@@ -21,31 +21,100 @@ const regionData = [
 function GlobeContent() {
   const globeEl = useRef()
   const containerRef = useRef()
+  const pinModelRef = useRef(null)
+
+  // Create pin model once and reuse it
+  const createPinModel = () => {
+    if (pinModelRef.current) return pinModelRef.current
+
+    const group = new THREE.Group()
+
+    // Pin stem - thin cylinder
+    const stemGeometry = new THREE.CylinderGeometry(0.025, 0.025, 0.6, 8)
+    const stemMaterial = new THREE.MeshPhongMaterial({
+      color: '#00cd90',
+      emissive: '#00cd90',
+      emissiveIntensity: 0.6,
+      shininess: 100
+    })
+    const stem = new THREE.Mesh(stemGeometry, stemMaterial)
+    stem.position.y = 0.3
+    stem.castShadow = true
+    group.add(stem)
+
+    // Pin head - glowing sphere
+    const headGeometry = new THREE.SphereGeometry(0.1, 12, 12)
+    const headMaterial = new THREE.MeshPhongMaterial({
+      color: '#00cd90',
+      emissive: '#00cd90',
+      emissiveIntensity: 1,
+      shininess: 100
+    })
+    const head = new THREE.Mesh(headGeometry, headMaterial)
+    head.position.y = 0.65
+    head.castShadow = true
+    group.add(head)
+
+    // Glow effect ring
+    const ringGeometry = new THREE.TorusGeometry(0.13, 0.012, 8, 16)
+    const ringMaterial = new THREE.MeshPhongMaterial({
+      color: '#00cd90',
+      emissive: '#00cd90',
+      emissiveIntensity: 0.8
+    })
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial)
+    ring.position.y = 0.65
+    ring.rotation.x = Math.PI / 4
+    group.add(ring)
+
+    pinModelRef.current = group
+    return group
+  }
 
   useEffect(() => {
-    if (!globeEl.current) return
+    const timer = setTimeout(() => {
+      if (!globeEl.current) return
 
-    // Auto-rotate + behavior
-    const controls = globeEl.current.controls()
-    controls.autoRotate = true
-    controls.autoRotateSpeed = 2.4
-    controls.enableZoom = false
-    controls.enablePan = false
+      try {
+        // Disable all user controls
+        if (globeEl.current.controls && typeof globeEl.current.controls === 'function') {
+          const controls = globeEl.current.controls()
+          if (controls) {
+            controls.enableZoom = false
+            controls.enablePan = false
+            controls.enableRotate = false
+            // Enable auto-rotate
+            controls.autoRotate = true
+            controls.autoRotateSpeed = 2.5
+          }
+        }
 
-    // Initial view
-    globeEl.current.pointOfView(
-      { lat: 20, lng: 0, altitude: 2.4 },
-      1800
-    )
+        // Set initial view - responsive altitude based on screen size
+        if (globeEl.current.pointOfView && typeof globeEl.current.pointOfView === 'function') {
+          const isMobile = window.innerWidth < 768
+          const altitude = isMobile ? 5.2 : 2.4
+          globeEl.current.pointOfView(
+            { lat: 20, lng: 0, altitude },
+            1800
+          )
+        }
 
-    // Add lighting like Bunny.net
-    const scene = globeEl.current.scene()
-    scene.add(new THREE.AmbientLight(0xffffff, 1.2))
+        // Add lighting
+        if (globeEl.current.scene && typeof globeEl.current.scene === 'function') {
+          const scene = globeEl.current.scene()
+          scene.add(new THREE.AmbientLight(0xffffff, 1.2))
+          const dirLight = new THREE.DirectionalLight(0xffffff, 1)
+          dirLight.position.set(5, 3, 5)
+          scene.add(dirLight)
+        }
+      } catch (err) {
+        console.log('Globe initialization error:', err)
+      }
+    }, 800)
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1)
-    dirLight.position.set(5, 3, 5)
-    scene.add(dirLight)
-
+    return () => {
+      clearTimeout(timer)
+    }
   }, [])
 
   return (
@@ -57,47 +126,30 @@ function GlobeContent() {
       <Globe
         ref={globeEl}
         backgroundColor="rgba(0,0,0,0)"
-        showAtmosphere
+        showAtmosphere={true}
         atmosphereColor="#005ffe"
-        atmosphereAltitude={0.18}
+        atmosphereAltitude={0.10}
 
         globeImageUrl="https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
         bumpImageUrl="https://unpkg.com/three-globe/example/img/earth-topology.png"
 
-        // REMOVE POINTS — we will use 3D pins instead
+        // Remove point-based markers
         pointsData={[]}
 
-        // 3D Pins (this makes it look like Bunny)
+        // Use 3D objects for realistic pins
         objectsData={regionData}
         objectLat={(d) => d.lat}
         objectLng={(d) => d.lng}
-        objectAltitude={0.015}
+        objectAltitude={(d) => 0.08}
         objectThreeObject={() => {
-          const group = new THREE.Group()
-
-          // Pin stem
-          const stemGeom = new THREE.CylinderGeometry(0.015, 0.015, 0.35, 12)
-          const stemMat = new THREE.MeshStandardMaterial({
-            color: '#00e6b8',
-            emissive: '#00e6b8',
-            emissiveIntensity: 0.6
+          // Clone the pin model to avoid reusing same instance
+          const pinModel = createPinModel()
+          const clonedPin = pinModel.clone()
+          clonedPin.traverse((child) => {
+            if (child.geometry) child.geometry = child.geometry.clone()
+            if (child.material) child.material = child.material.clone()
           })
-          const stem = new THREE.Mesh(stemGeom, stemMat)
-          stem.position.y = 0.18
-          group.add(stem)
-
-          // Pin head (glowing sphere)
-          const headGeom = new THREE.SphereGeometry(0.07, 20, 20)
-          const headMat = new THREE.MeshStandardMaterial({
-            color: '#00ffd0',
-            emissive: '#00ffd0',
-            emissiveIntensity: 1
-          })
-          const head = new THREE.Mesh(headGeom, headMat)
-          head.position.y = 0.37
-          group.add(head)
-
-          return group
+          return clonedPin
         }}
       />
 
