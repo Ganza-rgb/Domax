@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import Link from 'next/link'
 import Navbar from '@/components/molecules/Navbar'
 import Footer from '@/components/organisms/Footer'
 import Button from '@/components/atoms/Button'
@@ -16,112 +15,92 @@ if (typeof window !== 'undefined') {
 export default function ProductPage() {
   const products = [
     {
-      name: 'CDN',
-      description: 'Lightning-fast global CDN that delivers content at the edge with sub-second latency across 82+ countries.',
+      name: 'Automated Grading Engine',
+      description: 'AI-powered scoring suggestions with rubric-based consistency. Our machine learning models analyze student submissions and provide intelligent feedback at scale.',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7 12a5 5 0 1110 0 5 5 0 01-10 0z" />
         </svg>
       ),
-      features: ['Global edge network', 'DDoS protection', 'Free SSL', 'Real-time analytics'],
-      href: '/product/cdn',
-      color: 'from-[#ff7a18] to-[#ffb347]',
+      features: ['ML-powered scoring', 'Instant feedback', 'Consistency checks', 'Quality assurance'],
+      color: 'from-[#00cd90] to-[#2dd4bf]',
     },
     {
-      name: 'Stream',
-      description: 'A better way to deliver online video with adaptive bitrate streaming and global CDN.',
+      name: 'Rubric System',
+      description: 'Create, customize, and apply rubrics with weighted criteria. Build reusable rubric templates that standardize grading across your institution.',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18H3a2 2 0 01-2-2V8a2 2 0 012-2h2M5 18v2a2 2 0 002 2h10a2 2 0 002-2v-2M5 18h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
         </svg>
       ),
-      features: ['Adaptive streaming', 'Video optimization', 'Live streaming', 'Analytics'],
-      href: '/product/stream',
-      color: 'from-[#5c65ff] to-[#62d5ff]',
+      features: ['Weighted criteria', 'Template library', 'Custom scales', 'Reusable rubrics'],
+      color: 'from-[#00cd90] to-[#2dd4bf]',
     },
     {
-      name: 'Storage',
-      description: 'The world\'s fastest cloud storage with global edge locations for instant file access.',
+      name: 'In-Document Annotations',
+      description: 'Provide inline comments, highlights, and suggestions directly on student papers. Rich formatting tools help deliver clear, actionable feedback.',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16a1 1 0 001 1h8a1 1 0 001-1V4m0 0a1 1 0 011 1v2a1 1 0 11-2 0V5a1 1 0 011-1m0 0h4a1 1 0 011 1v2a1 1 0 11-2 0V5a1 1 0 011-1" />
         </svg>
       ),
-      features: ['Global edge storage', 'Instant access', 'API integration', '99.99% uptime'],
-      href: '/product/storage',
-      color: 'from-[#ff7a18] to-[#ff9a62]',
+      features: ['Comment threads', 'Color highlights', 'Suggestions', 'Drawing tools'],
+      color: 'from-[#00cd90] to-[#2dd4bf]',
     },
     {
-      name: 'Optimizer',
-      description: 'Powerful image processing and optimization that reduces file sizes without quality loss.',
+      name: 'Analytics Dashboard',
+      description: 'Comprehensive insights into class performance, submission metrics, and grading patterns. Track student progress and identify areas for intervention.',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
         </svg>
       ),
-      features: ['Auto optimization', 'WebP conversion', 'Lazy loading', 'Responsive images'],
-      href: '/product/optimizer',
-      color: 'from-[#5c65ff] to-[#62d5ff]',
+      features: ['Performance charts', 'Trend analysis', 'Grade distribution', 'Export reports'],
+      color: 'from-[#00cd90] to-[#2dd4bf]',
     },
     {
-      name: 'DNS',
-      description: 'Next-generation DNS routing with global anycast network for ultra-fast resolution.',
+      name: 'Batch Processing',
+      description: 'Grade entire classes of submissions in one workflow. Bulk upload, grade, and distribute feedback efficiently with our streamlined batch interface.',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
       ),
-      features: ['Global anycast', 'DDoS protection', 'Fast resolution', 'Easy management'],
-      href: '/product/dns',
-      color: 'from-[#ff7a18] to-[#ffb347]',
+      features: ['Bulk uploads', 'Parallel grading', 'Batch publishing', 'Progress tracking'],
+      color: 'from-[#00cd90] to-[#2dd4bf]',
     },
     {
-      name: 'Magic Container',
-      description: 'The best way to deploy globally with containers that run at the edge.',
+      name: 'LMS Integrations',
+      description: 'Seamless integration with Google Classroom, Canvas, Blackboard, and other LMS platforms. Sync assignments and grades automatically.',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4m0-10l8-4m-8 4L4 7m8 4L20 7" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.658 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
         </svg>
       ),
-      features: ['Edge containers', 'Auto scaling', 'Zero cold starts', 'Global deployment'],
-      href: '/product/magic-container',
-      color: 'from-[#5c65ff] to-[#62d5ff]',
+      features: ['Google Classroom', 'Canvas sync', 'Grade return', 'Auto-sync'],
+      color: 'from-[#00cd90] to-[#2dd4bf]',
     },
     {
-      name: 'Edge Scripting',
-      description: 'Deploy and run applications at the edge with serverless functions that scale automatically.',
+      name: 'Plagiarism Detection',
+      description: 'Built-in plagiarism detection powered by Turnitin and Copyscape integrations. Identify originality issues and protect academic integrity.',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
         </svg>
       ),
-      features: ['Serverless functions', 'Edge compute', 'Auto scaling', 'Low latency'],
-      href: '/product/edge-scripting',
-      color: 'from-[#ff7a18] to-[#ff9a62]',
+      features: ['Originality scoring', 'Source matching', 'Detailed reports', 'Threshold alerts'],
+      color: 'from-[#00cd90] to-[#2dd4bf]',
     },
     {
-      name: 'Shield',
-      description: 'Security simplified with enterprise-grade DDoS protection and WAF.',
+      name: 'Student Code System',
+      description: 'Generate unlimited access codes for students. Share one code for entire classes or personalized codes for individual students.',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
         </svg>
       ),
-      features: ['DDoS protection', 'WAF rules', 'Bot protection', 'Real-time monitoring'],
-      href: '/product/shield',
-      color: 'from-[#5c65ff] to-[#62d5ff]',
-    },
-    {
-      name: 'Font',
-      description: 'First privacy-oriented font CDN with zero tracking and GDPR compliance.',
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-        </svg>
-      ),
-      features: ['Privacy-first', 'Zero tracking', 'Fast delivery', 'GDPR compliant'],
-      href: '/product/font',
-      color: 'from-[#ff7a18] to-[#ffb347]',
+      features: ['Unlimited codes', 'Redeemable credits', 'Usage tracking', 'Bulk generation'],
+      color: 'from-[#00cd90] to-[#2dd4bf]',
     },
   ]
 
@@ -224,18 +203,18 @@ export default function ProductPage() {
       <Navbar />
       
       {/* Hero Section */}
-      <section ref={heroRef} className="pt-32 pb-20 bg-[#04081d] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute -top-32 -right-10 w-96 h-96 bg-gradient-to-br from-[#ffb347] to-transparent blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[28rem] h-[28rem] bg-gradient-to-tr from-[#5c65ff] to-transparent blur-3xl" />
+      <section ref={heroRef} className="pt-24 pb-16 bg-white text-[#0A3059] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-0 pointer-events-none">
+          <div className="absolute -top-40 -right-20 w-[28rem] h-[28rem] bg-gradient-to-br from-[#e6fffb] to-transparent blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[28rem] h-[28rem] bg-gradient-to-tr from-[#e6f0ff] to-transparent blur-3xl" />
         </div>
         <div className="container-custom relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl lg:text-6xl font-bold mb-6">
-              Everything you need to hop ahead
+              Powerful Grading Tools Built for Educators
             </h1>
             <p className="text-xl text-white/80 mb-10">
-              A unified platform that brings together CDN, security, and compute into one powerful edge platform.
+              Everything you need to grade faster, provide better feedback, and scale your teaching. From automated scoring to comprehensive analytics.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="primary" size="lg" href="/signup">
@@ -253,68 +232,50 @@ export default function ProductPage() {
       <section ref={productsRef} className="py-20 bg-white">
         <div className="container-custom">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-[#04081d] mb-4">
-              Our Products
+            <h2 className="text-4xl font-bold text-[#0A3059] mb-4">
+              Complete Feature Set
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Choose the tools you need to build faster, scale easier, and deliver better experiences.
+              All the tools you need to transform your grading workflow and provide meaningful feedback to students.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product, index) => (
               <Card
                 key={index}
                 variant="elevated"
-                className="p-8 hover:scale-105 transition-transform"
+                className="p-6 hover:scale-105 transition-transform h-full flex flex-col"
               >
-                <Link href={product.href} className="block">
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${product.color} flex items-center justify-center text-white mb-6`}>
-                    {product.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#04081d] mb-3">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {product.description}
-                  </p>
-                  <ul className="space-y-2 mb-6">
-                    {product.features.map((feature, fIndex) => (
-                      <li key={fIndex} className="flex items-center text-sm text-gray-600">
-                        <svg
-                          className="w-4 h-4 text-[#ff7a18] mr-2 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex items-center text-[#ff7a18] font-semibold group">
-                    Learn more
-                    <svg
-                      className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </svg>
-                  </div>
-                </Link>
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${product.color} flex items-center justify-center text-white mb-4 flex-shrink-0`}>
+                  {product.icon}
+                </div>
+                <h3 className="text-lg font-bold text-[#0A3059] mb-2">
+                  {product.name}
+                </h3>
+                <p className="text-gray-600 mb-4 leading-relaxed text-sm flex-grow">
+                  {product.description}
+                </p>
+                <ul className="space-y-2">
+                  {product.features.map((feature, fIndex) => (
+                    <li key={fIndex} className="flex items-center text-xs text-gray-600">
+                      <svg
+                        className="w-4 h-4 text-[#00cd90] mr-2 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
               </Card>
             ))}
           </div>
@@ -322,48 +283,56 @@ export default function ProductPage() {
       </section>
 
       {/* Value Props */}
-      <section ref={valuePropsRef} className="py-20 bg-[#eff3ff]">
+      <section ref={valuePropsRef} className="py-20 bg-white">
         <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-[#0A3059] mb-4">
+              Why educators love Domax
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Practical tools that speed up grading, improve feedback, and keep students engaged.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: 'Unified Platform',
-                description: 'One platform for CDN, security, and compute. No glue code, no complexity.',
+                title: 'Save Hours Every Week',
+                description:
+                  'Automate repetitive scoring and apply rubrics consistently so you can spend more time teaching.',
                 icon: (
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 ),
               },
               {
-                title: 'Global Edge Network',
-                description: '120+ edge locations across 6 continents for unmatched performance.',
+                title: 'Better Student Feedback',
+                description:
+                  'Give inline, actionable comments and clear rubric-aligned explanations that help students improve.',
                 icon: (
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h-2m0 0H8m4 0V6m0 4v4m-8-8a8 8 0 1116 0 8 8 0 01-16 0z" />
                   </svg>
                 ),
               },
               {
-                title: 'Simple Pricing',
-                description: 'Transparent pricing starting at $1/month with no hidden fees.',
+                title: 'Consistent Grading at Scale',
+                description:
+                  'Reusable rubric templates and QA checks keep grading fair and comparable across classes and terms.',
                 icon: (
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 ),
               },
             ].map((prop, index) => (
               <Card key={index} variant="elevated" className="p-8 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ff7a18] to-[#ffb347] flex items-center justify-center text-white mx-auto mb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00cd90] to-[#2dd4bf] flex items-center justify-center text-white mx-auto mb-6">
                   {prop.icon}
                 </div>
-                <h3 className="text-2xl font-bold text-[#04081d] mb-4">
-                  {prop.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {prop.description}
-                </p>
+                <h3 className="text-xl font-bold text-[#0A3059] mb-3">{prop.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{prop.description}</p>
               </Card>
             ))}
           </div>
@@ -371,24 +340,24 @@ export default function ProductPage() {
       </section>
 
       {/* CTA Section */}
-      <section ref={ctaRef} className="py-20 bg-[#04081d] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-10 right-0 w-80 h-80 bg-gradient-to-br from-[#ff9a62] to-transparent blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-[22rem] h-[22rem] bg-gradient-to-tr from-[#6a76ff] to-transparent blur-[160px]" />
+      <section ref={ctaRef} className="py-16 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-0 pointer-events-none">
+          <div className="absolute top-10 -right-20 w-80 h-80 bg-gradient-to-br from-[#e6fffb] to-transparent blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[#e6f0ff] to-transparent blur-3xl" />
         </div>
         <div className="container-custom relative z-10 text-center">
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Ready to get started?
+            Ready to transform your grading?
           </h2>
           <p className="text-lg text-white/70 max-w-2xl mx-auto mb-10">
-            Join thousands of teams who deploy faster, save more, and deliver better experiences.
+            Join thousands of educators who are saving time and improving student outcomes with Domax.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="primary" size="lg" href="/signup">
               Start Free Trial
             </Button>
             <Button variant="outline" size="lg" href="/contact">
-              Contact Sales
+              Request Demo
             </Button>
           </div>
         </div>
