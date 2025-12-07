@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/molecules/Navbar'
 import Footer from '@/components/organisms/Footer'
+import GlobeVisualization from '@/components/organisms/GlobeVisualization'
+import DomaxGlobe from '@/components/organisms/DomaxGlobe'
 import FeaturesDropdown from '@/components/organisms/FeaturesDropdown'
 import GradientHeading from '@/components/atoms/GradientHeading'
 import Button from '@/components/atoms/Button'
@@ -1000,16 +1002,17 @@ export default function Home() {
       {/* A global network built for more than speed */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+            {/* Left content */}
             <div>
               <p className="text-xs sm:text-sm font-semibold tracking-[0.3em] text-[#005ffe] mb-3 sm:mb-4">TRUSTED WORLDWIDE</p>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0A3059] mb-4 sm:mb-6">
                 Built for teachers, trusted by their students
               </h2>
-              <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 leading-relaxed">
+              <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-10 leading-relaxed">
                 Domax gives classroom teachers the same AI power as enterprise teams—without the bureaucracy. Keep grading fast, keep context-rich feedback flowing, and let students revisit annotated work through the free portals unlocked by your access codes.
               </p>
-              <div className="grid grid-cols-3 gap-3 sm:gap-4 text-center">
+              <div className="grid grid-cols-3 gap-4 sm:gap-6">
                 <div>
                   <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#005ffe] mb-1 sm:mb-2">1.5M+</p>
                   <p className="text-xs sm:text-sm text-gray-600">Papers Graded</p>
@@ -1024,14 +1027,10 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="relative w-full h-48 sm:h-64 lg:h-80 bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] rounded-2xl sm:rounded-3xl border-2 border-[#d8ddff] flex items-center justify-center">
-              <div className="text-center">
-                <svg className="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 mx-auto mb-3 sm:mb-4 text-[#005ffe]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p className="text-sm sm:text-base text-gray-600 font-medium">Global Reach</p>
-                <p className="text-xs sm:text-sm text-gray-500 mt-2">Trusted by educators worldwide</p>
-              </div>
+
+            {/* Right globe visualization */}
+            <div className="w-full h-80 sm:h-96 lg:h-[500px]">
+              <DomaxGlobe />
             </div>
           </div>
         </div>

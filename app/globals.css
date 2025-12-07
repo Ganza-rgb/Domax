@@ -282,3 +282,10 @@
   }
 }
 
+/* Custom gradient utilities */
+@layer utilities {
+  .bg-gradient-radial {
+    background-image: radial-gradient(var(--gradient-stops, from-[#00cd9020] via-transparent to-transparent));
+  }
+}
+
