@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://domax.com/sitemap.xml
+
+
+
+
+
+
+
+
+
+
