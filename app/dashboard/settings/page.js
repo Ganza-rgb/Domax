@@ -49,8 +49,8 @@ export default function SettingsPage() {
     <div className="space-y-6 max-w-3xl">
       <WorkspaceHeader
         meta="Settings"
-        title="Personalize your workspace"
-        subtitle="Controls apply across every exam and submission. Changes save automatically."
+        title="Settings"
+        subtitle="Changes save automatically."
       />
 
       <Panel meta="Account" title="Profile">
@@ -73,7 +73,7 @@ export default function SettingsPage() {
             id="pref-notifications"
             checked={teacher.preferences.notifications}
             onChange={(value) => updatePreferences({ notifications: value })}
-            label="Email me when AI confidence is below 70%"
+            label="Email me when Domax is unsure about an answer"
             description="A daily summary of answers that need a closer look."
           />
           <Toggle

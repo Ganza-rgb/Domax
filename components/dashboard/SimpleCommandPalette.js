@@ -220,7 +220,7 @@ export default function SimpleCommandPalette() {
           ) : (
             grouped.map(({ category, items }) => (
               <div key={category} className="mb-1 last:mb-0" role="presentation">
-                <div className="px-4 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--sky-subtle)]">
+                <div className="px-4 pt-2 pb-1 text-[12px] font-medium text-[var(--sky-subtle)]">
                   {category}
                 </div>
                 {items.map((command) => {

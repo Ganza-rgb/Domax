@@ -36,19 +36,19 @@ export default function ExamsPage() {
   const statusBoard = useMemo(
     () => [
       {
-        label: 'Live exams',
+        label: 'In progress',
         value: exams.filter((exam) => exam.status === 'in-progress').length,
-        hint: 'Monitoring right now',
+        hint: 'Being marked now',
       },
       {
         label: 'Drafts',
         value: exams.filter((exam) => exam.status === 'draft').length,
-        hint: 'Need scheduling',
+        hint: 'Not scheduled yet',
       },
       {
-        label: 'Awaiting review',
+        label: 'Need your review',
         value: exams.reduce((acc, exam) => acc + exam.stats.needsReview, 0),
-        hint: 'Scripts pending manual oversight',
+        hint: 'Scripts with answers to check',
         tone: exams.some((exam) => exam.stats.needsReview > 0) ? 'caution' : 'neutral',
       },
     ],
@@ -59,8 +59,8 @@ export default function ExamsPage() {
     <div className="space-y-6">
       <WorkspaceHeader
         meta="Exams manager"
-        title="Plan, monitor, and close out exams"
-        subtitle={`${exams.length} upcoming + ongoing`}
+        title="Exams"
+        subtitle={`${exams.length} upcoming or in progress`}
         actions={
           <>
             <Button variant="secondary" size="sm" disabled title="Importing exams is not available yet">
@@ -82,7 +82,7 @@ export default function ExamsPage() {
       <StatGroup items={statusBoard} />
 
       <div className="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)] gap-6 items-start">
-        <Panel meta="Exam spaces" title="Playbook" bodyClassName="!px-2 !pb-2">
+        <Panel title="Your exams" bodyClassName="!px-2 !pb-2">
           <ExamList />
         </Panel>
 

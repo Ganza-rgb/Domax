@@ -57,12 +57,12 @@ export default function EntitlementsPage() {
     <div className="space-y-6">
       <WorkspaceHeader
         meta="Access codes"
-        title="Generate codes for teachers & boards"
-        subtitle="Issue time-boxed access codes for teachers and exam institutions. Every code inherits download or seat limits plus automatic expiration windows."
+        title="Access codes"
+        subtitle="Codes that give teachers and exam institutions access for a set time."
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 items-start">
-        <Panel meta="Teacher cohort" title="Small group onboarding">
+        <Panel title="For a group of teachers">
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -77,7 +77,7 @@ export default function EntitlementsPage() {
                 />
               </div>
               <div>
-                <label htmlFor="teacher-ttl" className={labelClass}>Expires in (hours)</label>
+                <label htmlFor="teacher-ttl" className={labelClass}>Valid for (hours)</label>
                 <input
                   id="teacher-ttl"
                   type="number"
@@ -90,7 +90,7 @@ export default function EntitlementsPage() {
             </div>
             <div>
               <label htmlFor="teacher-note" className={labelClass}>
-                Cohort note <span className="font-normal text-[var(--sky-subtle)]">(optional)</span>
+                Who it’s for <span className="font-normal text-[var(--sky-subtle)]">(optional)</span>
               </label>
               <input
                 id="teacher-note"
@@ -102,7 +102,7 @@ export default function EntitlementsPage() {
               />
             </div>
             <Button variant="primary" size="md" onClick={handleTeacherGenerate} disabled={isSubmitting}>
-              {isSubmitting ? 'Generating…' : 'Generate teacher code'}
+              {isSubmitting ? 'Generating…' : 'Create teacher code'}
             </Button>
             {teacherResult && (
               <GeneratedCode
@@ -113,7 +113,7 @@ export default function EntitlementsPage() {
           </div>
         </Panel>
 
-        <Panel meta="Institutions" title="Board-level provisioning">
+        <Panel title="For a whole institution">
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -128,7 +128,7 @@ export default function EntitlementsPage() {
                 />
               </div>
               <div>
-                <label htmlFor="inst-campuses" className={labelClass}>Campuses covered</label>
+                <label htmlFor="inst-campuses" className={labelClass}>Campuses</label>
                 <input
                   id="inst-campuses"
                   type="number"
@@ -140,7 +140,7 @@ export default function EntitlementsPage() {
               </div>
             </div>
             <div>
-              <label htmlFor="inst-ttl" className={labelClass}>Expires in (hours)</label>
+              <label htmlFor="inst-ttl" className={labelClass}>Valid for (hours)</label>
               <input
                 id="inst-ttl"
                 type="number"
@@ -151,7 +151,7 @@ export default function EntitlementsPage() {
               />
             </div>
             <Button variant="primary" size="md" onClick={handleInstitutionGenerate} disabled={isSubmitting}>
-              {isSubmitting ? 'Generating…' : 'Generate institution code'}
+              {isSubmitting ? 'Generating…' : 'Create institution code'}
             </Button>
             {institutionResult && (
               <GeneratedCode

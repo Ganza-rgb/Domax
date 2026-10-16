@@ -79,8 +79,8 @@ export default function UploadPage() {
     <div className="space-y-6">
       <WorkspaceHeader
         meta="Document upload"
-        title="Upload student papers"
-        subtitle="Upload PDF, DOCX, or TXT files to start grading"
+        title="Upload"
+        subtitle="PDF, DOCX or TXT files for now. Photo capture of handwritten scripts is on the way."
         actions={
           <Button variant="secondary" size="sm" href="/dashboard/submissions">
             View submissions

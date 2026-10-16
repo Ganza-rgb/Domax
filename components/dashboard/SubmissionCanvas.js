@@ -186,8 +186,8 @@ export default function SubmissionCanvas() {
           <SubmissionPagesViewer pages={activeSubmission.pages} activePage={activePage} onSelectPage={setActivePage} />
 
           {(activeSubmission.aiSummary || activeSubmission.weakAreas?.length > 0) && (
-            <section className="rounded-xl border border-[var(--sky-panel-border)] p-4" aria-label="AI notes">
-              <p className="sky-label mb-1.5">AI notes · suggestion only</p>
+            <section className="rounded-xl border border-[var(--sky-panel-border)] p-4" aria-label="Domax’s notes">
+              <p className="sky-label mb-1.5">Domax’s notes · suggestions only</p>
               {activeSubmission.aiSummary && (
                 <p className="text-sm text-[var(--sky-text)] leading-relaxed">{activeSubmission.aiSummary}</p>
               )}

@@ -20,8 +20,8 @@ export default function AssignmentsPage() {
     <div className="space-y-6">
       <WorkspaceHeader
         meta="Assignment management"
-        title="Manage assignments and tasks"
-        subtitle="Create, schedule, and track assignments across your courses"
+        title="Assignments"
+        subtitle="Work you’ve set for your classes."
         actions={
           <Button variant="primary" size="sm" href="/dashboard/upload">
             Create assignment

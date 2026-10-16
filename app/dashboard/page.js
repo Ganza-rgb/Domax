@@ -1,19 +1,22 @@
 'use client'
 
-import { useMemo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import { WsButton as Button, Panel,
-  StatGroup,
+import {
+  WsButton as Button,
+  Panel,
   StatusPill,
   ProgressBar,
   Segmented,
   EmptyState,
+  ReadSummary,
+  TickMark,
   submissionStatus,
-  averageConfidence,
+  unsureQuestions,
   markedCount,
   fieldClass,
-  LOW_CONFIDENCE, } from '@/components/dashboard/ui'
+} from '@/components/dashboard/ui'
 import { useDashboardState } from '@/states/useDashboardState'
 import { useSubmissionState } from '@/states/useSubmissionState'
 import { useExamState } from '@/states/useExamState'
@@ -21,6 +24,8 @@ import { useUserState } from '@/states/useUserState'
 
 // Review cases first, then scripts that are ready to finalize
 const queueOrder = { 'needs-review': 0, ready: 1 }
+
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`
 
 export default function DashboardPage() {
   const { setCurrentSection, updatePanel } = useDashboardState()
@@ -31,57 +36,28 @@ export default function DashboardPage() {
   const [notes, setNotes] = useState([])
   const [noteDraft, setNoteDraft] = useState('')
   const [addingNote, setAddingNote] = useState(false)
-  const [editingPlanner, setEditingPlanner] = useState(false)
-  const [plannerRows, setPlannerRows] = useState([
-    { level: 'Primary', sample: 60, rate: 20 },
-    { level: 'O-Level', sample: 120, rate: 35 },
-    { level: 'A-Level', sample: 40, rate: 50 },
-  ])
 
   useEffect(() => {
     setCurrentSection('home')
     updatePanel({ type: 'overview', payload: null })
   }, [setCurrentSection, updatePanel])
 
-  const pendingSubmissions = submissions
+  const pending = submissions
     .filter((submission) => submission.status !== 'completed')
     .sort((a, b) => (queueOrder[a.status] ?? 2) - (queueOrder[b.status] ?? 2))
-  const needsManualReview = submissions.filter((submission) => submission.status === 'needs-review')
-  const lowConfidence = submissions.filter((submission) =>
-    submission.questions.some((q) => q.confidence < LOW_CONFIDENCE)
-  )
-  const nextSubmission = pendingSubmissions[0] || null
+  const needsReview = pending.filter((submission) => submission.status === 'needs-review')
+  const ready = pending.filter((submission) => submission.status === 'ready')
+  const withUnsure = pending.filter((submission) => unsureQuestions(submission.questions).length > 0)
+  const next = pending[0] || null
+  const nextExam = next ? exams.find((exam) => exam.id === next.examId) : null
 
-  const queueRows = {
-    pending: pendingSubmissions,
-    review: needsManualReview,
-    ready: submissions.filter((submission) => submission.status === 'ready'),
-    low: lowConfidence.filter((submission) => submission.status !== 'completed'),
-  }[queueFilter]
+  const queueRows = { pending, review: needsReview, ready, unsure: withUnsure }[queueFilter]
 
-  const timeline = useMemo(
-    () => [
-      {
-        title: 'Morning scan run',
-        meta: 'Completed · 7:40 AM',
-        detail: '32 pages ingested from S3 red class',
-        tone: 'positive',
-      },
-      {
-        title: 'Manual review sprint',
-        meta: 'In progress · due 11:30 AM',
-        detail: `${needsManualReview.length} scripts waiting for your sign-off`,
-        tone: 'info',
-      },
-      {
-        title: 'Wallet health',
-        meta: 'Auto-alert · triggered',
-        detail: `${teacher.balancePages} pages left · suggest top-up before Friday`,
-        tone: 'caution',
-      },
-    ],
-    [needsManualReview.length, teacher.balancePages]
-  )
+  const summary = pending.length
+    ? `${plural(pending.length, 'script')} waiting for you${
+        withUnsure.length ? `. ${withUnsure.length === 1 ? 'One has' : `${withUnsure.length} have`} answers Domax wasn’t sure about.` : '.'
+      }`
+    : 'Nothing is waiting. Every script has been finalized.'
 
   const addNote = (event) => {
     event.preventDefault()
@@ -92,154 +68,185 @@ export default function DashboardPage() {
     setAddingNote(false)
   }
 
-  const plannerTotal = plannerRows.reduce((sum, row) => sum + row.sample * row.rate, 0)
-
   return (
     <div className="space-y-6">
-      <WorkspaceHeader
-        meta="Priority overview"
-        title="Today's grading cockpit"
-        subtitle="Keep your queue moving while Domax powers through the edge cases."
-        actions={
-          <>
-            <Button variant="secondary" size="sm" onClick={() => window.__openCommandPalette?.()}>
-              Search
-            </Button>
-            {nextSubmission ? (
-              <Button variant="primary" size="sm" href={`/dashboard/submissions/${nextSubmission.id}`}>
-                Continue grading
-              </Button>
-            ) : (
-              <Button variant="primary" size="sm" disabled>
-                All caught up
-              </Button>
-            )}
-          </>
-        }
-      />
+      <WorkspaceHeader title="Today" subtitle={summary} />
 
-      {/* Who is signed in — one line instead of a full card */}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--sky-subtle)] -mt-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0A3059] text-[11px] font-semibold text-white">
-          {teacher.avatar}
-        </span>
-        <span className="font-medium text-[var(--sky-text)]">{teacher.name}</span>
-        <span aria-hidden="true">·</span>
-        <span>{teacher.level}</span>
-        <span aria-hidden="true">·</span>
-        <span>Code {teacher.schoolCode}</span>
-        <span aria-hidden="true">·</span>
-        <Link href="/dashboard/settings" className="hover:text-[var(--sky-text)] rounded">
-          Notifications {teacher.preferences.notifications ? 'on' : 'muted'}
-        </Link>
-      </div>
-
-      <StatGroup
-        items={[
-          { label: 'Pending submissions', value: pendingSubmissions.length },
-          { label: 'Needs manual review', value: needsManualReview.length, tone: needsManualReview.length ? 'caution' : 'neutral' },
-          { label: 'Low-confidence', value: lowConfidence.length, tone: lowConfidence.length ? 'caution' : 'neutral', hint: `Any answer below ${Math.round(LOW_CONFIDENCE * 100)}%` },
-          { label: 'Exams this week', value: exams.length },
-        ]}
-      />
-
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] gap-6 items-start">
-        {/* Primary column */}
-        <div className="space-y-6 min-w-0">
-          <Panel
-            meta="Manual review"
-            title="Queue"
-            actions={
-              <Link href="/dashboard/submissions" className="text-sm font-medium text-[var(--action-accent)] hover:underline rounded">
-                Open submissions
+      {/* Next up: the one thing to do now */}
+      {next ? (
+        <section aria-labelledby="next-up" className="ws-feature rounded-2xl p-6 sm:p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-end">
+            <div className="min-w-0">
+              <p id="next-up" className="text-[13px] font-semibold text-[#8db8ff]">Next up</p>
+              <h2 className="mt-2 text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.05] tracking-[-0.035em] text-white font-semibold">
+                {next.student.name}
+              </h2>
+              <p className="mt-1.5 text-[15px] text-white/65">
+                {[nextExam?.title, next.student.classRoom].filter(Boolean).join(' · ')}
+              </p>
+              <ul className="mt-6 flex flex-wrap gap-2" aria-label="Questions in this script">
+                {next.questions.map((question, index) => {
+                  const unsure = unsureQuestions([question]).length > 0
+                  const marked = question.teacherScore !== null && question.teacherScore !== undefined
+                  return (
+                    <li
+                      key={question.id || index}
+                      className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px] ${
+                        unsure ? 'bg-[#F5A524]/15 text-[#FFC86B]' : 'bg-white/[0.08] text-white/80'
+                      }`}
+                    >
+                      {marked ? (
+                        <TickMark className="w-3.5 h-3.5" />
+                      ) : (
+                        <span aria-hidden="true" className={`w-1.5 h-1.5 rounded-full ${unsure ? 'bg-[#FFC86B]' : 'bg-white/50'}`} />
+                      )}
+                      <span className="font-semibold">Q{index + 1}</span>
+                      <span>{marked ? 'Marked' : unsure ? 'Domax was unsure' : 'Clear suggestion'}</span>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+            <div className="flex flex-col items-start lg:items-end gap-3">
+              <Link
+                href={`/dashboard/submissions/${next.id}`}
+                className="inline-flex items-center gap-2 min-h-12 px-6 rounded-full bg-white text-[#0A3059] text-[15px] font-semibold hover:bg-[#E8F0FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#071a33]"
+              >
+                {markedCount(next.questions) ? 'Continue review' : 'Start review'}
+                <svg viewBox="0 0 16 16" className="w-4 h-4" aria-hidden="true">
+                  <path d="M3 8h9m-3.5-3.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </Link>
-            }
-            bodyClassName="!px-0 !pb-0"
-          >
-            <div className="px-5 pb-3">
-              <Segmented
-                label="Filter queue"
-                value={queueFilter}
-                onChange={setQueueFilter}
-                options={[
-                  { value: 'pending', label: 'All pending', count: pendingSubmissions.length },
-                  { value: 'review', label: 'Needs review', count: needsManualReview.length },
-                  { value: 'ready', label: 'Ready', count: submissions.filter((s) => s.status === 'ready').length },
-                  { value: 'low', label: 'Low confidence', count: lowConfidence.filter((s) => s.status !== 'completed').length },
-                ]}
+              <p className="text-[13px] text-white/55 tabular-nums">
+                {markedCount(next.questions)} of {next.questions.length} questions marked by you
+              </p>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] p-8 flex items-center gap-4">
+          <TickMark className="w-8 h-8 flex-shrink-0" />
+          <div>
+            <h2 className="text-xl font-semibold text-[var(--sky-text)]">All caught up</h2>
+            <p className="text-[15px] text-[var(--sky-subtle)] mt-0.5">Every script has been finalized. New uploads will appear here.</p>
+          </div>
+        </section>
+      )}
+
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_20rem] gap-6 items-start">
+        {/* Queue */}
+        <Panel
+          title="Queue"
+          actions={
+            <Link href="/dashboard/submissions" className="text-sm font-medium text-[var(--action-accent)] hover:underline rounded">
+              All submissions
+            </Link>
+          }
+          bodyClassName="!px-0 !pb-0"
+        >
+          <div className="px-5 pb-3">
+            <Segmented
+              label="Filter queue"
+              value={queueFilter}
+              onChange={setQueueFilter}
+              options={[
+                { value: 'pending', label: 'Waiting', count: pending.length },
+                { value: 'review', label: 'Needs review', count: needsReview.length },
+                { value: 'ready', label: 'Ready', count: ready.length },
+                { value: 'unsure', label: 'Unsure', count: withUnsure.length },
+              ]}
+            />
+          </div>
+
+          {queueRows.length === 0 ? (
+            <div className="px-5 pb-5">
+              <EmptyState
+                title={queueFilter === 'pending' ? 'All caught up' : 'Nothing in this view'}
+                body={queueFilter === 'pending' ? 'Every script has been finalized.' : 'Try another filter to see the rest of your queue.'}
               />
             </div>
+          ) : (
+            <ul className="border-t border-[var(--sky-panel-border)] divide-y divide-[var(--sky-panel-border)]">
+              {queueRows.map((submission) => {
+                const status = submissionStatus(submission.status)
+                const marked = markedCount(submission.questions)
+                const total = submission.questions.length
+                return (
+                  <li key={submission.id}>
+                    <Link
+                      href={`/dashboard/submissions/${submission.id}`}
+                      className="group grid grid-cols-[1fr_auto] sm:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto] items-center gap-x-4 gap-y-1.5 px-5 py-3.5 hover:bg-[var(--sky-surface)] transition-colors"
+                    >
+                      <span className="min-w-0">
+                        <span className="block font-semibold text-[var(--sky-text)] truncate">{submission.student.name}</span>
+                        <span className="block text-xs text-[var(--sky-subtle)]">{submission.student.classRoom}</span>
+                      </span>
+                      <span className="hidden sm:block">
+                        <StatusPill tone={status.tone}>{status.label}</StatusPill>
+                      </span>
+                      <ReadSummary questions={submission.questions} className="col-span-2 sm:col-span-1 row-start-2 sm:row-start-auto" />
+                      <span className="flex items-center gap-3 col-start-2 row-start-1 sm:col-start-auto sm:row-start-auto">
+                        <span className="text-[13px] tabular-nums text-[var(--sky-subtle)] whitespace-nowrap">
+                          {marked}/{total} marked
+                        </span>
+                        <svg viewBox="0 0 16 16" className="w-4 h-4 text-[var(--sky-subtle)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--action-accent)]" aria-hidden="true">
+                          <path d="M6 3.5L10.5 8 6 12.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </Panel>
 
-            {queueRows.length === 0 ? (
-              <div className="px-5 pb-5">
-                <EmptyState
-                  title={queueFilter === 'pending' ? 'All caught up' : 'Nothing in this view'}
-                  body={queueFilter === 'pending' ? 'Every script has been finalized. Enjoy the pause.' : 'Try another filter to see the rest of your queue.'}
-                />
-              </div>
+        {/* Side column */}
+        <div className="space-y-6 min-w-0">
+          <Panel
+            title="Exams"
+            actions={<Link href="/dashboard/exams" className="text-sm font-medium text-[var(--action-accent)] hover:underline rounded">All exams</Link>}
+          >
+            {exams.length === 0 ? (
+              <p className="text-sm text-[var(--sky-subtle)]">No exams yet.</p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[560px] text-sm">
-                  <thead>
-                    <tr className="border-y border-[var(--sky-panel-border)] bg-[var(--sky-surface)] text-left text-xs text-[var(--sky-subtle)]">
-                      <th scope="col" className="px-5 py-2 font-medium">Student</th>
-                      <th scope="col" className="px-3 py-2 font-medium">Status</th>
-                      <th scope="col" className="px-3 py-2 font-medium">Marked</th>
-                      <th scope="col" className="px-3 py-2 font-medium">AI confidence</th>
-                      <th scope="col" className="px-5 py-2"><span className="sr-only">Action</span></th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[var(--sky-panel-border)]">
-                    {queueRows.map((submission) => {
-                      const status = submissionStatus(submission.status)
-                      const avg = averageConfidence(submission.questions)
-                      const marked = markedCount(submission.questions)
-                      const total = submission.questions.length
-                      return (
-                        <tr key={submission.id} className="hover:bg-[var(--sky-surface)]">
-                          <td className="px-5 py-3">
-                            <p className="font-semibold text-[var(--sky-text)]">{submission.student.name}</p>
-                            <p className="text-xs text-[var(--sky-subtle)]">{submission.student.classRoom}</p>
-                          </td>
-                          <td className="px-3 py-3">
-                            <StatusPill tone={status.tone}>{status.label}</StatusPill>
-                          </td>
-                          <td className="px-3 py-3 tabular-nums text-[var(--sky-text)] whitespace-nowrap">
-                            {marked} / {total}
-                          </td>
-                          <td className="px-3 py-3">
-                            <div className="flex items-center gap-2 min-w-[7rem]">
-                              <ProgressBar
-                                value={avg === null ? 0 : avg * 100}
-                                tone={avg !== null && avg < LOW_CONFIDENCE ? 'caution' : 'info'}
-                                label={`AI confidence for ${submission.student.name}`}
-                                className="w-16"
-                              />
-                              <span className={`tabular-nums text-xs ${avg !== null && avg < LOW_CONFIDENCE ? 'text-[var(--vscode-orange)] font-semibold' : 'text-[var(--sky-subtle)]'}`}>
-                                {avg === null ? '—' : `${Math.round(avg * 100)}%`}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-5 py-3 text-right">
-                            <Link
-                              href={`/dashboard/submissions/${submission.id}`}
-                              className="inline-flex h-8 items-center rounded-md border border-[var(--sky-panel-border)] px-3 text-[13px] font-medium text-[var(--sky-text)] hover:border-[var(--action-accent)] hover:text-[var(--action-accent)]"
-                            >
-                              Review
-                            </Link>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
+              <ul className="space-y-4">
+                {exams.map((exam) => (
+                  <li key={exam.id}>
+                    <div className="flex items-baseline justify-between gap-3 text-sm">
+                      <Link href={`/dashboard/exams/${exam.id}`} className="font-medium text-[var(--sky-text)] hover:text-[var(--action-accent)] truncate rounded">
+                        {exam.title}
+                      </Link>
+                      <span className="text-xs tabular-nums text-[var(--sky-subtle)] whitespace-nowrap">
+                        {exam.stats.graded}/{exam.stats.total}
+                      </span>
+                    </div>
+                    <ProgressBar
+                      value={exam.stats.graded}
+                      max={exam.stats.total}
+                      tone={exam.stats.graded === exam.stats.total ? 'positive' : 'info'}
+                      label={`${exam.title} marking progress`}
+                      className="mt-1.5"
+                    />
+                  </li>
+                ))}
+              </ul>
             )}
           </Panel>
 
+          <Panel title="Wallet">
+            <p className="font-headline text-3xl font-semibold tracking-[-0.03em] text-[var(--sky-text)] tabular-nums">
+              {teacher.balancePages.toLocaleString()}
+              <span className="text-base font-medium text-[var(--sky-subtle)] ml-1.5 tracking-normal">pages left</span>
+            </p>
+            <p className="text-[13px] text-[var(--sky-subtle)] mt-2 leading-relaxed">
+              Top-ups are arranged with the Domax team for now.{' '}
+              <Link href="/dashboard/billing" className="text-[var(--action-accent)] hover:underline rounded">Billing</Link>
+            </p>
+          </Panel>
+
           <Panel
-            meta="Mission timeline"
-            title="Today's plan"
+            title="Notes"
             actions={
               !addingNote && (
                 <Button variant="secondary" size="xs" onClick={() => setAddingNote(true)}>
@@ -248,164 +255,42 @@ export default function DashboardPage() {
               )
             }
           >
-            <ol className="relative space-y-4 border-l border-[var(--sky-panel-border)] ml-1">
-              {timeline.map((item) => (
-                <li key={item.title} className="relative pl-5">
-                  <span
-                    aria-hidden="true"
-                    className={`absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-[var(--sky-panel)] ${
-                      { positive: 'bg-[var(--vscode-green)]', info: 'bg-[var(--vscode-accent)]', caution: 'bg-[var(--vscode-orange)]' }[item.tone]
-                    }`}
-                  />
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                    <p className="text-sm font-semibold text-[var(--sky-text)]">{item.title}</p>
-                    <p className="text-xs text-[var(--sky-subtle)]">{item.meta}</p>
-                  </div>
-                  <p className="text-sm text-[var(--sky-subtle)] mt-0.5">{item.detail}</p>
-                </li>
-              ))}
-              {notes.map((note) => (
-                <li key={note.id} className="relative pl-5">
-                  <span aria-hidden="true" className="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-[var(--sky-panel)] bg-[var(--sky-subtle)]" />
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                    <p className="text-sm font-semibold text-[var(--sky-text)]">Note</p>
-                    <p className="text-xs text-[var(--sky-subtle)]">{note.time}</p>
-                  </div>
-                  <p className="text-sm text-[var(--sky-subtle)] mt-0.5 whitespace-pre-wrap">{note.text}</p>
-                </li>
-              ))}
-            </ol>
+            {notes.length === 0 && !addingNote && (
+              <p className="text-sm text-[var(--sky-subtle)]">Jot down anything to come back to while you mark.</p>
+            )}
+            {notes.length > 0 && (
+              <ul className="space-y-3">
+                {notes.map((note) => (
+                  <li key={note.id} className="text-sm">
+                    <p className="text-[var(--sky-text)] whitespace-pre-wrap">{note.text}</p>
+                    <p className="text-xs text-[var(--sky-subtle)] mt-0.5">{note.time}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
             {addingNote && (
-              <form onSubmit={addNote} className="mt-4 space-y-2">
-                <label htmlFor="plan-note" className="sr-only">Note</label>
+              <form onSubmit={addNote} className={`space-y-2 ${notes.length ? 'mt-4' : ''}`}>
+                <label htmlFor="home-note" className="sr-only">Note</label>
                 <textarea
-                  id="plan-note"
+                  id="home-note"
                   autoFocus
-                  rows={2}
+                  rows={3}
                   value={noteDraft}
                   onChange={(event) => setNoteDraft(event.target.value)}
-                  placeholder="e.g. Re-check Q3 answers for S3 Blue after lunch"
+                  placeholder="e.g. Re-check Q3 for S3 Blue after lunch"
                   className={`${fieldClass} h-auto py-2`}
                 />
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-xs text-[var(--sky-subtle)]">Notes are kept for this session only.</p>
-                  <div className="flex gap-2">
-                    <Button variant="secondary" size="xs" onClick={() => { setAddingNote(false); setNoteDraft('') }}>
-                      Cancel
-                    </Button>
-                    <Button variant="primary" size="xs" type="submit" disabled={!noteDraft.trim()}>
-                      Add note
-                    </Button>
-                  </div>
+                <p className="text-xs text-[var(--sky-subtle)]">Kept for this session only.</p>
+                <div className="flex justify-end gap-2">
+                  <Button variant="secondary" size="xs" onClick={() => { setAddingNote(false); setNoteDraft('') }}>
+                    Cancel
+                  </Button>
+                  <Button variant="primary" size="xs" type="submit" disabled={!noteDraft.trim()}>
+                    Save note
+                  </Button>
                 </div>
               </form>
             )}
-          </Panel>
-        </div>
-
-        {/* Supporting column */}
-        <div className="space-y-6 min-w-0">
-          <Panel meta="Usage snapshot" title="Today's load">
-            <dl className="divide-y divide-[var(--sky-panel-border)] text-sm">
-              <div className="flex items-center justify-between py-2.5 first:pt-0">
-                <dt className="text-[var(--sky-subtle)]">Pages graded today</dt>
-                <dd className="font-semibold tabular-nums text-[var(--sky-text)]">{teacher.usage.today}</dd>
-              </div>
-              <div className="flex items-center justify-between py-2.5">
-                <dt className="text-[var(--sky-subtle)]">This week</dt>
-                <dd className="font-semibold tabular-nums text-[var(--sky-text)]">{teacher.usage.thisWeek} pages</dd>
-              </div>
-              <div className="flex items-center justify-between py-2.5 last:pb-0">
-                <dt className="text-[var(--sky-subtle)]">Wallet balance</dt>
-                <dd className="font-semibold tabular-nums text-[var(--sky-text)]">
-                  <Link href="/dashboard/billing" className="hover:text-[var(--action-accent)] rounded">
-                    {teacher.balancePages.toLocaleString()} pages
-                  </Link>
-                </dd>
-              </div>
-            </dl>
-          </Panel>
-
-          <Panel meta="Exams" title="Marking progress" actions={<Link href="/dashboard/exams" className="text-sm font-medium text-[var(--action-accent)] hover:underline rounded">All exams</Link>}>
-            <ul className="space-y-4">
-              {exams.map((exam) => (
-                <li key={exam.id}>
-                  <div className="flex items-baseline justify-between gap-3 text-sm">
-                    <Link href={`/dashboard/exams/${exam.id}`} className="font-medium text-[var(--sky-text)] hover:text-[var(--action-accent)] truncate rounded">
-                      {exam.title}
-                    </Link>
-                    <span className="text-xs tabular-nums text-[var(--sky-subtle)] whitespace-nowrap">
-                      {exam.stats.graded} / {exam.stats.total}
-                    </span>
-                  </div>
-                  <ProgressBar
-                    value={exam.stats.graded}
-                    max={exam.stats.total}
-                    tone={exam.stats.graded === exam.stats.total ? 'positive' : 'info'}
-                    label={`${exam.title} marking progress`}
-                    className="mt-1.5"
-                  />
-                </li>
-              ))}
-            </ul>
-          </Panel>
-
-          <Panel
-            meta="Usage planner"
-            title="Auto-cost estimator"
-            actions={
-              <Button variant="secondary" size="xs" onClick={() => setEditingPlanner((v) => !v)} aria-pressed={editingPlanner}>
-                {editingPlanner ? 'Done' : 'Adjust'}
-              </Button>
-            }
-          >
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-xs text-[var(--sky-subtle)]">
-                  <th scope="col" className="pb-2 font-medium">Level</th>
-                  <th scope="col" className="pb-2 font-medium text-right">Pages</th>
-                  <th scope="col" className="pb-2 font-medium text-right">Cost</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--sky-panel-border)]">
-                {plannerRows.map((row, index) => (
-                  <tr key={row.level}>
-                    <th scope="row" className="py-2 text-left font-medium text-[var(--sky-text)]">
-                      {row.level}
-                      <span className="block text-xs font-normal text-[var(--sky-subtle)]">RWF {row.rate} per page</span>
-                    </th>
-                    <td className="py-2 text-right tabular-nums text-[var(--sky-text)]">
-                      {editingPlanner ? (
-                        <input
-                          type="number"
-                          min="0"
-                          step="10"
-                          value={row.sample}
-                          aria-label={`${row.level} pages`}
-                          onChange={(event) => {
-                            const sample = Math.max(0, Number(event.target.value) || 0)
-                            setPlannerRows((rows) => rows.map((r, i) => (i === index ? { ...r, sample } : r)))
-                          }}
-                          className={`${fieldClass} h-8 w-20 text-right`}
-                        />
-                      ) : (
-                        row.sample
-                      )}
-                    </td>
-                    <td className="py-2 text-right tabular-nums text-[var(--sky-text)]">RWF {(row.sample * row.rate).toLocaleString()}</td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className="border-t border-[var(--sky-panel-border)]">
-                  <th scope="row" className="pt-2.5 text-left font-semibold text-[var(--sky-text)]">Total</th>
-                  <td className="pt-2.5 text-right tabular-nums text-[var(--sky-subtle)]">
-                    {plannerRows.reduce((sum, row) => sum + row.sample, 0)}
-                  </td>
-                  <td className="pt-2.5 text-right font-semibold tabular-nums text-[var(--sky-text)]">RWF {plannerTotal.toLocaleString()}</td>
-                </tr>
-              </tfoot>
-            </table>
           </Panel>
         </div>
       </div>

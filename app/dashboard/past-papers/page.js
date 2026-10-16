@@ -16,7 +16,7 @@ export default function PastPapersPage() {
     <div className="space-y-6">
       <WorkspaceHeader
         meta="Past papers"
-        title="Browse, download, or assign past papers"
+        title="Past papers"
         subtitle="Students can access these for free using your class code."
       />
       <PastPapersList />

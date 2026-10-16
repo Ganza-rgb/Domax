@@ -153,7 +153,7 @@ export default function SimpleSidebar() {
           {navGroups.map((group, groupIndex) => (
             <div key={group.label} className={groupIndex > 0 ? 'mt-4' : ''}>
               <p
-                className={`px-5 mb-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--sky-subtle)] whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                className={`px-5 mb-1 text-[12px] font-medium text-[var(--sky-subtle)] whitespace-nowrap overflow-hidden transition-all duration-300 ${
                   isExpanded ? 'opacity-100 max-h-6' : 'opacity-0 max-h-0'
                 }`}
               >
@@ -282,7 +282,7 @@ export default function SimpleSidebar() {
             </div>
             {navGroups.map((group) => (
               <div key={group.label} className="mt-2">
-                <p className="px-2 mb-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--sky-subtle)]">{group.label}</p>
+                <p className="px-2 mb-1 text-[12px] font-medium text-[var(--sky-subtle)]">{group.label}</p>
                 <ul className="grid grid-cols-2 gap-1">
                   {group.items.map((item) => {
                     const isActive = isActivePath(pathname, item.href)

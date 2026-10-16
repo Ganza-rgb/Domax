@@ -26,8 +26,8 @@ export default function BillingPage() {
     <div className="space-y-6">
       <WorkspaceHeader
         meta="Billing & usage"
-        title="Keep credits healthy"
-        subtitle="Domax charges per page or booklet with transparent rates."
+        title="Billing"
+        subtitle="Your wallet, the rates you’re charged, and every transaction."
         actions={
           <>
             <Button variant="secondary" size="sm" onClick={downloadStatement} disabled={transactions.length === 0}>

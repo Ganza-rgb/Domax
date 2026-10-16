@@ -34,8 +34,8 @@ export default function AnalyticsPage() {
     <div className="space-y-6">
       <WorkspaceHeader
         meta="Analytics"
-        title="Performance insights"
-        subtitle="Track grading trends and class performance"
+        title="Analytics"
+        subtitle="Class performance and marking progress, from finalized scripts."
       />
 
       <StatGroup

@@ -10,10 +10,9 @@ import { useUserState } from '@/states/useUserState'
 import {
   ProgressBar,
   StatusPill,
-  averageConfidence,
+  ReadSummary,
   markedCount,
   submissionStatus,
-  LOW_CONFIDENCE,
 } from './ui'
 
 /**
@@ -133,7 +132,6 @@ function OpenLink({ href, children }) {
 
 function SubmissionDetails({ submission }) {
   const status = submissionStatus(submission.status)
-  const avg = averageConfidence(submission.questions)
   const marked = markedCount(submission.questions)
   const total = submission.questions?.length || 0
   return (
@@ -153,10 +151,8 @@ function SubmissionDetails({ submission }) {
         <ProgressBar value={marked} max={total} tone={marked === total ? 'positive' : 'info'} label="Questions marked" />
       </div>
       <dl className="divide-y divide-[var(--sky-panel-border)] border-y border-[var(--sky-panel-border)]">
-        <Row label="AI confidence">
-          {avg === null ? '—' : (
-            <span className={avg < LOW_CONFIDENCE ? 'text-[var(--vscode-orange)]' : ''}>{Math.round(avg * 100)}%</span>
-          )}
+        <Row label="Domax’s read">
+          <ReadSummary questions={submission.questions} />
         </Row>
         <Row label="Pages">{submission.pages?.length || 0}</Row>
         {submission.receivedAt && <Row label="Received">{submission.receivedAt}</Row>}
@@ -184,7 +180,7 @@ function ExamDetailsSummary({ exam }) {
       </div>
       <dl className="divide-y divide-[var(--sky-panel-border)] border-y border-[var(--sky-panel-border)]">
         <Row label="Needs review">{exam.stats?.needsReview ?? 0}</Row>
-        <Row label="Low confidence">{exam.stats?.aiLowConfidence ?? 0}</Row>
+        <Row label="Unsure answers">{exam.stats?.aiLowConfidence ?? 0}</Row>
         {exam.scheduled && <Row label="Scheduled">{exam.scheduled}</Row>}
         {exam.duration && <Row label="Duration">{exam.duration}</Row>}
       </dl>

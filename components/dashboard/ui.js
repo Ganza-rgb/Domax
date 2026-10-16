@@ -16,17 +16,18 @@ import Link from 'next/link'
 /* Panel — the standard workspace surface with an optional header row  */
 /* ------------------------------------------------------------------ */
 export function Panel({ title, meta, actions, children, className = '', bodyClassName = '', as: Tag = 'section', ...props }) {
-  const hasHeader = title || meta || actions
+  // A panel shows one heading. `meta` is only used when there's no title.
+  const heading = title || meta
+  const hasHeader = heading || actions
   return (
     <Tag
-      className={`rounded-xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] ${className}`}
+      className={`rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] ${className}`}
       {...props}
     >
       {hasHeader && (
         <header className="flex items-start justify-between gap-3 px-5 pt-4 pb-3">
           <div className="min-w-0">
-            {meta && <p className="sky-label mb-0.5">{meta}</p>}
-            {title && <h2 className="text-[15px] font-semibold text-[var(--sky-text)] leading-snug">{title}</h2>}
+            {heading && <h2 className="font-body text-[15px] font-semibold tracking-[-0.01em] text-[var(--sky-text)] leading-snug">{heading}</h2>}
           </div>
           {actions && <div className="flex items-center gap-2 flex-shrink-0">{actions}</div>}
         </header>
@@ -56,15 +57,15 @@ export function StatGroup({ items, className = '' }) {
   }[items.length] || 'grid-cols-2 lg:grid-cols-4'
   return (
     <dl
-      className={`grid ${cols} gap-px overflow-hidden rounded-xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel-border)] ${className}`}
+      className={`grid ${cols} gap-px overflow-hidden rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel-border)] ${className}`}
     >
       {items.map((item) => (
-        <div key={item.label} className="bg-[var(--sky-panel)] px-5 py-4">
-          <dt className="text-[13px] text-[var(--sky-subtle)]">{item.label}</dt>
-          <dd className={`mt-1 text-2xl font-semibold tabular-nums tracking-tight ${toneText[item.tone || 'neutral']}`}>
+        <div key={item.label} className="bg-[var(--sky-panel)] px-5 sm:px-6 py-5">
+          <dt className="text-[13px] font-medium text-[var(--sky-subtle)]">{item.label}</dt>
+          <dd className={`mt-2 font-headline text-[1.875rem] leading-none font-semibold tabular-nums tracking-[-0.035em] ${toneText[item.tone || 'neutral']}`}>
             {item.value}
           </dd>
-          {item.hint && <dd className="mt-0.5 text-xs text-[var(--sky-subtle)]">{item.hint}</dd>}
+          {item.hint && <dd className="mt-2 text-xs text-[var(--sky-subtle)]">{item.hint}</dd>}
         </div>
       ))}
     </dl>
@@ -116,6 +117,44 @@ export function markedCount(questions = []) {
 
 export const LOW_CONFIDENCE = 0.7
 
+/*
+ * Confidence scores aren't calibrated yet, so the interface never shows them
+ * as percentages: an answer is either clear, or Domax was unsure about it.
+ */
+export function unsureQuestions(questions = []) {
+  return questions
+    .map((q, index) => ({ ...q, number: index + 1 }))
+    .filter((q) => (q?.confidence ?? 1) < LOW_CONFIDENCE)
+}
+
+export function ReadSummary({ questions = [], className = '' }) {
+  const unsure = unsureQuestions(questions)
+  if (!unsure.length) {
+    return (
+      <span className={`inline-flex items-center gap-1.5 text-[13px] text-[var(--sky-subtle)] ${className}`}>
+        <TickMark className="w-3.5 h-3.5" />
+        Clear
+      </span>
+    )
+  }
+  return (
+    <span className={`inline-flex items-center gap-1.5 text-[13px] font-medium text-[var(--vscode-orange)] ${className}`}>
+      <span aria-hidden="true" className="w-1.5 h-1.5 rounded-full bg-current" />
+      Unsure on {unsure.map((q) => `Q${q.number}`).join(', ')}
+    </span>
+  )
+}
+
+/** The brand tick: only ever used for something clear, signed or done. */
+export function TickMark({ className = 'w-4 h-4' }) {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+      <circle cx="8" cy="8" r="8" fill="#00cd90" />
+      <path d="M4.6 8.3l2.2 2.2 4.6-4.8" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 /* ------------------------------------------------------------------ */
 /* ProgressBar                                                         */
 /* ------------------------------------------------------------------ */
@@ -148,10 +187,16 @@ export function ProgressBar({ value = 0, max = 100, tone = 'info', label, classN
 /* ------------------------------------------------------------------ */
 export function EmptyState({ title, body, action, className = '' }) {
   return (
-    <div className={`flex flex-col items-center justify-center rounded-xl border border-dashed border-[var(--sky-panel-border)] px-6 py-10 text-center ${className}`}>
-      <p className="text-sm font-semibold text-[var(--sky-text)]">{title}</p>
-      {body && <p className="mt-1 max-w-sm text-sm text-[var(--sky-subtle)]">{body}</p>}
-      {action && <div className="mt-4">{action}</div>}
+    <div className={`flex flex-col items-center justify-center rounded-xl bg-[var(--sky-surface)] px-6 py-12 text-center ${className}`}>
+      {/* A small stack of sheets: Domax's subject is paper */}
+      <svg viewBox="0 0 48 48" className="w-12 h-12 mb-4" aria-hidden="true">
+        <rect x="12" y="9" width="24" height="31" rx="3" fill="var(--sky-panel)" stroke="var(--sky-panel-border)" strokeWidth="1.5" transform="rotate(-8 24 24)" />
+        <rect x="12" y="8" width="24" height="31" rx="3" fill="var(--sky-panel)" stroke="var(--sky-subtle)" strokeOpacity="0.45" strokeWidth="1.5" />
+        <path d="M17 16h14M17 21h14M17 26h9" stroke="var(--sky-subtle)" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+      <p className="font-headline text-lg font-semibold tracking-[-0.02em] text-[var(--sky-text)]">{title}</p>
+      {body && <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-[var(--sky-subtle)]">{body}</p>}
+      {action && <div className="mt-5">{action}</div>}
     </div>
   )
 }
@@ -344,7 +389,7 @@ const wsSizes = {
 }
 
 export function WsButton({ children, variant = 'primary', size = 'sm', href, className = '', type = 'button', disabled = false, ...props }) {
-  const classes = `inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--sky-panel)] focus-visible:ring-[var(--action-accent)] disabled:cursor-not-allowed disabled:opacity-50 ${wsVariants[variant] || wsVariants.primary} ${wsSizes[size] || wsSizes.sm} ${className}`
+  const classes = `inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--sky-panel)] focus-visible:ring-[var(--action-accent)] disabled:cursor-not-allowed disabled:opacity-50 ${wsVariants[variant] || wsVariants.primary} ${wsSizes[size] || wsSizes.sm} ${className}`
   if (href && !disabled) {
     return (
       <Link href={href} className={classes} {...props}>

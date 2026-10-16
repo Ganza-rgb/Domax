@@ -20,12 +20,12 @@ export default function SubmissionPagesViewer({ pages = [], activePage, onSelect
     <div className="space-y-3">
       {/* Current page */}
       <div className="rounded-xl border border-[var(--sky-panel-border)] bg-[var(--sky-surface)] p-3">
-        <div className="aspect-[3/4] w-full rounded-md bg-[var(--sky-panel)] border border-[var(--sky-panel-border)] flex flex-col items-center justify-center gap-1 text-[var(--sky-subtle)]">
-          <svg className="w-8 h-8 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-            <path d="M7 4h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm7 0v5h5" />
-          </svg>
-          <p className="text-sm font-medium text-[var(--sky-text)]">{current?.label}</p>
-          <p className="text-xs">Scan preview unavailable</p>
+        {/* Paper stays paper in either theme. No scan images exist in the data
+            yet, so the sheet is labelled rather than faked. */}
+        <div className="paper relative aspect-[3/4] w-full rounded-md border border-[#E7E0D3] shadow-[0_8px_20px_-14px_rgba(10,48,89,0.45)] flex flex-col items-center justify-center gap-1 text-center px-6">
+          <span aria-hidden="true" className="absolute left-8 top-0 bottom-0 w-px bg-[#EBB3B3]" />
+          <p className="relative text-sm font-semibold text-[#0A3059] bg-[#fdfcf8] px-2">{current?.label}</p>
+          <p className="relative text-xs text-[#5B6B82] bg-[#fdfcf8] px-2">The scanned page will appear here.</p>
         </div>
         <div className="mt-3 flex items-center justify-between">
           <button
@@ -68,7 +68,7 @@ export default function SubmissionPagesViewer({ pages = [], activePage, onSelect
                   : 'border-[var(--sky-panel-border)] bg-[var(--sky-panel)] text-[var(--sky-subtle)] hover:border-[var(--action-accent)]'
               }`}
             >
-              <span className="block aspect-[3/4] rounded-sm bg-[var(--sky-surface)] mb-1" aria-hidden="true" />
+              <span className="block aspect-[3/4] rounded-sm border border-[#E7E0D3] bg-[#fdfcf8] mb-1" aria-hidden="true" />
               {page.label}
             </button>
           )

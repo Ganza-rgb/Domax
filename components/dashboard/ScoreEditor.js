@@ -66,14 +66,14 @@ export default function ScoreEditor({ question, index, onChange }) {
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 sm:items-end">
         {/* AI suggestion */}
         <div className="rounded-lg bg-[var(--sky-surface)] px-3 py-2.5">
-          <p className="text-xs text-[var(--sky-subtle)]">AI suggestion</p>
+          <p className="text-xs text-[var(--sky-subtle)]">Domax suggests</p>
           <div className="mt-0.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
             <p className="text-lg font-semibold tabular-nums text-[var(--sky-text)]">
               {question.aiScore}
               <span className="text-sm font-normal text-[var(--sky-subtle)]"> / {question.maxScore}</span>
             </p>
-            <p className={`text-xs font-medium tabular-nums ${lowConfidence ? 'text-[var(--vscode-orange)]' : 'text-[var(--sky-subtle)]'}`}>
-              {(question.confidence * 100).toFixed(0)}% confidence{lowConfidence ? ' · check carefully' : ''}
+            <p className={`text-xs font-medium ${lowConfidence ? 'text-[var(--vscode-orange)]' : 'text-[var(--sky-subtle)]'}`}>
+              {lowConfidence ? 'Domax was unsure · check carefully' : 'Clear read'}
             </p>
             {!isMarked && (
               <button

@@ -46,8 +46,8 @@ export default function CoursesPage() {
     <div className="space-y-6">
       <WorkspaceHeader
         meta="Course management"
-        title="Manage your courses and classes"
-        subtitle="Organize students, exams, and assignments by course"
+        title="Courses"
+        subtitle="Your classes, with their students, exams and assignments."
         actions={
           <Button variant="primary" size="sm" onClick={() => setShowCreateForm(true)} disabled={showCreateForm}>
             Create course

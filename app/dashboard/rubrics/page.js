@@ -50,8 +50,8 @@ export default function RubricsPage() {
     <div className="space-y-6">
       <WorkspaceHeader
         meta="Rubric management"
-        title="Create and manage rubrics"
-        subtitle="Build reusable grading criteria for consistent scoring"
+        title="Rubrics"
+        subtitle="Marking schemes you can reuse across classes and terms."
         actions={
           <Button variant="primary" size="sm" onClick={() => setShowCreateForm(true)} data-tour="create-rubric-button" disabled={showCreateForm}>
             Create rubric

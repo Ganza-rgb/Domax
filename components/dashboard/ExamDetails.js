@@ -64,7 +64,7 @@ export default function ExamDetails({ exam, onOpenSubmission, hideTitle = false 
           { label: 'Total submissions', value: exam.stats.total },
           { label: 'Graded', value: exam.stats.graded },
           { label: 'Needs review', value: exam.stats.needsReview, tone: exam.stats.needsReview ? 'caution' : 'neutral' },
-          { label: 'Low confidence', value: exam.stats.aiLowConfidence, tone: exam.stats.aiLowConfidence ? 'caution' : 'neutral' },
+          { label: 'Unsure answers', value: exam.stats.aiLowConfidence, tone: exam.stats.aiLowConfidence ? 'caution' : 'neutral' },
         ]}
       />
 
@@ -79,7 +79,7 @@ export default function ExamDetails({ exam, onOpenSubmission, hideTitle = false 
                 <tr className="bg-[var(--sky-surface)] text-left text-xs text-[var(--sky-subtle)]">
                   <th scope="col" className="px-4 py-2 font-medium">Student</th>
                   <th scope="col" className="px-3 py-2 font-medium">Progress</th>
-                  <th scope="col" className="px-3 py-2 font-medium">AI confidence</th>
+                  <th scope="col" className="px-3 py-2 font-medium">Domax’s read</th>
                   <th scope="col" className="px-3 py-2 font-medium">Updated</th>
                   <th scope="col" className="px-4 py-2"><span className="sr-only">Action</span></th>
                 </tr>
@@ -92,8 +92,8 @@ export default function ExamDetails({ exam, onOpenSubmission, hideTitle = false 
                     <tr key={submission.id} className="hover:bg-[var(--sky-surface)]">
                       <td className="px-4 py-2.5 font-medium text-[var(--sky-text)]">{submission.student}</td>
                       <td className="px-3 py-2.5 text-[var(--sky-subtle)]">{submission.progress}</td>
-                      <td className={`px-3 py-2.5 tabular-nums ${low ? 'text-[var(--vscode-orange)] font-semibold' : 'text-[var(--sky-subtle)]'}`}>
-                        {submission.aiConfidence > 0 ? `${Math.round(submission.aiConfidence * 100)}%` : '—'}
+                      <td className={`px-3 py-2.5 ${low ? 'text-[var(--vscode-orange)] font-medium' : 'text-[var(--sky-subtle)]'}`}>
+                        {submission.aiConfidence > 0 ? (low ? 'Unsure' : 'Clear') : '—'}
                       </td>
                       <td className="px-3 py-2.5 tabular-nums text-[var(--sky-subtle)]">{submission.updatedAt}</td>
                       <td className="px-4 py-2.5 text-right">

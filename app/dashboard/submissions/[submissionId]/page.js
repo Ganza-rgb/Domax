@@ -54,14 +54,16 @@ export default function SubmissionDetailPage() {
 
   return (
     <div>
-      <WorkspaceHeader
-        meta="Submissions workspace"
-        title="Review and finalize scripts"
-        subtitle="AI does the heavy lifting, you focus on the edge cases."
-      />
+      {/* The breadcrumb names the script; the work gets the space. */}
+      <h1 className="sr-only">Review script</h1>
       <div className="grid grid-cols-1 xl:grid-cols-[300px_minmax(0,1fr)] gap-5 items-start">
-        <SubmissionQueue onSelect={(item) => router.push(`/dashboard/submissions/${item.id}`)} />
-        <SubmissionCanvas />
+        {/* On small screens the script comes first; the queue follows it. */}
+        <div className="order-2 xl:order-none min-w-0">
+          <SubmissionQueue onSelect={(item) => router.push(`/dashboard/submissions/${item.id}`)} />
+        </div>
+        <div className="order-1 xl:order-none min-w-0">
+          <SubmissionCanvas />
+        </div>
       </div>
     </div>
   )

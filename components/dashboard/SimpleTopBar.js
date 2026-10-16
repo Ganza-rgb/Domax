@@ -81,16 +81,6 @@ export default function SimpleTopBar() {
       </nav>
 
       <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
-        {/* Quick stats */}
-        <div className="hidden md:flex items-center gap-4 text-[13px] text-[var(--sky-subtle)] mr-1">
-          <Link href="/dashboard/billing" className="hover:text-[var(--sky-text)] rounded">
-            Balance <span className="text-[var(--sky-text)] font-semibold tabular-nums">{(teacher?.balancePages || 0).toLocaleString()} pages</span>
-          </Link>
-          <span>
-            Today <span className="text-[var(--sky-text)] font-semibold tabular-nums">{teacher?.usage?.today || 0} graded</span>
-          </span>
-        </div>
-
         {/* Command palette trigger */}
         <button
           type="button"
