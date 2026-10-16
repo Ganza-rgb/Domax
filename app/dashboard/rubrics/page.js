@@ -1,21 +1,19 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { useDashboardState } from '@/states/useDashboardState'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import Button from '@/components/atoms/Button'
+import { EmptyState, Notice, Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
+
+const emptyRubric = () => ({ name: '', description: '', criteria: [{ name: '', maxScore: 10, weight: 1 }] })
 
 export default function RubricsPage() {
-  const router = useRouter()
   const { setCurrentSection } = useDashboardState()
   const [rubrics, setRubrics] = useState([])
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [newRubric, setNewRubric] = useState({
-    name: '',
-    description: '',
-    criteria: [{ name: '', maxScore: 10, weight: 1 }],
-  })
+  const [newRubric, setNewRubric] = useState(emptyRubric)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     setCurrentSection('rubrics')
@@ -31,14 +29,23 @@ export default function RubricsPage() {
 
   const handleCreateRubric = () => {
     if (!newRubric.name || newRubric.criteria.some((c) => !c.name)) {
-      alert('Please fill in all required fields')
+      setError('Give the rubric a name and name every criterion.')
       return
     }
+
     // TODO: Save rubric via API
     setRubrics([...rubrics, { ...newRubric, id: Date.now() }])
-    setNewRubric({ name: '', description: '', criteria: [{ name: '', maxScore: 10, weight: 1 }] })
+    setNewRubric(emptyRubric())
+    setError(null)
     setShowCreateForm(false)
   }
+
+  const cancel = () => {
+    setShowCreateForm(false)
+    setError(null)
+  }
+
+  const totalPoints = newRubric.criteria.reduce((sum, c) => sum + (Number(c.maxScore) || 0), 0)
 
   return (
     <div className="space-y-6">
@@ -47,129 +54,159 @@ export default function RubricsPage() {
         title="Create and manage rubrics"
         subtitle="Build reusable grading criteria for consistent scoring"
         actions={
-          <Button variant="primary" size="sm" onClick={() => setShowCreateForm(true)} data-tour="create-rubric-button">
+          <Button variant="primary" size="sm" onClick={() => setShowCreateForm(true)} data-tour="create-rubric-button" disabled={showCreateForm}>
             Create rubric
           </Button>
         }
       />
 
       {showCreateForm && (
-        <section className="sky-card space-y-4" data-tour="rubric-form">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-[var(--sky-text)]">New Rubric</h3>
-            <button
-              type="button"
-              onClick={() => setShowCreateForm(false)}
-              className="text-[var(--sky-subtle)] hover:text-[var(--sky-text)]"
-            >
-              Cancel
-            </button>
-          </div>
+        <Panel meta="New" title="New rubric" data-tour="rubric-form">
+          <div className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="rubric-name" className={labelClass}>Rubric name</label>
+                <input
+                  id="rubric-name"
+                  type="text"
+                  value={newRubric.name}
+                  onChange={(e) => setNewRubric({ ...newRubric, name: e.target.value })}
+                  placeholder="e.g., Essay Writing Rubric"
+                  aria-invalid={Boolean(error && !newRubric.name)}
+                  className={fieldClass}
+                />
+              </div>
+              <div>
+                <label htmlFor="rubric-description" className={labelClass}>
+                  Description <span className="font-normal text-[var(--sky-subtle)]">(optional)</span>
+                </label>
+                <input
+                  id="rubric-description"
+                  type="text"
+                  value={newRubric.description}
+                  onChange={(e) => setNewRubric({ ...newRubric, description: e.target.value })}
+                  placeholder="Brief description of this rubric"
+                  className={fieldClass}
+                />
+              </div>
+            </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-[var(--sky-text)] mb-2">Rubric name *</label>
-            <input
-              type="text"
-              value={newRubric.name}
-              onChange={(e) => setNewRubric({ ...newRubric, name: e.target.value })}
-              placeholder="e.g., Essay Writing Rubric"
-              className="w-full px-4 py-3 rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-surface)] text-[var(--sky-text)] focus:outline-none focus:border-[#005ffe]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-[var(--sky-text)] mb-2">Description</label>
-            <textarea
-              value={newRubric.description}
-              onChange={(e) => setNewRubric({ ...newRubric, description: e.target.value })}
-              placeholder="Brief description of this rubric..."
-              rows={3}
-              className="w-full px-4 py-3 rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-surface)] text-[var(--sky-text)] focus:outline-none focus:border-[#005ffe]"
-            />
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <label className="block text-sm font-semibold text-[var(--sky-text)]">Grading criteria *</label>
-              <Button variant="outline" size="sm" onClick={handleAddCriterion}>
+            <fieldset>
+              <legend className="flex w-full items-center justify-between mb-2">
+                <span className="text-sm font-medium text-[var(--sky-text)]">Grading criteria</span>
+                <span className="text-xs text-[var(--sky-subtle)] tabular-nums">{totalPoints} points total</span>
+              </legend>
+              <div className="overflow-hidden rounded-lg border border-[var(--sky-panel-border)]">
+                <div className="hidden sm:grid grid-cols-[1fr_6rem_2.5rem] gap-3 bg-[var(--sky-surface)] px-3 py-2 text-xs text-[var(--sky-subtle)]">
+                  <span>Criterion</span>
+                  <span>Max points</span>
+                  <span className="sr-only">Remove</span>
+                </div>
+                <ul className="divide-y divide-[var(--sky-panel-border)]">
+                  {newRubric.criteria.map((criterion, idx) => (
+                    <li key={idx} className="grid grid-cols-[1fr_6rem_2.5rem] items-center gap-3 px-3 py-2">
+                      <label className="sr-only" htmlFor={`criterion-${idx}`}>Criterion {idx + 1} name</label>
+                      <input
+                        id={`criterion-${idx}`}
+                        type="text"
+                        value={criterion.name}
+                        onChange={(e) => {
+                          const updated = [...newRubric.criteria]
+                          updated[idx].name = e.target.value
+                          setNewRubric({ ...newRubric, criteria: updated })
+                        }}
+                        placeholder={`Criterion ${idx + 1}, e.g. Use of evidence`}
+                        aria-invalid={Boolean(error && !criterion.name)}
+                        className={`${fieldClass} h-9`}
+                      />
+                      <label className="sr-only" htmlFor={`criterion-${idx}-points`}>Criterion {idx + 1} max points</label>
+                      <input
+                        id={`criterion-${idx}-points`}
+                        type="number"
+                        value={criterion.maxScore}
+                        onChange={(e) => {
+                          const updated = [...newRubric.criteria]
+                          updated[idx].maxScore = Number(e.target.value)
+                          setNewRubric({ ...newRubric, criteria: updated })
+                        }}
+                        min="1"
+                        className={`${fieldClass} h-9 text-right tabular-nums`}
+                      />
+                      {newRubric.criteria.length > 1 ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = newRubric.criteria.filter((_, i) => i !== idx)
+                            setNewRubric({ ...newRubric, criteria: updated })
+                          }}
+                          aria-label={`Remove criterion ${idx + 1}`}
+                          className="w-9 h-9 flex items-center justify-center rounded-md text-[var(--sky-subtle)] hover:text-[var(--vscode-red)] hover:bg-[var(--sky-surface)]"
+                        >
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                            <path d="M18 6L6 18M6 6l12 12" />
+                          </svg>
+                        </button>
+                      ) : (
+                        <span />
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Button variant="secondary" size="sm" onClick={handleAddCriterion} className="mt-3">
                 Add criterion
               </Button>
-            </div>
-            <div className="space-y-3">
-              {newRubric.criteria.map((criterion, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-surface)]"
-                >
-                  <input
-                    type="text"
-                    value={criterion.name}
-                    onChange={(e) => {
-                      const updated = [...newRubric.criteria]
-                      updated[idx].name = e.target.value
-                      setNewRubric({ ...newRubric, criteria: updated })
-                    }}
-                    placeholder="Criterion name"
-                    className="flex-1 px-3 py-2 rounded-xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] text-sm focus:outline-none focus:border-[#005ffe]"
-                  />
-                  <input
-                    type="number"
-                    value={criterion.maxScore}
-                    onChange={(e) => {
-                      const updated = [...newRubric.criteria]
-                      updated[idx].maxScore = Number(e.target.value)
-                      setNewRubric({ ...newRubric, criteria: updated })
-                    }}
-                    placeholder="Points"
-                    min="1"
-                    className="w-24 px-3 py-2 rounded-xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] text-sm focus:outline-none focus:border-[#005ffe]"
-                  />
-                  {newRubric.criteria.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = newRubric.criteria.filter((_, i) => i !== idx)
-                        setNewRubric({ ...newRubric, criteria: updated })
-                      }}
-                      className="p-2 text-[var(--sky-subtle)] hover:text-[var(--vscode-red)]"
-                    >
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M18 6L6 18M6 6l12 12" />
-                      </svg>
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+            </fieldset>
 
-          <div className="flex gap-3">
-            <Button variant="primary" onClick={handleCreateRubric}>
-              Save Rubric
-            </Button>
-            <Button variant="outline" onClick={() => setShowCreateForm(false)}>
-              Cancel
-            </Button>
+            {error && <Notice tone="caution">{error}</Notice>}
+
+            <div className="flex justify-end gap-2 border-t border-[var(--sky-panel-border)] pt-4">
+              <Button variant="secondary" size="sm" onClick={cancel}>
+                Cancel
+              </Button>
+              <Button variant="primary" size="sm" onClick={handleCreateRubric}>
+                Save rubric
+              </Button>
+            </div>
           </div>
-        </section>
+        </Panel>
       )}
 
-      <section className="sky-card" data-tour="rubric-list">
-        <p className="sky-label">Your Rubrics</p>
+      <Panel meta="Library" title="Your rubrics" data-tour="rubric-list">
         {rubrics.length === 0 ? (
-          <p className="text-sm text-[var(--sky-subtle)] mt-3">No rubrics created yet. Click "Create rubric" to begin.</p>
+          <EmptyState
+            title="No rubrics yet"
+            body="Rubrics keep marking consistent across scripts and classes."
+            action={!showCreateForm && (
+              <Button variant="primary" size="sm" onClick={() => setShowCreateForm(true)}>
+                Create your first rubric
+              </Button>
+            )}
+          />
         ) : (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {rubrics.map((rubric) => (
-              <div key={rubric.id} className="rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-surface)] p-4">
-                <h3 className="text-lg font-semibold text-[var(--sky-text)]">{rubric.name}</h3>
-                <p className="text-sm text-[var(--sky-subtle)] mt-1">{rubric.description}</p>
-                <p className="text-xs text-[var(--sky-subtle)] mt-2">{rubric.criteria.length} criteria</p>
-              </div>
+              <li key={rubric.id} className="rounded-lg border border-[var(--sky-panel-border)] p-4">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h3 className="text-[15px] font-semibold text-[var(--sky-text)]">{rubric.name}</h3>
+                  <span className="text-xs text-[var(--sky-subtle)] tabular-nums whitespace-nowrap">
+                    {rubric.criteria.reduce((sum, c) => sum + (Number(c.maxScore) || 0), 0)} pts
+                  </span>
+                </div>
+                {rubric.description && <p className="text-sm text-[var(--sky-subtle)] mt-1">{rubric.description}</p>}
+                <ul className="mt-3 space-y-1 text-sm">
+                  {rubric.criteria.map((c, i) => (
+                    <li key={i} className="flex justify-between gap-3 text-[var(--sky-text)]">
+                      <span className="truncate">{c.name}</span>
+                      <span className="tabular-nums text-[var(--sky-subtle)]">{c.maxScore}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
-      </section>
+      </Panel>
     </div>
   )
 }
