@@ -4,8 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useDashboardState } from '@/states/useDashboardState'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import Button from '@/components/atoms/Button'
-import { Notice, Panel } from '@/components/dashboard/ui'
+import { WsButton as Button, Notice, Panel } from '@/components/dashboard/ui'
 
 const ACCEPTED = '.pdf,.docx,.txt'
 

@@ -1,9 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import Button from '@/components/atoms/Button'
 import { useSubmissionState } from '@/states/useSubmissionState'
-import { EmptyState, ProgressBar, StatGroup, LOW_CONFIDENCE, downloadCsv } from './ui'
+import { WsButton as Button, EmptyState, ProgressBar, StatGroup, LOW_CONFIDENCE, downloadCsv } from './ui'
 
 export default function ExamDetails({ exam, onOpenSubmission, hideTitle = false }) {
   const { findSubmissionById } = useSubmissionState()
@@ -75,7 +74,7 @@ export default function ExamDetails({ exam, onOpenSubmission, hideTitle = false 
           <EmptyState title="No submissions yet" body="Scripts appear here once they are uploaded for this exam." />
         ) : (
           <div className="overflow-x-auto rounded-xl border border-[var(--sky-panel-border)]">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[560px] text-sm">
               <thead>
                 <tr className="bg-[var(--sky-surface)] text-left text-xs text-[var(--sky-subtle)]">
                   <th scope="col" className="px-4 py-2 font-medium">Student</th>

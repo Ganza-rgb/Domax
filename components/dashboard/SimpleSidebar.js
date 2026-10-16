@@ -94,10 +94,7 @@ export default function SimpleSidebar() {
     localStorage.setItem('sidebarExpanded', isExpanded.toString())
   }, [isExpanded])
 
-  // Close the mobile sheet whenever the route changes or Escape is pressed
-  useEffect(() => {
-    setMoreOpen(false)
-  }, [pathname])
+  // Close the mobile sheet with Escape
   useEffect(() => {
     if (!moreOpen) return undefined
     const onKey = (event) => {
@@ -293,7 +290,10 @@ export default function SimpleSidebar() {
                       <li key={item.section}>
                         <Link
                           href={item.href}
-                          onClick={() => setCurrentSection(item.section)}
+                          onClick={() => {
+                            setCurrentSection(item.section)
+                            setMoreOpen(false)
+                          }}
                           aria-current={isActive ? 'page' : undefined}
                           className={`flex items-center gap-2.5 h-11 px-3 rounded-lg text-sm ${
                             isActive

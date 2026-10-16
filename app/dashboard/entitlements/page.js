@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import Button from '@/components/atoms/Button'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import { Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
+import { WsButton as Button, Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
 
 export default function EntitlementsPage() {
   const [teacherForm, setTeacherForm] = useState({ seats: 5, ttlHours: 72, note: '' })

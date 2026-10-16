@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { LOW_CONFIDENCE } from './ui'
 
 /**
@@ -14,10 +14,13 @@ export default function ScoreEditor({ question, index, onChange }) {
   // Local draft so the field can be empty while typing. Previously an empty
   // field was stored as 0, which counted as a teacher mark.
   const [draft, setDraft] = useState(question?.teacherScore ?? '')
+  const [syncedScore, setSyncedScore] = useState(question?.teacherScore)
 
-  useEffect(() => {
+  // When the stored mark changes elsewhere (e.g. "Use suggestion"), show it
+  if (question?.teacherScore !== syncedScore) {
+    setSyncedScore(question?.teacherScore)
     setDraft(question?.teacherScore ?? '')
-  }, [question?.teacherScore])
+  }
 
   if (!question) return null
 

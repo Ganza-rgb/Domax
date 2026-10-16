@@ -1,12 +1,11 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import Button from '@/components/atoms/Button'
 import { useSubmissionState } from '@/states/useSubmissionState'
 import { useDashboardState } from '@/states/useDashboardState'
 import SubmissionPagesViewer from './SubmissionPagesViewer'
 import SubmissionQuestionsPanel from './SubmissionQuestionsPanel'
-import { ConfirmDialog, Notice, ProgressBar, StatusPill, markedCount, submissionStatus } from './ui'
+import { WsButton as Button, ConfirmDialog, Notice, ProgressBar, StatusPill, markedCount, submissionStatus } from './ui'
 
 export default function SubmissionCanvas() {
   const { submissions, activeSubmission, setActiveSubmissionId, updateQuestionScore, finalizeSubmission, finalized } =
@@ -30,10 +29,12 @@ export default function SubmissionCanvas() {
   }, [activeSubmission, setSelectedSubmission, updatePanel])
 
   // Clear feedback when switching scripts
-  useEffect(() => {
+  const [noticeFor, setNoticeFor] = useState(activeSubmission?.id)
+  if (activeSubmission?.id !== noticeFor) {
+    setNoticeFor(activeSubmission?.id)
     setNotice(null)
     setConfirmOpen(false)
-  }, [activeSubmission?.id])
+  }
 
   const focusQuestion = useCallback((questionIndex) => {
     const input = document.querySelector(`[data-question-input="${questionIndex}"]`)

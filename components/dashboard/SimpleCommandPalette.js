@@ -104,10 +104,6 @@ export default function SimpleCommandPalette() {
     return groups
   }, [filteredCommands])
 
-  useEffect(() => {
-    setActiveIndex(0)
-  }, [query])
-
   const handleCommand = useCallback(
     (command) => {
       const section = command.href.split('/')[2] || 'home'
@@ -197,7 +193,10 @@ export default function SimpleCommandPalette() {
           <input
             autoFocus
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value)
+              setActiveIndex(0)
+            }}
             onKeyDown={onInputKeyDown}
             placeholder="Search students, scripts, exams or commands…"
             role="combobox"

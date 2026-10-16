@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import Button from '@/components/atoms/Button'
-import { EmptyState, Notice, Panel, StatGroup } from './ui'
+import { WsButton as Button, EmptyState, Notice, Panel, StatGroup } from './ui'
 
 export default function StudentProfile({ student }) {
   const [copied, setCopied] = useState(null)

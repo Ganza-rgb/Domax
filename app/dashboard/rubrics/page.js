@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useDashboardState } from '@/states/useDashboardState'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import Button from '@/components/atoms/Button'
-import { EmptyState, Notice, Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
+import { WsButton as Button, EmptyState, Notice, Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
 
 const emptyRubric = () => ({ name: '', description: '', criteria: [{ name: '', maxScore: 10, weight: 1 }] })
 

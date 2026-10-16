@@ -2,15 +2,30 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import Button from '@/components/atoms/Button'
 import { useUserState } from '@/states/useUserState'
 import { useDashboardState } from '@/states/useDashboardState'
-import { SearchField } from './ui'
+import { WsButton as Button, SearchField } from './ui'
 
 const sorters = {
   name: (a, b) => a.name.localeCompare(b.name),
   avg: (a, b) => a.avgScore - b.avgScore,
   level: (a, b) => a.level.localeCompare(b.level),
+}
+
+function SortHeader({ id, sort, onSort, children, className = '' }) {
+  const active = sort.key === id
+  return (
+    <th
+      scope="col"
+      className={`px-3 py-2 font-medium ${className}`}
+      aria-sort={active ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
+    >
+      <button type="button" onClick={() => onSort(id)} className={`inline-flex items-center gap-1 rounded hover:text-[var(--sky-text)] ${active ? 'text-[var(--sky-text)]' : ''}`}>
+        {children}
+        <span aria-hidden="true" className="text-[10px]">{active ? (sort.dir === 'asc' ? '▲' : '▼') : '↕'}</span>
+      </button>
+    </th>
+  )
 }
 
 export default function StudentList() {
@@ -39,22 +54,6 @@ export default function StudentList() {
   const toggleSort = (key) =>
     setSort((prev) => (prev.key === key ? { key, dir: prev.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: key === 'avg' ? 'desc' : 'asc' }))
 
-  const SortHeader = ({ id, children, className = '' }) => {
-    const active = sort.key === id
-    return (
-      <th
-        scope="col"
-        className={`px-3 py-2 font-medium ${className}`}
-        aria-sort={active ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
-      >
-        <button type="button" onClick={() => toggleSort(id)} className={`inline-flex items-center gap-1 rounded hover:text-[var(--sky-text)] ${active ? 'text-[var(--sky-text)]' : ''}`}>
-          {children}
-          <span aria-hidden="true" className="text-[10px]">{active ? (sort.dir === 'asc' ? '▲' : '▼') : '↕'}</span>
-        </button>
-      </th>
-    )
-  }
-
   return (
     <div className="space-y-3">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -63,19 +62,19 @@ export default function StudentList() {
           <Button variant="secondary" size="sm" disabled title="Roster import is not available yet">
             Import roster
           </Button>
-          <Button variant="primary" size="sm" disabled title="Adding students is not available yet">
+          <Button variant="secondary" size="sm" disabled title="Adding students is not available yet">
             Add student
           </Button>
         </div>
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-[var(--sky-panel-border)]">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[600px] text-sm">
           <thead>
             <tr className="bg-[var(--sky-surface)] text-left text-xs text-[var(--sky-subtle)]">
-              <SortHeader id="name" className="pl-4">Student</SortHeader>
-              <SortHeader id="level">Level</SortHeader>
-              <SortHeader id="avg" className="text-right">Average</SortHeader>
+              <SortHeader id="name" sort={sort} onSort={toggleSort} className="pl-4">Student</SortHeader>
+              <SortHeader id="level" sort={sort} onSort={toggleSort}>Level</SortHeader>
+              <SortHeader id="avg" sort={sort} onSort={toggleSort} className="text-right">Average</SortHeader>
               <th scope="col" className="px-3 py-2 font-medium">Trend</th>
               <th scope="col" className="px-3 py-2 font-medium">Last active</th>
               <th scope="col" className="px-4 py-2"><span className="sr-only">Action</span></th>

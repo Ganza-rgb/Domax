@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useRef } from 'react'
+import Link from 'next/link'
 
 /* ------------------------------------------------------------------ */
 /* Panel — the standard workspace surface with an optional header row  */
@@ -321,4 +322,39 @@ export function downloadCsv(filename, rows) {
   link.click()
   link.remove()
   URL.revokeObjectURL(url)
+}
+
+/* ------------------------------------------------------------------ */
+/* WsButton — workspace button that follows the light/dark theme.      */
+/* Same props as components/atoms/Button (variant, size, href, …).     */
+/* ------------------------------------------------------------------ */
+const wsVariants = {
+  primary: 'bg-[#005ffe] text-white hover:bg-[#0047cc] border border-transparent',
+  secondary:
+    'bg-[var(--sky-panel)] text-[var(--sky-text)] border border-[var(--sky-panel-border)] hover:bg-[var(--sky-surface)] hover:border-[var(--sky-subtle)]',
+  ghost: 'text-[var(--sky-text)] border border-transparent hover:bg-[var(--sky-surface)]',
+}
+wsVariants.outline = wsVariants.secondary
+
+const wsSizes = {
+  xs: 'h-7 px-2.5 text-xs',
+  sm: 'h-8 px-3 text-[13px]',
+  md: 'h-9 px-3.5 text-sm',
+  lg: 'h-10 px-4 text-sm',
+}
+
+export function WsButton({ children, variant = 'primary', size = 'sm', href, className = '', type = 'button', disabled = false, ...props }) {
+  const classes = `inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--sky-panel)] focus-visible:ring-[var(--action-accent)] disabled:cursor-not-allowed disabled:opacity-50 ${wsVariants[variant] || wsVariants.primary} ${wsSizes[size] || wsSizes.sm} ${className}`
+  if (href && !disabled) {
+    return (
+      <Link href={href} className={classes} {...props}>
+        {children}
+      </Link>
+    )
+  }
+  return (
+    <button type={type} className={classes} disabled={disabled} {...props}>
+      {children}
+    </button>
+  )
 }

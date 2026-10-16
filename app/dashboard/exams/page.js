@@ -1,11 +1,10 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
-import Button from '@/components/atoms/Button'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import ExamList from '@/components/dashboard/ExamList'
 import ExamDetails from '@/components/dashboard/ExamDetails'
-import { Panel, StatGroup } from '@/components/dashboard/ui'
+import { WsButton as Button, Panel, StatGroup } from '@/components/dashboard/ui'
 import { useDashboardState } from '@/states/useDashboardState'
 import { useExamState } from '@/states/useExamState'
 import { useSubmissionState } from '@/states/useSubmissionState'
@@ -68,7 +67,7 @@ export default function ExamsPage() {
               Import exam
             </Button>
             <Button
-              variant="primary"
+              variant="secondary"
               size="sm"
               data-tour="create-exam-button"
               disabled

@@ -21,7 +21,7 @@ import {
  *
  * It only appears when something is selected (an exam, a student or a
  * submission), so pages without a selection get the full width. It is hidden
- * on the submissions workspace, which already shows the same details inline.
+ * on Home, Submissions and Exams, which already show the same details inline.
  */
 export default function SimpleRightPanel() {
   const pathname = usePathname()
@@ -60,7 +60,9 @@ export default function SimpleRightPanel() {
     return null
   }, [rightPanelData, selectedStudent, findStudentById])
 
-  const hiddenHere = pathname === '/dashboard' || pathname.startsWith('/dashboard/submissions')
+  // Pages that already show the selected record inline don't need the panel
+  const hiddenHere =
+    pathname === '/dashboard' || pathname.startsWith('/dashboard/submissions') || pathname.startsWith('/dashboard/exams')
   const type = rightPanelData?.type
   // Show the item that matches the current panel type first, then fall back.
   const view =

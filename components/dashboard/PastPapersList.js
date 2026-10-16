@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import Button from '@/components/atoms/Button'
 import { useUserState } from '@/states/useUserState'
+import { WsButton as Button, EmptyState, Segmented, StatusPill } from './ui'
 
 const filters = ['All', 'P6', 'S3', 'S6']
 
@@ -14,54 +14,60 @@ export default function PastPapersList() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-2">
-        {filters.map((filter) => (
-          <button
-            key={filter}
-            type="button"
-            onClick={() => setActiveFilter(filter)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-              activeFilter === filter
-                ? 'bg-[#005ffe] text-white shadow-lg'
-                : 'bg-[var(--sky-surface)] text-[var(--sky-text)]'
-            }`}
-          >
-            {filter}
-          </button>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filtered.map((paper) => (
-          <div key={paper.id} className="sky-card flex flex-col gap-3">
-            <div>
-              <p className="sky-label">{paper.level}</p>
-              <h3 className="text-lg font-semibold text-[var(--sky-text)]">{paper.title}</h3>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {paper.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-1 rounded-full bg-[var(--sky-surface)] text-xs font-semibold text-[var(--sky-text)]"
-                >
-                  {tag}
-                </span>
+      <Segmented
+        label="Filter by level"
+        value={activeFilter}
+        onChange={setActiveFilter}
+        options={filters.map((filter) => ({
+          value: filter,
+          label: filter,
+          count: filter === 'All' ? pastPapers.length : pastPapers.filter((p) => p.level === filter).length,
+        }))}
+      />
+
+      {filtered.length === 0 ? (
+        <EmptyState title="No papers for this level" body="Try another level." />
+      ) : (
+        <div className="overflow-x-auto rounded-xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)]">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-[var(--sky-surface)] text-left text-xs text-[var(--sky-subtle)]">
+                <th scope="col" className="px-5 py-2 font-medium">Paper</th>
+                <th scope="col" className="px-3 py-2 font-medium">Level</th>
+                <th scope="col" className="px-3 py-2 font-medium">Type</th>
+                <th scope="col" className="px-3 py-2 font-medium text-right">Pages</th>
+                <th scope="col" className="px-5 py-2"><span className="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[var(--sky-panel-border)]">
+              {filtered.map((paper) => (
+                <tr key={paper.id}>
+                  <td className="px-5 py-3 font-semibold text-[var(--sky-text)]">{paper.title}</td>
+                  <td className="px-3 py-3 text-[var(--sky-subtle)]">{paper.level}</td>
+                  <td className="px-3 py-3">
+                    <div className="flex flex-wrap gap-1">
+                      {paper.tags.map((tag) => (
+                        <StatusPill key={tag}>{tag}</StatusPill>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-3 py-3 text-right tabular-nums text-[var(--sky-text)]">{paper.pages}</td>
+                  <td className="px-5 py-3">
+                    <div className="flex justify-end gap-2">
+                      <Button variant="secondary" size="xs" disabled title="Paper files are not available yet">
+                        Download
+                      </Button>
+                      <Button variant="secondary" size="xs" disabled title="Assigning papers is not available yet">
+                        Assign
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
               ))}
-            </div>
-            <div className="flex items-center justify-between text-sm text-[var(--sky-subtle)]">
-              <span>{paper.pages} pages</span>
-              <div className="flex gap-2">
-                <Button variant="outline" size="xs">
-                  Download
-                </Button>
-                <Button variant="primary" size="xs">
-                  Assign
-                </Button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
-

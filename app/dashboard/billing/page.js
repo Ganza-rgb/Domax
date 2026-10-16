@@ -1,10 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
-import Button from '@/components/atoms/Button'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import BillingOverview from '@/components/dashboard/BillingOverview'
-import { downloadCsv } from '@/components/dashboard/ui'
+import { WsButton as Button, downloadCsv } from '@/components/dashboard/ui'
 import { useDashboardState } from '@/states/useDashboardState'
 import { useUserState } from '@/states/useUserState'
 

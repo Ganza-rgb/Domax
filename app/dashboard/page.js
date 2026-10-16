@@ -2,10 +2,8 @@
 
 import { useMemo, useEffect, useState } from 'react'
 import Link from 'next/link'
-import Button from '@/components/atoms/Button'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import {
-  Panel,
+import { WsButton as Button, Panel,
   StatGroup,
   StatusPill,
   ProgressBar,
@@ -15,8 +13,7 @@ import {
   averageConfidence,
   markedCount,
   fieldClass,
-  LOW_CONFIDENCE,
-} from '@/components/dashboard/ui'
+  LOW_CONFIDENCE, } from '@/components/dashboard/ui'
 import { useDashboardState } from '@/states/useDashboardState'
 import { useSubmissionState } from '@/states/useSubmissionState'
 import { useExamState } from '@/states/useExamState'
@@ -182,7 +179,7 @@ export default function DashboardPage() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+                <table className="w-full min-w-[560px] text-sm">
                   <thead>
                     <tr className="border-y border-[var(--sky-panel-border)] bg-[var(--sky-surface)] text-left text-xs text-[var(--sky-subtle)]">
                       <th scope="col" className="px-5 py-2 font-medium">Student</th>

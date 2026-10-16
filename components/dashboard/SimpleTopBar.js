@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useUserState } from '@/states/useUserState'
@@ -24,17 +24,19 @@ const pageTitles = {
   '/dashboard/settings': 'Settings',
 }
 
+const subscribeNoop = () => () => {}
+
 export default function SimpleTopBar() {
   const pathname = usePathname()
   const { teacher, findStudentById } = useUserState()
   const { toggleTheme, isDark } = useThemeState()
   const { findExamById } = useExamState()
   const { findSubmissionById } = useSubmissionState()
-  const [isMac, setIsMac] = useState(false)
-
-  useEffect(() => {
-    setIsMac(/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent))
-  }, [])
+  const isMac = useSyncExternalStore(
+    subscribeNoop,
+    () => /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent),
+    () => false
+  )
 
   // Breadcrumb: section, then the record name on detail routes
   const basePath = pathname.split('/').slice(0, 3).join('/')

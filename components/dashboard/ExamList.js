@@ -33,7 +33,7 @@ export default function ExamList() {
               type="button"
               onClick={() => handleSelect(exam.id)}
               aria-current={isActive ? 'true' : undefined}
-              className={`w-full rounded-lg px-3 py-3 text-left transition-all ${
+              className={`w-full rounded-lg px-3 py-3 text-left transition-all hover:-translate-y-1 ${
                 isActive
                   ? 'bg-[var(--action-accent-soft)] ring-1 ring-inset ring-[var(--action-accent)]'
                   : 'hover:bg-[var(--sky-surface)]'
