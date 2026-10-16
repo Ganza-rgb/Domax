@@ -71,7 +71,7 @@ export default function ProductPage() {
     },
     {
       name: 'LMS Integrations',
-      description: 'Seamless integration with Google Classroom, Canvas, Blackboard, and other LMS platforms. Sync assignments and grades automatically.',
+      description: 'Connects to Google Classroom, Canvas, Blackboard and other LMS platforms, so assignments and marks don’t have to be copied across by hand.',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.658 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -210,7 +210,7 @@ export default function ProductPage() {
         </div>
         <div className="container-custom relative z-10">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-semibold mb-5">
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-medium mb-5">
               Powerful Grading Tools Built for Educators
             </h1>
             <p className="lede mb-9 max-w-2xl mx-auto">
@@ -233,7 +233,7 @@ export default function ProductPage() {
         <div className="container-custom">
           <div className="max-w-2xl mb-10 sm:mb-12">
             <p className="eyebrow mb-3">Product</p>
-            <h2 className="text-3xl sm:text-4xl font-semibold text-ink mb-4">
+            <h2 className="text-3xl sm:text-4xl font-medium text-ink mb-4">
               Complete Feature Set
             </h2>
             <p className="lede">
@@ -287,7 +287,7 @@ export default function ProductPage() {
       <section ref={valuePropsRef} className="py-16 sm:py-24 bg-white">
         <div className="container-custom">
           <div className="max-w-2xl mb-10 sm:mb-12">
-            <h2 className="text-3xl sm:text-4xl font-semibold text-ink mb-4">
+            <h2 className="text-3xl sm:text-4xl font-medium text-ink mb-4">
               Why educators love Domax
             </h2>
             <p className="lede">
@@ -348,7 +348,7 @@ export default function ProductPage() {
         </div>
         <div className="container-custom relative z-10 text-center">
           <div className="rounded-2xl bg-[#0A3059] px-6 py-14 sm:py-16">
-          <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-medium text-white mb-4">
             Ready to transform your grading?
           </h2>
           <p className="text-base sm:text-lg text-white/75 max-w-xl mx-auto mb-8">

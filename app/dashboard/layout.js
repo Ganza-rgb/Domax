@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }) {
         <UserStateProvider>
           <ExamStateProvider>
             <SubmissionStateProvider>
-              <div className="flex h-screen bg-[var(--sky-surface)] text-[var(--sky-text)] overflow-hidden">
+              <div data-workspace className="flex h-screen bg-[var(--sky-surface)] text-[var(--sky-text)] overflow-hidden">
                 {/* Left Sidebar - VS Code style */}
                 <SimpleSidebar />
                 
@@ -29,14 +29,12 @@ export default function DashboardLayout({ children }) {
                   
                   {/* Main content */}
                   <div className="flex-1 flex overflow-hidden">
-                    <main className="flex-1 overflow-y-auto bg-[var(--sky-panel)] p-4 lg:p-6 pb-20 lg:pb-6">
-                      {children}
+                    <main id="workspace-main" className="flex-1 overflow-y-auto bg-[var(--sky-surface)] px-4 pt-5 pb-24 sm:px-6 lg:px-8 lg:pt-7 lg:pb-10">
+                      <div className="mx-auto max-w-[1280px]">{children}</div>
                     </main>
-                    
-                    {/* Right panel - VS Code style */}
-                    <aside className="hidden lg:block w-64 border-l border-[var(--sky-panel-border)] bg-[var(--sky-panel)] overflow-y-auto">
-                      <SimpleRightPanel />
-                    </aside>
+
+                    {/* Context panel — renders only when something is selected */}
+                    <SimpleRightPanel />
                   </div>
                 </div>
               </div>

@@ -148,7 +148,7 @@ export default function FeaturesPage() {
     {
       title: 'LMS Integrations',
       description:
-        'Seamless integration with Google Classroom, Canvas, Moodle, and more. Sync grades and assignments automatically.',
+        'Connects to Google Classroom, Canvas, Moodle and others, so assignments and marks don’t have to be copied across by hand.',
       icon: (
         <svg className={iconClasses} viewBox="0 0 24 24" fill="none">
           <path

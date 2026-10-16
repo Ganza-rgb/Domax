@@ -1,12 +1,23 @@
 'use client'
 
+import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import Button from '@/components/atoms/Button'
 import { useUserState } from '@/states/useUserState'
 import { useDashboardState } from '@/states/useDashboardState'
+import { SearchField } from './ui'
 
-export default function StudentList({ onCreateStudent }) {
+const sorters = {
+  name: (a, b) => a.name.localeCompare(b.name),
+  avg: (a, b) => a.avgScore - b.avgScore,
+  level: (a, b) => a.level.localeCompare(b.level),
+}
+
+export default function StudentList() {
   const { students } = useUserState()
-  const { setSelectedStudent, updatePanel } = useDashboardState()
+  const { selectedStudent, setSelectedStudent, updatePanel } = useDashboardState()
+  const [query, setQuery] = useState('')
+  const [sort, setSort] = useState({ key: 'name', dir: 'asc' })
 
   const handleSelect = (studentId) => {
     setSelectedStudent(studentId)
@@ -16,41 +27,110 @@ export default function StudentList({ onCreateStudent }) {
     }
   }
 
+  const rows = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    const filtered = students.filter(
+      (student) => !q || student.name.toLowerCase().includes(q) || student.level.toLowerCase().includes(q)
+    )
+    const sorted = [...filtered].sort(sorters[sort.key])
+    return sort.dir === 'asc' ? sorted : sorted.reverse()
+  }, [students, query, sort])
+
+  const toggleSort = (key) =>
+    setSort((prev) => (prev.key === key ? { key, dir: prev.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: key === 'avg' ? 'desc' : 'asc' }))
+
+  const SortHeader = ({ id, children, className = '' }) => {
+    const active = sort.key === id
+    return (
+      <th
+        scope="col"
+        className={`px-3 py-2 font-medium ${className}`}
+        aria-sort={active ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
+      >
+        <button type="button" onClick={() => toggleSort(id)} className={`inline-flex items-center gap-1 rounded hover:text-[var(--sky-text)] ${active ? 'text-[var(--sky-text)]' : ''}`}>
+          {children}
+          <span aria-hidden="true" className="text-[10px]">{active ? (sort.dir === 'asc' ? '▲' : '▼') : '↕'}</span>
+        </button>
+      </th>
+    )
+  }
+
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <Button variant="primary" size="sm" onClick={onCreateStudent}>
-          Add student
-        </Button>
-        <Button variant="outline" size="sm">
-          Import roster
-        </Button>
+    <div className="space-y-3">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <SearchField value={query} onChange={setQuery} placeholder="Search by name or level" label="Search students" className="sm:w-72" />
+        <div className="flex gap-2">
+          <Button variant="secondary" size="sm" disabled title="Roster import is not available yet">
+            Import roster
+          </Button>
+          <Button variant="primary" size="sm" disabled title="Adding students is not available yet">
+            Add student
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {students.map((student) => (
-          <button
-            key={student.id}
-            type="button"
-            onClick={() => handleSelect(student.id)}
-            className="sky-card text-left hover:border-[#005ffe] transition-colors"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-[var(--sky-text)]">{student.name}</h3>
-                <p className="text-xs text-[var(--sky-subtle)]">{student.level}</p>
-              </div>
-              <span className="text-xs font-semibold text-[#00cd90]">{student.trend}</span>
-            </div>
-            <div className="mt-4 flex items-center justify-between text-sm text-[var(--sky-subtle)]">
-              <span>Average score</span>
-              <span className="text-[var(--sky-text)] font-semibold">{student.avgScore}%</span>
-            </div>
-            <p className="text-xs text-[var(--sky-subtle)] mt-2">Last active {student.lastActive}</p>
-          </button>
-        ))}
+      <div className="overflow-x-auto rounded-xl border border-[var(--sky-panel-border)]">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-[var(--sky-surface)] text-left text-xs text-[var(--sky-subtle)]">
+              <SortHeader id="name" className="pl-4">Student</SortHeader>
+              <SortHeader id="level">Level</SortHeader>
+              <SortHeader id="avg" className="text-right">Average</SortHeader>
+              <th scope="col" className="px-3 py-2 font-medium">Trend</th>
+              <th scope="col" className="px-3 py-2 font-medium">Last active</th>
+              <th scope="col" className="px-4 py-2"><span className="sr-only">Action</span></th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[var(--sky-panel-border)]">
+            {rows.map((student) => {
+              const isSelected = selectedStudent === student.id
+              const negative = String(student.trend).startsWith('-')
+              return (
+                <tr
+                  key={student.id}
+                  onClick={() => handleSelect(student.id)}
+                  className={`cursor-pointer ${isSelected ? 'bg-[var(--action-accent-soft)]' : 'hover:bg-[var(--sky-surface)]'}`}
+                >
+                  <td className="pl-4 pr-3 py-2.5">
+                    <button
+                      type="button"
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        handleSelect(student.id)
+                      }}
+                      className="font-semibold text-[var(--sky-text)] text-left rounded"
+                    >
+                      {student.name}
+                    </button>
+                  </td>
+                  <td className="px-3 py-2.5 text-[var(--sky-subtle)]">{student.level}</td>
+                  <td className="px-3 py-2.5 text-right font-semibold tabular-nums text-[var(--sky-text)]">{student.avgScore}%</td>
+                  <td className={`px-3 py-2.5 tabular-nums font-medium ${negative ? 'text-[var(--vscode-red)]' : 'text-[var(--vscode-green)]'}`}>
+                    {student.trend}
+                  </td>
+                  <td className="px-3 py-2.5 text-[var(--sky-subtle)]">{student.lastActive}</td>
+                  <td className="px-4 py-2.5 text-right">
+                    <Link
+                      href={`/dashboard/students/${student.id}`}
+                      onClick={(event) => event.stopPropagation()}
+                      className="text-[13px] font-medium text-[var(--action-accent)] hover:underline rounded"
+                    >
+                      Profile
+                    </Link>
+                  </td>
+                </tr>
+              )
+            })}
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-4 py-8 text-center text-sm text-[var(--sky-subtle)]">
+                  {students.length === 0 ? 'No students yet.' : `No students match “${query}”.`}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   )
 }
-

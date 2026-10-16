@@ -219,89 +219,85 @@ export default function PricingPage() {
         {/* Hero */}
         <section
           ref={heroRef}
-          className="pt-24 lg:pt-32 pb-16 lg:pb-24 bg-gradient-to-b from-[#E6F2FF] via-white to-white"
+          className="pt-32 sm:pt-36 pb-16 lg:pb-24 bg-[linear-gradient(180deg,#F0F7FF_0%,#FFFFFF_60%)]"
         >
-          <div className="container-custom grid lg:grid-cols-2 gap-10 lg:gap-16 items-center px-4">
+          <div className="container-custom grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-center">
             <div data-animate="hero">
-              <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/70 border border-white text-xs font-semibold tracking-[0.25em] text-[#005ffe] mb-4">
-                PRICING
-              </span>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight tracking-tight mb-5">
+              <p className="eyebrow mb-4">Pricing</p>
+              <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-medium leading-[1.08] tracking-[-0.025em] mb-5">
                 Precision grading,
                 <br />
                 only pay for what you use.
               </h1>
-              <p className="text-lg text-gray-600 mb-6">
+              <p className="lede mb-8 max-w-xl">
                 Wallet-based billing tuned for solo teachers—load only what you need, invite unlimited students for free, and export clean receipts for reimbursement or tax purposes.
               </p>
-              <div className="flex flex-wrap gap-3 mb-8">
-                <Button variant="primary" size="md" href="/signup">
+              <div className="flex flex-wrap gap-2.5 mb-10">
+                <Button variant="primary" size="lg" href="/signup">
                   Launch Domax
                 </Button>
-                <Button variant="ghost" size="md" href="/contact">
+                <Button variant="secondary" size="lg" href="/contact">
                   Talk to billing
                 </Button>
               </div>
-              <div className="grid sm:grid-cols-3 gap-3" data-animate="hero">
+              <dl className="grid grid-cols-1 sm:grid-cols-3 gap-px rounded-xl overflow-hidden border border-line bg-line" data-animate="hero">
                 {heroStats.map((stat) => (
                   <div
                     key={stat.label}
-                    className="rounded-2xl border border-white/70 bg-white/70 backdrop-blur-lg p-4 shadow-sm"
+                    className="bg-white px-4 py-3.5"
                   >
-                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{stat.label}</p>
-                    <p className="text-lg font-semibold text-[#0A3059]">{stat.value}</p>
+                    <dt className="text-xs text-ink-3 mb-0.5">{stat.label}</dt>
+                    <dd className="text-base font-semibold text-ink tabular-nums">{stat.value}</dd>
                   </div>
                 ))}
-              </div>
+              </dl>
             </div>
 
             <div
               data-animate="hero"
-              className="bg-white rounded-[32px] border border-[#e0e4ff] shadow-[0_35px_85px_-45px_rgba(10,48,89,0.75)] p-6 lg:p-8 relative overflow-hidden"
+              className="bg-white rounded-2xl border border-line shadow-pop p-6 lg:p-7 relative overflow-hidden"
             >
-              <div className="absolute -top-16 -right-16 w-48 h-48 bg-[#005ffe]/10 rounded-full blur-3xl" />
-              <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#00cd90]/10 rounded-full blur-3xl" />
-              <div className="relative z-10 space-y-6">
-                <div className="flex items-center justify-between">
+              <div className="relative z-10 space-y-5">
+                <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-xs uppercase text-gray-500">Live wallet preview</p>
-                    <p className="text-xl font-semibold mt-1">{LEVEL_LABELS[level]}</p>
+                    <p className="text-xs text-ink-3">Live wallet preview</p>
+                    <p className="text-lg font-semibold mt-0.5">{LEVEL_LABELS[level]}</p>
                   </div>
-                  <span className="text-sm font-semibold text-[#005ffe] bg-[#005ffe]/10 px-3 py-1 rounded-full capitalize">
+                  <span className="text-xs font-semibold text-[#005ffe] bg-[#F0F7FF] border border-[#D6E6FF] px-2.5 py-1 rounded-md capitalize">
                     {billingType}
                   </span>
                 </div>
-                <div className="rounded-2xl border border-[#eef2ff] bg-[#f8fbff] p-4 space-y-3">
-                  <div className="flex items-center justify-between text-sm text-gray-600">
+                <div className="rounded-xl bg-[#F6F8FA] p-4 space-y-3">
+                  <div className="flex items-baseline justify-between text-sm text-ink-2">
                     <span>Estimated invoice</span>
-                    <span className="text-xl font-semibold text-[#0A3059]">{formatRwf(estimatorSummary.amountRwf)}</span>
+                    <span className="text-2xl font-semibold text-ink tabular-nums">{formatRwf(estimatorSummary.amountRwf)}</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm text-gray-600">
+                  <div className="flex items-center justify-between text-sm text-ink-2">
                     <span>Credits unlocked</span>
-                    <span className="text-base font-semibold text-[#005ffe]">
+                    <span className="font-semibold text-ink tabular-nums">
                       {numberFormatter.format(baselinePages)} pages
                     </span>
                   </div>
-                  <div className="h-2 rounded-full bg-white overflow-hidden">
+                  <div className="h-1.5 rounded-full bg-[#E3E8EF] overflow-hidden" role="presentation">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#00cd90] to-[#005ffe]"
+                      className="h-full rounded-full bg-[#005ffe]"
                       style={{ width: `${Math.min(100, (baselinePages / 10000) * 100)}%` }}
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="rounded-2xl border border-[#eef2ff] p-4">
-                    <p className="text-gray-500 mb-1">Unit rate</p>
-                    <p className="text-lg font-semibold">{formatRwf(effectiveUnitRate)}</p>
-                    <p className="text-xs text-gray-400">{billingType === 'booklets' ? 'per booklet' : 'per page'}</p>
+                <dl className="grid grid-cols-2 divide-x divide-line border-y border-line text-sm">
+                  <div className="py-3.5 pr-4">
+                    <dt className="text-ink-3 mb-0.5">Unit rate</dt>
+                    <dd className="text-lg font-semibold tabular-nums">{formatRwf(effectiveUnitRate)}</dd>
+                    <dd className="text-xs text-ink-3">{billingType === 'booklets' ? 'per booklet' : 'per page'}</dd>
                   </div>
-                  <div className="rounded-2xl border border-[#eef2ff] p-4">
-                    <p className="text-gray-500 mb-1">Minimum top-up</p>
-                    <p className="text-lg font-semibold">{formatRwf(MINIMUM_CHARGE_RWF)}</p>
-                    <p className="text-xs text-gray-400">once per wallet</p>
+                  <div className="py-3.5 pl-4">
+                    <dt className="text-ink-3 mb-0.5">Minimum top-up</dt>
+                    <dd className="text-lg font-semibold tabular-nums">{formatRwf(MINIMUM_CHARGE_RWF)}</dd>
+                    <dd className="text-xs text-ink-3">once per wallet</dd>
                   </div>
-                </div>
-                <div className="flex items-center justify-between text-xs text-gray-500">
+                </dl>
+                <div className="flex items-center justify-between text-xs text-ink-3">
                   <span>Audit-ready ledger</span>
                   <span>Webhook receipts enabled</span>
                 </div>
@@ -311,98 +307,109 @@ export default function PricingPage() {
         </section>
 
         {/* Level matrix & bundles */}
-        <section ref={matrixRef} className="py-16 lg:py-20 bg-white">
-          <div className="container-custom px-4">
+        <section ref={matrixRef} className="section-spacing bg-white">
+          <div className="container-custom">
             <div className="max-w-2xl mb-10">
-              <p className="text-sm font-semibold text-[#005ffe] tracking-[0.3em] mb-3">LEVEL-BASED PRICING</p>
-              <h2 className="text-3xl font-semibold leading-tight mb-4">Transparent tariffs for every curriculum.</h2>
-              <p className="text-gray-600">
+              <p className="eyebrow mb-3">Level-based pricing</p>
+              <h2 className="text-3xl sm:text-4xl font-medium mb-4">Transparent tariffs for every curriculum.</h2>
+              <p className="lede">
                 Choose the level that matches your scripts. You can mix levels inside the same wallet; Domax tracks
                 consumption for you.
               </p>
             </div>
-            <div className="grid gap-6 lg:grid-cols-3">
+            <div className="grid gap-4 lg:grid-cols-3">
               {Object.keys(PAGE_PRICES).map((key) => (
                 <div
                   key={key}
                   data-animate="matrix-card"
-                  className="rounded-3xl border border-[#e0e4ff] bg-gradient-to-b from-white to-[#f8fbff] p-6 shadow-[0_30px_80px_-60px_rgba(10,48,89,0.9)]"
+                  className={`rounded-2xl border bg-white p-6 sm:p-7 flex flex-col transition-colors ${
+                    level === key ? 'border-[#005ffe] ring-1 ring-[#005ffe]' : 'border-line'
+                  }`}
                 >
-                  <div className="mb-4">
-                    <p className="text-xs uppercase text-gray-500 tracking-[0.2em]">{LEVEL_LABELS[key]}</p>
-                    <h3 className="text-2xl font-semibold mt-2">{formatRwf(PAGE_PRICES[key])} / page</h3>
-                    <p className="text-gray-500 mt-1">{levelMeta[key].blurb}</p>
+                  <div className="mb-5">
+                    <p className="text-sm font-medium text-ink-2">{LEVEL_LABELS[key]}</p>
+                    <p className="mt-3 flex items-baseline gap-1.5">
+                      <span className="text-4xl font-semibold font-headline tracking-tight tabular-nums">{formatRwf(PAGE_PRICES[key])}</span>
+                      <span className="text-sm text-ink-3">/ page</span>
+                    </p>
+                    <p className="text-[15px] text-ink-2 mt-3 leading-relaxed">{levelMeta[key].blurb}</p>
                   </div>
-                  <div className="space-y-2 mb-4">
-                    <div className="flex justify-between text-sm text-gray-600">
-                      <span>Booklet processing</span>
-                      <span className="font-semibold text-[#0A3059]">{formatRwf(BOOKLET_PRICES[key])}</span>
+                  <dl className="divide-y divide-line border-y border-line mb-5 text-sm">
+                    <div className="flex justify-between py-2.5">
+                      <dt className="text-ink-2">Booklet processing</dt>
+                      <dd className="font-semibold text-ink tabular-nums">{formatRwf(BOOKLET_PRICES[key])}</dd>
                     </div>
-                    <div className="flex justify-between text-sm text-gray-600">
-                      <span>Bundle effective rate</span>
-                      <span className="font-semibold text-[#005ffe]">
+                    <div className="flex justify-between py-2.5">
+                      <dt className="text-ink-2">Bundle effective rate</dt>
+                      <dd className="font-semibold text-ink tabular-nums">
                         {formatRwf(Math.round(BUNDLE_OFFERS[BUNDLE_OFFERS.length - 1].amount / BUNDLE_OFFERS[BUNDLE_OFFERS.length - 1].pages))}/page
-                      </span>
+                      </dd>
                     </div>
-                  </div>
-                  <ul className="space-y-2 text-sm text-gray-600 mb-6">
+                  </dl>
+                  <ul className="space-y-2 text-sm text-ink-2 mb-6">
                     {levelMeta[key].highlights.map((highlight) => (
-                      <li key={highlight} className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00cd90]" />
+                      <li key={highlight} className="flex items-center gap-2.5">
+                        <svg className="w-3.5 h-3.5 text-[#007A56] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                         {highlight}
                       </li>
                     ))}
                   </ul>
-                  <Button variant="ghost" size="sm" onClick={() => setLevel(key)}>
-                    Align wallet to {LEVEL_LABELS[key]}
+                  <Button
+                    variant={level === key ? 'primary' : 'secondary'}
+                    size="md"
+                    className="mt-auto w-full"
+                    onClick={() => setLevel(key)}
+                    aria-pressed={level === key}
+                  >
+                    {level === key ? 'Wallet aligned' : `Align wallet to ${LEVEL_LABELS[key]}`}
                   </Button>
                 </div>
               ))}
             </div>
 
-            <div className="mt-14 rounded-[32px] border border-[#dfe7f5] bg-[#f8fbff] p-6 lg:p-8">
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
-                <div>
-                  <p className="text-sm font-semibold text-[#005ffe] tracking-[0.3em] mb-2">BUNDLES</p>
+            <div className="mt-16 rounded-2xl border border-line bg-[#F6F8FA] p-6 lg:p-8">
+              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-7">
+                <div className="max-w-xl">
+                  <p className="eyebrow mb-2">Bundles</p>
                   <h3 className="text-2xl font-semibold">Prefund larger campaigns in one click.</h3>
-                  <p className="text-gray-600 mt-2">
+                  <p className="text-ink-2 mt-2 leading-relaxed">
                     Bundles load thousands of pages instantly with detailed receipts for your budgeting or reimbursement workflow.
                   </p>
                 </div>
-                <Button variant="primary" size="sm" href="/contact">
+                <Button variant="secondary" size="md" href="/contact">
                   Chat with a Domax coach
                 </Button>
               </div>
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid md:grid-cols-3 gap-3" role="radiogroup" aria-label="Bundle">
                 {BUNDLE_OFFERS.map((bundle, idx) => (
                   <label
                     key={bundle.amount}
-                    className={`rounded-2xl border p-4 cursor-pointer transition-all ${
+                    className={`rounded-xl border p-4 cursor-pointer transition-all bg-white ${
                       bundleIndex === idx
-                        ? 'border-[#005ffe] bg-white shadow-lg shadow-[#005ffe]/10'
-                        : 'border-[#dfe7f5] bg-white/70'
+                        ? 'border-[#005ffe] ring-1 ring-[#005ffe]'
+                        : 'border-line hover:border-line-strong'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-start justify-between mb-3">
                       <div>
-                        <p className="text-xs uppercase text-gray-500">Bundle value</p>
-                        <p className="text-xl font-semibold">{formatRwf(bundle.amount)}</p>
+                        <p className="text-xs text-ink-3">Bundle value</p>
+                        <p className="text-xl font-semibold tabular-nums">{formatRwf(bundle.amount)}</p>
                       </div>
                       <input
                         type="radio"
                         name="bundle"
                         checked={bundleIndex === idx}
                         onChange={() => setBundleIndex(idx)}
-                        className="w-4 h-4 accent-[#005ffe]"
+                        className="w-4 h-4 mt-1 accent-[#005ffe]"
                       />
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">
+                    <p className="text-sm text-ink-2">
                       Credits delivered:{' '}
-                      <span className="font-semibold text-[#0A3059]">
+                      <span className="font-semibold text-ink tabular-nums">
                         {numberFormatter.format(bundle.pages)} pages
                       </span>
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-ink-3 mt-1 tabular-nums">
                       Effective rate {formatRwf(Math.round(bundle.amount / bundle.pages))} / page
                     </p>
                   </label>
@@ -413,257 +420,270 @@ export default function PricingPage() {
         </section>
 
         {/* Estimator */}
-        <section ref={estimatorRef} className="py-16 lg:py-24 bg-gradient-to-b from-[#F5F9FF] to-white">
-          <div className="container-custom px-4">
-            <div className="max-w-3xl mb-10">
-              <p className="text-sm font-semibold text-[#005ffe] tracking-[0.3em] mb-3">ESTIMATOR</p>
-              <h2 className="text-3xl font-semibold leading-tight mb-4">Model your spend in seconds.</h2>
-              <p className="text-gray-600">
+        <section ref={estimatorRef} className="section-spacing bg-[#F6F8FA] border-y border-line">
+          <div className="container-custom">
+            <div className="max-w-2xl mb-10">
+              <p className="eyebrow mb-3">Estimator</p>
+              <h2 className="text-3xl sm:text-4xl font-medium mb-4">Model your spend in seconds.</h2>
+              <p className="lede">
                 Adjust pages, booklets, or bundle size. Domax enforces minimums automatically and shows how many credits
                 hit your wallet before you pay.
               </p>
             </div>
 
-            <div className="rounded-[32px] border border-[#dfe7f5] bg-white/80 backdrop-blur-lg shadow-[0_50px_120px_-80px_rgba(0,95,254,0.8)] p-6 lg:p-10">
-              <div className="flex flex-wrap gap-3 mb-8">
-                {billingModes.map((mode) => (
-                  <button
-                    key={mode.id}
-                    onClick={() => setBillingType(mode.id)}
-                    className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${
-                      billingType === mode.id
-                        ? 'bg-[#005ffe] text-white shadow-lg shadow-[#005ffe]/20'
-                        : 'bg-[#f0f7ff] text-[#0A3059]'
-                    }`}
-                  >
-                    {mode.label}
-                    {mode.badge && (
-                      <span className="ml-2 text-[10px] uppercase tracking-widest text-white/80">{mode.badge}</span>
-                    )}
-                  </button>
-                ))}
-              </div>
+            <div className="rounded-2xl border border-line bg-white overflow-hidden grid lg:grid-cols-[1.2fr_0.8fr]">
+              <div className="p-6 lg:p-8 space-y-7">
+                <div>
+                  <p id="billing-mode-label" className="text-sm font-semibold text-ink mb-2.5">Billing mode</p>
+                  <div className="inline-flex flex-wrap p-1 rounded-lg bg-[#F6F8FA] border border-line" role="group" aria-labelledby="billing-mode-label">
+                    {billingModes.map((mode) => (
+                      <button
+                        key={mode.id}
+                        type="button"
+                        aria-pressed={billingType === mode.id}
+                        onClick={() => setBillingType(mode.id)}
+                        className={`rounded-md px-3.5 h-9 text-sm font-semibold transition-all inline-flex items-center gap-2 ${
+                          billingType === mode.id
+                            ? 'bg-white text-ink shadow-[0_1px_2px_rgba(10,48,89,0.12)]'
+                            : 'text-ink-2 hover:text-ink'
+                        }`}
+                      >
+                        {mode.label}
+                        {mode.badge && (
+                          <span className="text-[11px] font-semibold text-[#007A56] bg-positive-soft px-1.5 py-0.5 rounded">{mode.badge}</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-sm text-ink-3 mt-2">{billingModes.find((mode) => mode.id === billingType)?.description}</p>
+                </div>
 
-              <div className="grid lg:grid-cols-2 gap-8">
-                <div className="space-y-6">
+                <div>
+                  <p id="level-label" className="text-sm font-semibold text-ink mb-2.5">Level</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2" role="group" aria-labelledby="level-label">
+                    {Object.keys(LEVEL_LABELS).map((key) => (
+                      <button
+                        key={key}
+                        type="button"
+                        aria-pressed={level === key}
+                        onClick={() => setLevel(key)}
+                        className={`rounded-lg border px-3 py-2.5 text-sm font-semibold text-left sm:text-center transition-all ${
+                          level === key
+                            ? 'border-[#005ffe] bg-[#F0F7FF] text-[#005ffe]'
+                            : 'border-line text-ink hover:border-line-strong'
+                        }`}
+                      >
+                        {LEVEL_LABELS[key]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {billingType === 'pages' && (
                   <div>
-                    <label className="text-sm font-semibold text-gray-600 mb-2 block">Level</label>
-                    <div className="grid grid-cols-3 gap-3">
-                      {Object.keys(LEVEL_LABELS).map((key) => (
+                    <div className="flex items-center justify-between text-sm mb-2.5">
+                      <label htmlFor="estimator-pages" className="font-semibold text-ink">Pages to grade</label>
+                      <span className="font-semibold text-ink tabular-nums">{numberFormatter.format(pages)}</span>
+                    </div>
+                    <input
+                      id="estimator-pages"
+                      type="range"
+                      min="100"
+                      max="20000"
+                      step="50"
+                      value={pages}
+                      onChange={(e) => setPages(Number(e.target.value))}
+                      className="w-full accent-[#005ffe]"
+                    />
+                    <div className="flex justify-between text-xs text-ink-3 mt-1 tabular-nums">
+                      <span>100</span>
+                      <span>20k</span>
+                    </div>
+                  </div>
+                )}
+
+                {billingType === 'booklets' && (
+                  <div>
+                    <div className="flex items-center justify-between text-sm mb-2.5">
+                      <label htmlFor="estimator-booklets" className="font-semibold text-ink">Booklets per cycle</label>
+                      <span className="font-semibold text-ink tabular-nums">{numberFormatter.format(booklets)}</span>
+                    </div>
+                    <input
+                      id="estimator-booklets"
+                      type="range"
+                      min="10"
+                      max="500"
+                      step="5"
+                      value={booklets}
+                      onChange={(e) => setBooklets(Number(e.target.value))}
+                      className="w-full accent-[#005ffe]"
+                    />
+                    <div className="flex justify-between text-xs text-ink-3 mt-1 tabular-nums">
+                      <span>10</span>
+                      <span>500</span>
+                    </div>
+                  </div>
+                )}
+
+                {billingType === 'bundle' && (
+                  <div>
+                    <p className="text-sm font-semibold text-ink mb-2.5">Select bundle</p>
+                    <div className="space-y-2">
+                      {BUNDLE_OFFERS.map((bundle, idx) => (
                         <button
-                          key={key}
-                          onClick={() => setLevel(key)}
-                          className={`rounded-2xl border px-3 py-3 text-sm font-semibold transition-all ${
-                            level === key
-                              ? 'border-[#005ffe] bg-[#005ffe]/10 text-[#005ffe]'
-                              : 'border-[#e0e4ff] text-[#0A3059]'
+                          key={bundle.amount}
+                          type="button"
+                          aria-pressed={bundleIndex === idx}
+                          onClick={() => setBundleIndex(idx)}
+                          className={`w-full text-left rounded-lg border px-4 py-3 transition-all ${
+                            bundleIndex === idx
+                              ? 'border-[#005ffe] bg-[#F0F7FF] text-[#005ffe]'
+                              : 'border-line text-ink hover:border-line-strong'
                           }`}
                         >
-                          {LEVEL_LABELS[key]}
+                          <div className="flex items-center justify-between text-sm font-medium tabular-nums">
+                            <span>{formatRwf(bundle.amount)}</span>
+                            <span>{numberFormatter.format(bundle.pages)} pages</span>
+                          </div>
                         </button>
                       ))}
                     </div>
                   </div>
+                )}
+              </div>
 
-                  {billingType === 'pages' && (
-                    <div>
-                      <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-                        <span>Pages to grade</span>
-                        <span className="font-semibold text-[#0A3059]">{numberFormatter.format(pages)}</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="100"
-                        max="20000"
-                        step="50"
-                        value={pages}
-                        onChange={(e) => setPages(Number(e.target.value))}
-                        className="w-full accent-[#005ffe]"
-                      />
-                      <div className="flex justify-between text-xs text-gray-400 mt-1">
-                        <span>100</span>
-                        <span>20k</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {billingType === 'booklets' && (
-                    <div>
-                      <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-                        <span>Booklets per cycle</span>
-                        <span className="font-semibold text-[#0A3059]">{numberFormatter.format(booklets)}</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="10"
-                        max="500"
-                        step="5"
-                        value={booklets}
-                        onChange={(e) => setBooklets(Number(e.target.value))}
-                        className="w-full accent-[#005ffe]"
-                      />
-                      <div className="flex justify-between text-xs text-gray-400 mt-1">
-                        <span>10</span>
-                        <span>500</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {billingType === 'bundle' && (
-                    <div>
-                      <p className="text-sm font-semibold text-gray-600 mb-3">Select bundle</p>
-                      <div className="space-y-3">
-                        {BUNDLE_OFFERS.map((bundle, idx) => (
-                          <button
-                            key={bundle.amount}
-                            onClick={() => setBundleIndex(idx)}
-                            className={`w-full text-left rounded-2xl border px-4 py-3 transition-all ${
-                              bundleIndex === idx
-                                ? 'border-[#005ffe] bg-[#005ffe]/5 text-[#005ffe]'
-                                : 'border-[#dfe7f5] text-[#0A3059]'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between text-sm">
-                              <span>{formatRwf(bundle.amount)}</span>
-                              <span>{numberFormatter.format(bundle.pages)} pages</span>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+              <div className="bg-[#0A3059] text-white p-6 lg:p-8 flex flex-col gap-5" aria-live="polite">
+                <div>
+                  <p className="text-sm text-white/70 mb-1">Estimated charge</p>
+                  <p className="text-4xl sm:text-5xl font-semibold font-headline tracking-tight tabular-nums text-white">{formatRwf(estimatorSummary.amountRwf)}</p>
+                  <p className="text-white/60 text-sm mt-2">Minimum enforced automatically</p>
                 </div>
-
-                <div className="rounded-3xl border border-[#e0e4ff] bg-[#f8fbff] p-6 space-y-5">
-                  <div>
-                    <p className="text-xs uppercase text-gray-500 tracking-[0.25em] mb-2">Estimated charge</p>
-                    <p className="text-4xl font-semibold leading-tight">{formatRwf(estimatorSummary.amountRwf)}</p>
-                    <p className="text-gray-500 text-sm mt-2">Minimum enforced automatically</p>
+                <dl className="divide-y divide-white/10 border-y border-white/10 text-sm">
+                  <div className="flex items-center justify-between py-3">
+                    <dt className="text-white/70">Credits delivered</dt>
+                    <dd className="font-semibold tabular-nums">
+                      {numberFormatter.format(estimatorSummary.pagesCredited || booklets * 12 || selectedBundle?.pages || 0)}{' '}
+                      pages
+                    </dd>
                   </div>
-                  <div className="rounded-2xl border border-white bg-white p-4">
-                    <div className="flex items-center justify-between text-sm text-gray-600">
-                      <span>Credits delivered</span>
-                      <span className="text-lg font-semibold text-[#005ffe]">
-                        {numberFormatter.format(estimatorSummary.pagesCredited || booklets * 12 || selectedBundle?.pages || 0)}{' '}
-                        pages
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-400 mt-2">
-                      For booklets we approximate 12 pages per booklet for forecasting purposes.
-                    </p>
+                  <div className="flex items-center justify-between py-3">
+                    <dt className="text-white/70">Unit rate</dt>
+                    <dd className="font-semibold tabular-nums">{formatRwf(effectiveUnitRate)}</dd>
                   </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center justify-between">
-                      <span>Unit rate</span>
-                      <span className="font-semibold">{formatRwf(effectiveUnitRate)}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Wallet minimum</span>
-                      <span className="font-semibold">{formatRwf(MINIMUM_CHARGE_RWF)}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Auto top-up ready</span>
-                      <span className="font-semibold text-[#00cd90]">Yes</span>
-                    </div>
+                  <div className="flex items-center justify-between py-3">
+                    <dt className="text-white/70">Wallet minimum</dt>
+                    <dd className="font-semibold tabular-nums">{formatRwf(MINIMUM_CHARGE_RWF)}</dd>
                   </div>
-                  <div className="flex flex-col gap-3">
-                    <Button variant="primary" size="md" href="/dashboard">
-                      Purchase credits
-                    </Button>
-                    <Button variant="outline" size="md" href="/contact">
-                      Export quote PDF
-                    </Button>
+                  <div className="flex items-center justify-between py-3">
+                    <dt className="text-white/70">Auto top-up ready</dt>
+                    <dd className="font-semibold text-[#7FE3C3]">Yes</dd>
                   </div>
-                  <p className="text-xs text-gray-400">
-                    Need procurement paperwork? Our team issues signed invoices the moment you trigger a wallet load.
-                  </p>
+                </dl>
+                <p className="text-xs text-white/60 -mt-2">
+                  For booklets we approximate 12 pages per booklet for forecasting purposes.
+                </p>
+                <div className="flex flex-col gap-2.5 mt-auto">
+                  <Button variant="primary-blue" size="lg" href="/dashboard">
+                    Purchase credits
+                  </Button>
+                  <Button variant="light" size="lg" href="/contact">
+                    Export quote PDF
+                  </Button>
                 </div>
+                <p className="text-xs text-white/60">
+                  Need procurement paperwork? Our team issues signed invoices the moment you trigger a wallet load.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Guardrails */}
-        <section className="py-16 bg-white">
-          <div className="container-custom px-4">
-            <div className="max-w-2xl mb-12">
-              <p className="text-sm font-semibold text-[#005ffe] tracking-[0.3em] mb-3">USAGE GUARDRAILS</p>
-              <h2 className="text-3xl font-semibold leading-tight mb-4">Finance-grade controls built in.</h2>
-              <p className="text-gray-600">
-                Every wallet is audit ready with approvals, role-based limits, and automated digests so procurement sleeps
-                easy.
-              </p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-6">
-              {guardrails.map((item) => (
-                <div key={item.title} className="rounded-3xl border border-[#e0e4ff] p-6 bg-gradient-to-b from-white to-[#f8fbff]">
-                  <div className="w-12 h-12 rounded-2xl bg-[#005ffe]/10 text-[#005ffe] flex items-center justify-center mb-4 text-xl">
-                    •
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-gray-600">{item.description}</p>
-                </div>
-              ))}
+        <section className="section-spacing bg-white">
+          <div className="container-custom">
+            <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16">
+              <div>
+                <p className="eyebrow mb-3">Usage guardrails</p>
+                <h2 className="text-3xl sm:text-4xl font-medium mb-4">Finance-grade controls built in.</h2>
+                <p className="lede">
+                  Every wallet is audit ready with approvals, role-based limits, and automated digests so procurement sleeps
+                  easy.
+                </p>
+              </div>
+              <ol className="divide-y divide-line border-y border-line">
+                {guardrails.map((item, index) => (
+                  <li key={item.title} className="py-6 grid grid-cols-[2.5rem_1fr] gap-2">
+                    <span className="text-sm font-semibold text-[#005ffe] tabular-nums pt-1">{String(index + 1).padStart(2, '0')}</span>
+                    <div>
+                      <h3 className="text-lg font-semibold mb-1.5">{item.title}</h3>
+                      <p className="text-ink-2 leading-relaxed">{item.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
         </section>
 
         {/* FAQ */}
-        <section ref={faqRef} className="py-16 lg:py-20 bg-[#f5f9ff]">
-          <div className="container-custom px-4">
-            <div className="max-w-3xl mb-10">
-              <p className="text-sm font-semibold text-[#005ffe] tracking-[0.3em] mb-3">FAQ</p>
-              <h2 className="text-3xl font-semibold leading-tight mb-4">Answers that shorten your procurement cycle.</h2>
-              <p className="text-gray-600">Still unsure? Our billing engineers can join your finance call.</p>
-            </div>
-            <div className="space-y-4">
-              {faqItems.map((faq) => {
-                const open = activeFaq === faq.id
-                return (
-                  <div
-                    key={faq.id}
-                    data-animate="faq"
-                    className="rounded-3xl border border-[#dfe7f5] bg-white overflow-hidden"
-                  >
-                    <button
-                      onClick={() => setActiveFaq(open ? null : faq.id)}
-                      className="w-full flex items-center justify-between px-6 py-5 text-left"
+        <section ref={faqRef} className="section-spacing bg-[#F6F8FA] border-t border-line">
+          <div className="container-custom">
+            <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16">
+              <div>
+                <p className="eyebrow mb-3">FAQ</p>
+                <h2 className="text-3xl sm:text-4xl font-medium mb-4">Answers that shorten your procurement cycle.</h2>
+                <p className="lede">Still unsure? Our billing engineers can join your finance call.</p>
+              </div>
+              <div className="divide-y divide-line border-y border-line">
+                {faqItems.map((faq) => {
+                  const open = activeFaq === faq.id
+                  return (
+                    <div
+                      key={faq.id}
+                      data-animate="faq"
                     >
-                      <div>
-                        <p className="text-lg font-semibold">{faq.question}</p>
-                      </div>
-                      <span className="text-2xl text-[#005ffe]">{open ? '−' : '+'}</span>
-                    </button>
-                    {open && (
-                      <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">
-                        {faq.answer}
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
+                      <button
+                        type="button"
+                        aria-expanded={open}
+                        aria-controls={`faq-${faq.id}`}
+                        onClick={() => setActiveFaq(open ? null : faq.id)}
+                        className="w-full flex items-center justify-between gap-6 py-5 text-left rounded-md"
+                      >
+                        <span className="text-base sm:text-lg font-semibold">{faq.question}</span>
+                        <span aria-hidden="true" className="w-7 h-7 rounded-full border border-line-strong flex items-center justify-center text-ink-2 flex-shrink-0">
+                          <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+                            <path d="M2 6h8" />
+                            {!open && <path d="M6 2v8" />}
+                          </svg>
+                        </span>
+                      </button>
+                      {open && (
+                        <div id={`faq-${faq.id}`} className="pb-6 pr-12 text-ink-2 leading-relaxed">
+                          {faq.answer}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </section>
 
         {/* CTA */}
-        <section className="py-16 lg:py-20 bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] text-[#0A3059] relative overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-10 right-0 w-80 h-80 bg-gradient-to-br from-[#00cd90] to-transparent blur-[120px] opacity-40" />
-            <div className="absolute bottom-0 left-0 w-[22rem] h-[22rem] bg-gradient-to-tr from-[#005ffe] to-transparent blur-[160px] opacity-30" />
-          </div>
-          <div className="container-custom relative z-10 text-center px-4">
-            <h2 className="text-3xl sm:text-4xl font-semibold mb-4">
+        <section className="bg-[#0A3059] text-white">
+          <div className="container-custom py-20 sm:py-24 text-center">
+            <h2 className="text-3xl sm:text-4xl font-medium text-white mb-4 max-w-2xl mx-auto">
               Ready to connect grading to your finance stack?
             </h2>
-            <p className="text-base sm:text-lg text-[#0A3059]/70 max-w-2xl mx-auto mb-8">
+            <p className="text-base sm:text-lg text-white/75 max-w-xl mx-auto mb-9">
               Spin up a wallet, invite teachers, and watch Domax reconcile every paper automatically.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <Button variant="primary" size="md" href="/signup">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button variant="primary-blue" size="xl" href="/signup">
                 Start free workspace
               </Button>
-              <Button variant="outline" size="md" href="/contact">
+              <Button variant="light" size="xl" href="/contact">
                 Schedule pricing review
               </Button>
             </div>

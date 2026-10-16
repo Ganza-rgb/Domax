@@ -15,7 +15,7 @@ export default function PlagiarismPage() {
       <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl font-medium text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Plagiarism Detection
             </h1>
             <p className="lede mb-12 pb-12 border-b border-line">
@@ -24,7 +24,7 @@ export default function PlagiarismPage() {
 
             <div className="prose max-w-none">
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Comprehensive Checking</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Comprehensive Checking</h2>
                 <p className="text-ink-2 mb-4">
                   Our plagiarism detection system checks student papers against a vast database of academic sources, web content, and previously submitted papers. Get detailed similarity reports with highlighted matches.
                 </p>
@@ -37,7 +37,7 @@ export default function PlagiarismPage() {
               </section>
 
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Key Features</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Key Features</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-6 bg-white border border-line rounded-xl">
                     <h3 className="text-[17px] font-semibold text-ink mb-1.5">Instant Results</h3>

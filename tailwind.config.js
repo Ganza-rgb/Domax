@@ -59,7 +59,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        headline: ['var(--font-poppins)', 'Poppins', 'system-ui', 'sans-serif'],
+        headline: ['var(--font-display)', 'Georgia', 'serif'],
+        hand: ['var(--font-hand)', 'cursive'],
         body: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       fontSize: {

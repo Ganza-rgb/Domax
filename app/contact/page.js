@@ -172,7 +172,7 @@ export default function ContactPage() {
         <div className="container-custom">
           <div className="max-w-6xl mx-auto">
             <div ref={headerRef} className="max-w-2xl mb-10 sm:mb-12">
-              <h1 className="text-4xl sm:text-5xl font-semibold leading-[1.1] tracking-[-0.025em] mb-4">Talk to the Domax team</h1>
+              <h1 className="text-4xl sm:text-5xl font-medium leading-[1.1] tracking-[-0.025em] mb-4">Talk to the Domax team</h1>
               <p className="lede">
                 Route your request directly to the squad that can help—sales engineers, billing specialists, or
                 integrations.
@@ -225,7 +225,7 @@ export default function ContactPage() {
 
                 <div ref={formRef}>
                   <Card className="p-5 sm:p-7" hover={false}>
-                    <h2 className="text-xl sm:text-2xl font-semibold mb-6">
+                    <h2 className="text-xl sm:text-2xl font-medium mb-6">
                       {selectedIntent?.label || 'Reach out'}
                     </h2>
                     <form onSubmit={handleSubmit} className="space-y-5">

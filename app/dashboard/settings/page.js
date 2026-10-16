@@ -2,89 +2,106 @@
 
 import { useEffect } from 'react'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import Button from '@/components/atoms/Button'
+import { Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
 import { useDashboardState } from '@/states/useDashboardState'
 import { useUserState } from '@/states/useUserState'
+import { useThemeState } from '@/states/useThemeState'
 import { RestartOnboardingButton } from '@/components/dashboard/OnboardingHelper'
+
+function Toggle({ id, checked, onChange, label, description }) {
+  return (
+    <div className="flex items-start justify-between gap-6 py-4 first:pt-0 last:pb-0">
+      <div>
+        <label htmlFor={id} className="text-sm font-medium text-[var(--sky-text)] cursor-pointer">
+          {label}
+        </label>
+        {description && <p className="text-sm text-[var(--sky-subtle)] mt-0.5">{description}</p>}
+      </div>
+      <button
+        id={id}
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={() => onChange(!checked)}
+        className={`relative inline-flex h-6 w-10 flex-shrink-0 items-center rounded-full transition-colors ${
+          checked ? 'bg-[#005ffe]' : 'bg-[var(--sky-panel-border)]'
+        }`}
+      >
+        <span
+          aria-hidden="true"
+          className={`inline-block h-5 w-5 rounded-full bg-white shadow ${checked ? 'translate-x-[18px]' : 'translate-x-0.5'}`}
+        />
+      </button>
+    </div>
+  )
+}
 
 export default function SettingsPage() {
   const { setCurrentSection } = useDashboardState()
   const { teacher, updatePreferences } = useUserState()
+  const { isDark, setTheme } = useThemeState()
 
   useEffect(() => {
     setCurrentSection('settings')
   }, [setCurrentSection])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl">
       <WorkspaceHeader
         meta="Settings"
         title="Personalize your workspace"
-        subtitle="Controls apply across every exam and submission."
+        subtitle="Controls apply across every exam and submission. Changes save automatically."
       />
-      <div className="sky-card space-y-5">
-        <div>
-          <p className="sky-label">Profile</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-            <div>
-              <label className="text-sm font-semibold text-[#0A3059]">Full name</label>
-              <input
-                type="text"
-                value={teacher.name}
-                readOnly
-                className="mt-2 w-full rounded-2xl border border-[#eef1ff] bg-[#f8fbff] px-4 py-3 text-sm text-gray-500"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-[#0A3059]">School code</label>
-              <input
-                type="text"
-                value={teacher.schoolCode}
-                readOnly
-                className="mt-2 w-full rounded-2xl border border-[#eef1ff] bg-[#f8fbff] px-4 py-3 text-sm text-gray-500"
-              />
-            </div>
+
+      <Panel meta="Account" title="Profile">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="settings-name" className={labelClass}>Full name</label>
+            <input id="settings-name" type="text" value={teacher.name} readOnly className={fieldClass} />
+          </div>
+          <div>
+            <label htmlFor="settings-school" className={labelClass}>School code</label>
+            <input id="settings-school" type="text" value={teacher.schoolCode} readOnly className={fieldClass} />
           </div>
         </div>
+        <p className="text-xs text-[var(--sky-subtle)] mt-3">Profile details are managed by your school administrator.</p>
+      </Panel>
 
-        <div className="border-t border-[#eef1ff] pt-5">
-          <p className="sky-label">Preferences</p>
-          <div className="mt-3 space-y-3">
-            <label className="flex items-center gap-3 text-sm text-[#0A3059]">
-              <input
-                type="checkbox"
-                checked={teacher.preferences.notifications}
-                onChange={(event) => updatePreferences({ notifications: event.target.checked })}
-                className="rounded border-[#dfe3ff] text-[#005ffe] focus:ring-[#005ffe]"
-              />
-              Email me when AI confidence is below 70%
-            </label>
-            <label className="flex items-center gap-3 text-sm text-[#0A3059]">
-              <input
-                type="checkbox"
-                checked={teacher.preferences.autoRelease}
-                onChange={(event) => updatePreferences({ autoRelease: event.target.checked })}
-                className="rounded border-[#dfe3ff] text-[#005ffe] focus:ring-[#005ffe]"
-              />
-              Auto-release submissions with confidence above 95%
-            </label>
-          </div>
+      <Panel meta="Marking" title="Preferences">
+        <div className="divide-y divide-[var(--sky-panel-border)]">
+          <Toggle
+            id="pref-notifications"
+            checked={teacher.preferences.notifications}
+            onChange={(value) => updatePreferences({ notifications: value })}
+            label="Email me when AI confidence is below 70%"
+            description="A daily summary of answers that need a closer look."
+          />
+          <Toggle
+            id="pref-autorelease"
+            checked={teacher.preferences.autoRelease}
+            onChange={(value) => updatePreferences({ autoRelease: value })}
+            label="Auto-release submissions with confidence above 95%"
+            description="Off by default. When off, every script waits for you to finalize it."
+          />
         </div>
+      </Panel>
 
-        <div className="border-t border-[#eef1ff] pt-5">
-          <p className="sky-label">Help & Support</p>
-          <div className="mt-3">
-            <p className="text-sm text-[var(--sky-subtle)] mb-3">
-              Restart the welcome tour to see the essential features again.
-            </p>
-            <RestartOnboardingButton />
-          </div>
-        </div>
+      <Panel meta="Display" title="Appearance">
+        <Toggle
+          id="pref-dark"
+          checked={isDark}
+          onChange={(value) => setTheme(value ? 'dark' : 'light')}
+          label="Dark theme"
+          description="Applies to the workspace only."
+        />
+      </Panel>
 
-        <Button variant="primary" size="sm">
-          Save settings
-        </Button>
-      </div>
+      <Panel meta="Help & support" title="Welcome tour">
+        <p className="text-sm text-[var(--sky-subtle)] mb-3">
+          Restart the welcome tour to see the essential features again.
+        </p>
+        <RestartOnboardingButton />
+      </Panel>
     </div>
   )
 }

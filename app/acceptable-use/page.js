@@ -14,21 +14,21 @@ export default function AcceptableUsePage() {
       <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl font-medium text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Acceptable Use Policy
             </h1>
             <p className="text-sm text-ink-3 mb-12 pb-8 border-b border-line">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
 
             <div className="prose max-w-none">
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">1. Introduction</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">1. Introduction</h2>
                 <p className="mb-4">
                   This Acceptable Use Policy ("Policy") outlines the rules and guidelines for using Domax's AI-powered grading platform. By using our service, you agree to comply with this Policy. Violations may result in suspension or termination of your account.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">2. Educational Use Only</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">2. Educational Use Only</h2>
                 <p className="mb-4">
                   Domax is designed exclusively for legitimate educational purposes. You may use our platform to:
                 </p>
@@ -41,7 +41,7 @@ export default function AcceptableUsePage() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">3. Prohibited Activities</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">3. Prohibited Activities</h2>
                 <p className="mb-4">You may not use Domax to:</p>
                 <ul className="list-disc pl-5 mb-4 space-y-2 marker:text-ink-3">
                   <li>Process content that violates copyright, intellectual property, or privacy laws</li>
@@ -55,7 +55,7 @@ export default function AcceptableUsePage() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">4. Content Standards</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">4. Content Standards</h2>
                 <p className="mb-4">
                   All content uploaded to Domax must:
                 </p>
@@ -68,7 +68,7 @@ export default function AcceptableUsePage() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">5. Account Security</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">5. Account Security</h2>
                 <p className="mb-4">
                   You are responsible for maintaining the security of your account. You must:
                 </p>
@@ -81,7 +81,7 @@ export default function AcceptableUsePage() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">6. Data Protection</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">6. Data Protection</h2>
                 <p className="mb-4">
                   When using Domax, you must ensure compliance with all applicable data protection laws, including:
                 </p>
@@ -94,7 +94,7 @@ export default function AcceptableUsePage() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">7. Violations and Enforcement</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">7. Violations and Enforcement</h2>
                 <p className="mb-4">
                   Violations of this Policy may result in:
                 </p>
@@ -107,21 +107,21 @@ export default function AcceptableUsePage() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">8. Reporting Violations</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">8. Reporting Violations</h2>
                 <p className="mb-4">
                   If you become aware of any violation of this Policy, please report it immediately to our support team at support@domax.com or through our contact page.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">9. Changes to This Policy</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">9. Changes to This Policy</h2>
                 <p className="mb-4">
                   We reserve the right to modify this Policy at any time. We will notify users of significant changes via email or through our platform. Continued use of Domax after changes constitutes acceptance of the updated Policy.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">10. Contact Information</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">10. Contact Information</h2>
                 <p className="mb-4">
                   For questions about this Acceptable Use Policy, please contact us at legal@domax.com or through our contact page.
                 </p>

@@ -57,7 +57,7 @@ export default function LoginPage() {
     },
     {
       title: 'LMS Integrations',
-      description: 'Seamlessly sync with Canvas, Blackboard, Moodle, and Google Classroom for a unified workflow.',
+      description: 'Send marks back to Canvas, Blackboard, Moodle or Google Classroom.',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" />
@@ -127,38 +127,38 @@ export default function LoginPage() {
     <div className="min-h-screen bg-white flex">
       {/* Left Side - Login Form */}
       <div ref={leftSideRef} className="flex-1 flex flex-col bg-white">
-        <div className="flex-1 flex items-center justify-center px-8 py-12 opacity-100">
-          <div className="w-full max-w-md">
+        <div className="flex-1 flex items-center justify-center px-6 sm:px-8 py-12 opacity-100">
+          <div className="w-full max-w-[400px]">
             {/* Logo */}
-            <Link href="/" className="flex items-end -space-x-1 mb-12">
+            <Link href="/" className="inline-flex items-end -space-x-1 mb-14 rounded-md" aria-label="Domax home">
               <Image
                 src="/favicon.svg"
-                alt="Domax Logo"
+                alt=""
                 width={40}
                 height={40}
-                className="h-8 w-8"
+                className="h-7 w-7"
                 priority
               />
-              <span className="text-2xl font-bold text-[#0A3059]">OMAX</span>
+              <span className="text-lg font-bold tracking-tight text-[#0A3059]">OMAX</span>
             </Link>
 
             {/* Welcome Message */}
             <div className="mb-8">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#0A3059] mb-6 lg:mb-8 leading-[1.1] tracking-tight">
+              <h1 className="text-[2rem] sm:text-[2.5rem] font-medium text-[#0A3059] mb-3 leading-[1.1] tracking-[-0.025em]">
                 Welcome back!
               </h1>
-              <p className="text-gray-600 text-lg">
+              <p className="text-ink-2 text-base">
                 Log in and continue grading your students' papers.
               </p>
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {/* Email Field */}
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-semibold text-[#0A3059] mb-2"
+                  className="block text-sm font-medium text-[#0A3059] mb-1.5"
                 >
                   Email
                 </label>
@@ -170,7 +170,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#005ffe] focus:border-transparent transition-all"
+                  className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg placeholder-[#5B6B82] text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] transition-all"
                   placeholder="you@example.com"
                 />
               </div>
@@ -179,7 +179,7 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-semibold text-[#0A3059] mb-2"
+                  className="block text-sm font-medium text-[#0A3059] mb-1.5"
                 >
                   Password
                 </label>
@@ -192,20 +192,22 @@ export default function LoginPage() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#005ffe] focus:border-transparent transition-all"
+                    className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg placeholder-[#5B6B82] text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] transition-all pr-11"
                     placeholder="Enter your password"
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 w-11 flex items-center justify-center rounded-r-lg text-ink-3 hover:text-ink"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-pressed={showPassword}
                   >
                     {showPassword ? (
-                      <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                       </svg>
                     ) : (
-                      <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
@@ -215,7 +217,7 @@ export default function LoginPage() {
               </div>
 
               {/* Forgot Password Link */}
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-end -mt-1">
                 <Link
                   href="/forgot-password"
                   className="text-sm font-medium text-[#005ffe] hover:text-[#0047cc] transition-colors"
@@ -237,8 +239,8 @@ export default function LoginPage() {
             </form>
 
             {/* Sign Up Link */}
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-600">
+            <div className="mt-8 pt-6 border-t border-line text-center">
+              <p className="text-sm text-ink-2">
                 Don't have an account?{' '}
                 <Link
                   href="/signup"
@@ -253,14 +255,16 @@ export default function LoginPage() {
       </div>
 
       {/* Right Side - Auto-sliding Features */}
-      <div ref={rightSideRef} className="hidden lg:flex flex-1 items-center justify-center bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] p-12 relative overflow-hidden">
+      <div ref={rightSideRef} className="hidden lg:flex flex-1 items-center justify-center bg-[#F0F7FF] border-l border-line p-12 relative overflow-hidden">
+      {/* Decorative layer. The GSAP call selects this element (first `div > div`)
+          and fades it to full opacity, so the wash itself is kept soft. */}
       <div className="absolute inset-0 opacity-30">
-          <div className="absolute -top-32 -right-10 w-96 h-96 bg-gradient-to-br from-[#00cd90] to-transparent blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[28rem] h-[28rem] bg-gradient-to-tr from-[#005ffe] to-transparent blur-3xl" />
+          <div className="absolute -top-40 -right-24 w-[34rem] h-[34rem] rounded-full bg-[radial-gradient(closest-side,rgba(0,205,144,0.12),rgba(0,205,144,0))]" />
+          <div className="absolute -bottom-40 -left-24 w-[34rem] h-[34rem] rounded-full bg-[radial-gradient(closest-side,rgba(0,95,254,0.10),rgba(0,95,254,0))]" />
         </div>
         
         <div className="relative z-10 max-w-md w-full">
-          <div className="relative h-96">
+          <div className="relative h-72" aria-live="polite">
             {features.map((feature, index) => (
               <div
                 key={index}
@@ -269,13 +273,13 @@ export default function LoginPage() {
                 }`}
               >
                 <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#005ffe] to-[#0047cc] flex items-center justify-center text-white mb-6 shadow-lg">
+                  <div className="w-12 h-12 rounded-xl bg-[#0A3059] flex items-center justify-center text-white mb-6">
                     {feature.icon}
                   </div>
-                  <h3 className="text-2xl font-bold text-[#0A3059] mb-3">
+                  <h3 className="text-2xl font-semibold text-[#0A3059] mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed">
+                  <p className="text-[17px] text-ink-2 leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -292,9 +296,10 @@ export default function LoginPage() {
                 className={`transition-all duration-300 ${
                   index === currentFeature
                     ? 'w-8 h-2 bg-[#005ffe] rounded-full'
-                    : 'w-2 h-2 bg-gray-300 rounded-full hover:bg-gray-400'
+                    : 'w-2 h-2 bg-[#CFD8E3] rounded-full hover:bg-[#5B6B82]'
                 }`}
                 aria-label={`Go to feature ${index + 1}`}
+                aria-current={index === currentFeature ? 'true' : undefined}
               />
             ))}
           </div>

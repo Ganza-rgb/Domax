@@ -15,7 +15,7 @@ export default function SupportPage() {
       <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl font-medium text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Support
             </h1>
             <p className="lede mb-12 pb-12 border-b border-line">
@@ -46,7 +46,7 @@ export default function SupportPage() {
             </div>
 
             <div className="p-8 bg-canvas border border-line rounded-2xl">
-              <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Contact Information</h2>
+              <h2 className="text-[1.375rem] font-medium text-ink mb-3">Contact Information</h2>
               <div className="space-y-3 text-ink-2">
                 <p><strong>Email:</strong> support@domax.com</p>
                 <p><strong>Response Time:</strong> We typically respond within 24 hours</p>

@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import ExamDetails from '@/components/dashboard/ExamDetails'
+import { EmptyState, Panel } from '@/components/dashboard/ui'
 import { useDashboardState } from '@/states/useDashboardState'
 import { useExamState } from '@/states/useExamState'
 import { useSubmissionState } from '@/states/useSubmissionState'
@@ -39,15 +41,24 @@ export default function ExamDetailsPage() {
         title={exam ? exam.title : 'Exam not found'}
         subtitle={exam ? `${exam.stats.graded}/${exam.stats.total} graded` : 'Check exam id'}
       />
-      <ExamDetails exam={exam} onOpenSubmission={handleOpenSubmission} />
+      {exam ? (
+        <Panel>
+          <ExamDetails exam={exam} onOpenSubmission={handleOpenSubmission} hideTitle />
+        </Panel>
+      ) : (
+        <EmptyState
+          title="This exam isn't in your workspace"
+          body={`No exam matches “${examId}”.`}
+          action={
+            <Link
+              href="/dashboard/exams"
+              className="inline-flex h-9 items-center rounded-lg bg-[#005ffe] px-3.5 text-sm font-semibold text-white hover:bg-[#0047cc]"
+            >
+              Back to exams
+            </Link>
+          }
+        />
+      )}
     </div>
   )
 }
-
-
-
-
-
-
-
-

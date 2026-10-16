@@ -69,7 +69,7 @@ export default function HelpPage() {
       <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl font-medium text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Help Center
             </h1>
             <p className="lede mb-12 pb-12 border-b border-line">
@@ -79,7 +79,7 @@ export default function HelpPage() {
             <div className="space-y-12">
               {faqCategories.map((category, categoryIndex) => (
                 <section key={categoryIndex}>
-                  <h2 className="text-[1.375rem] font-semibold text-ink mb-5">{category.title}</h2>
+                  <h2 className="text-[1.375rem] font-medium text-ink mb-5">{category.title}</h2>
                   <div className="border-y border-line divide-y divide-line">
                     {category.questions.map((item, itemIndex) => (
                       <details key={itemIndex} className="group py-1">
@@ -101,7 +101,7 @@ export default function HelpPage() {
             </div>
 
             <div className="mt-16 p-8 sm:p-10 bg-canvas border border-line rounded-2xl text-center">
-              <h2 className="text-2xl font-semibold text-ink mb-4">Still need help?</h2>
+              <h2 className="text-2xl font-medium text-ink mb-4">Still need help?</h2>
               <p className="text-ink-2 mb-6">Our support team is here to assist you.</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button href="/contact" variant="primary" size="lg">

@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Button from '@/components/atoms/Button'
+import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
+import { Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
 
 export default function EntitlementsPage() {
   const [teacherForm, setTeacherForm] = useState({ seats: 5, ttlHours: 72, note: '' })
@@ -53,119 +55,146 @@ export default function EntitlementsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-surface-neutral py-24">
-      <div className="container-custom space-y-10">
-        <header>
-          <p className="text-xs uppercase font-semibold text-brand-primary-blue">Entitlement studio</p>
-          <h1 className="text-4xl font-bold text-[#0A3059] mt-2">Generate codes for teachers & boards</h1>
-          <p className="text-text-muted max-w-2xl mt-3">
-            Issue time-boxed access codes for teachers and exam institutions. Every code inherits download or seat limits plus
-            automatic expiration windows.
-          </p>
-        </header>
+    <div className="space-y-6">
+      <WorkspaceHeader
+        meta="Access codes"
+        title="Generate codes for teachers & boards"
+        subtitle="Issue time-boxed access codes for teachers and exam institutions. Every code inherits download or seat limits plus automatic expiration windows."
+      />
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <section className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm space-y-4">
-            <div>
-              <p className="text-xs uppercase font-semibold text-gray-400">Teacher cohort</p>
-              <h2 className="text-2xl font-semibold text-[#0A3059]">Small group onboarding</h2>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 items-start">
+        <Panel meta="Teacher cohort" title="Small group onboarding">
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="teacher-seats" className={labelClass}>Seats</label>
+                <input
+                  id="teacher-seats"
+                  type="number"
+                  min={1}
+                  value={teacherForm.seats}
+                  onChange={(e) => setTeacherForm((prev) => ({ ...prev, seats: Number(e.target.value) }))}
+                  className={fieldClass}
+                />
+              </div>
+              <div>
+                <label htmlFor="teacher-ttl" className={labelClass}>Expires in (hours)</label>
+                <input
+                  id="teacher-ttl"
+                  type="number"
+                  min={1}
+                  value={teacherForm.ttlHours}
+                  onChange={(e) => setTeacherForm((prev) => ({ ...prev, ttlHours: Number(e.target.value) }))}
+                  className={fieldClass}
+                />
+              </div>
             </div>
-            <label className="text-sm font-semibold text-[#0A3059]">
-              Seats
+            <div>
+              <label htmlFor="teacher-note" className={labelClass}>
+                Cohort note <span className="font-normal text-[var(--sky-subtle)]">(optional)</span>
+              </label>
               <input
-                type="number"
-                min={1}
-                value={teacherForm.seats}
-                onChange={(e) => setTeacherForm((prev) => ({ ...prev, seats: Number(e.target.value) }))}
-                className="mt-2 w-full rounded-2xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary-blue"
-              />
-            </label>
-            <label className="text-sm font-semibold text-[#0A3059]">
-              Expires in (hours)
-              <input
-                type="number"
-                min={1}
-                value={teacherForm.ttlHours}
-                onChange={(e) => setTeacherForm((prev) => ({ ...prev, ttlHours: Number(e.target.value) }))}
-                className="mt-2 w-full rounded-2xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary-blue"
-              />
-            </label>
-            <label className="text-sm font-semibold text-[#0A3059]">
-              Cohort note
-              <input
+                id="teacher-note"
                 type="text"
                 value={teacherForm.note}
                 onChange={(e) => setTeacherForm((prev) => ({ ...prev, note: e.target.value }))}
-                className="mt-2 w-full rounded-2xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary-blue"
+                placeholder="e.g. S3 science department"
+                className={fieldClass}
               />
-            </label>
-            <Button variant="primary" onClick={handleTeacherGenerate} disabled={isSubmitting}>
+            </div>
+            <Button variant="primary" size="md" onClick={handleTeacherGenerate} disabled={isSubmitting}>
               {isSubmitting ? 'Generating…' : 'Generate teacher code'}
             </Button>
             {teacherResult && (
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                <p className="font-semibold">{teacherResult.code}</p>
-                <p>
-                  Seats: {teacherResult.seatLimit} · Expires {new Date(teacherResult.expiresAt).toLocaleString()}
-                </p>
-              </div>
+              <GeneratedCode
+                code={teacherResult.code}
+                details={[`Seats: ${teacherResult.seatLimit}`, `Expires ${new Date(teacherResult.expiresAt).toLocaleString()}`]}
+              />
             )}
-          </section>
+          </div>
+        </Panel>
 
-          <section className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm space-y-4">
-            <div>
-              <p className="text-xs uppercase font-semibold text-gray-400">Institutions</p>
-              <h2 className="text-2xl font-semibold text-[#0A3059]">Board-level provisioning</h2>
+        <Panel meta="Institutions" title="Board-level provisioning">
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="inst-seats" className={labelClass}>Seats</label>
+                <input
+                  id="inst-seats"
+                  type="number"
+                  min={50}
+                  value={institutionForm.seats}
+                  onChange={(e) => setInstitutionForm((prev) => ({ ...prev, seats: Number(e.target.value) }))}
+                  className={fieldClass}
+                />
+              </div>
+              <div>
+                <label htmlFor="inst-campuses" className={labelClass}>Campuses covered</label>
+                <input
+                  id="inst-campuses"
+                  type="number"
+                  min={1}
+                  value={institutionForm.campuses}
+                  onChange={(e) => setInstitutionForm((prev) => ({ ...prev, campuses: Number(e.target.value) }))}
+                  className={fieldClass}
+                />
+              </div>
             </div>
-            <label className="text-sm font-semibold text-[#0A3059]">
-              Seats
+            <div>
+              <label htmlFor="inst-ttl" className={labelClass}>Expires in (hours)</label>
               <input
-                type="number"
-                min={50}
-                value={institutionForm.seats}
-                onChange={(e) => setInstitutionForm((prev) => ({ ...prev, seats: Number(e.target.value) }))}
-                className="mt-2 w-full rounded-2xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary-blue"
-              />
-            </label>
-            <label className="text-sm font-semibold text-[#0A3059]">
-              Campuses covered
-              <input
-                type="number"
-                min={1}
-                value={institutionForm.campuses}
-                onChange={(e) => setInstitutionForm((prev) => ({ ...prev, campuses: Number(e.target.value) }))}
-                className="mt-2 w-full rounded-2xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary-blue"
-              />
-            </label>
-            <label className="text-sm font-semibold text-[#0A3059]">
-              Expires in (hours)
-              <input
+                id="inst-ttl"
                 type="number"
                 min={24}
                 value={institutionForm.ttlHours}
                 onChange={(e) => setInstitutionForm((prev) => ({ ...prev, ttlHours: Number(e.target.value) }))}
-                className="mt-2 w-full rounded-2xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary-blue"
+                className={fieldClass}
               />
-            </label>
-            <Button variant="primary" onClick={handleInstitutionGenerate} disabled={isSubmitting}>
+            </div>
+            <Button variant="primary" size="md" onClick={handleInstitutionGenerate} disabled={isSubmitting}>
               {isSubmitting ? 'Generating…' : 'Generate institution code'}
             </Button>
             {institutionResult && (
-              <div className="rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-brand-primary-blue">
-                <p className="font-semibold">{institutionResult.code}</p>
-                <p>
-                  Seats: {institutionResult.seatLimit} · Campuses: {institutionResult.metadata?.campuses || institutionForm.campuses}
-                </p>
-                <p>Expires {new Date(institutionResult.expiresAt).toLocaleString()}</p>
-              </div>
+              <GeneratedCode
+                code={institutionResult.code}
+                details={[
+                  `Seats: ${institutionResult.seatLimit}`,
+                  `Campuses: ${institutionResult.metadata?.campuses || institutionForm.campuses}`,
+                  `Expires ${new Date(institutionResult.expiresAt).toLocaleString()}`,
+                ]}
+              />
             )}
-          </section>
-        </div>
+          </div>
+        </Panel>
       </div>
-    </main>
+    </div>
   )
 }
 
-
-
-
+function GeneratedCode({ code, details }) {
+  const [copied, setCopied] = useState(false)
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setCopied(false)
+    }
+  }
+  return (
+    <div role="status" className="rounded-lg border border-[var(--sky-panel-border)] bg-[var(--sky-surface)] px-4 py-3">
+      <div className="flex items-center justify-between gap-3">
+        <p className="font-mono text-base font-semibold tracking-wide text-[var(--sky-text)]">{code}</p>
+        <button
+          type="button"
+          onClick={copy}
+          className="h-8 rounded-md border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] px-3 text-[13px] font-medium text-[var(--sky-text)] hover:border-[var(--action-accent)]"
+        >
+          {copied ? 'Copied' : 'Copy'}
+        </button>
+      </div>
+      <p className="mt-1 text-[13px] text-[var(--sky-subtle)]">{details.join(' · ')}</p>
+    </div>
+  )
+}

@@ -15,7 +15,7 @@ export default function AnnotationsPage() {
       <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl font-medium text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               In-Document Annotations
             </h1>
             <p className="lede mb-12 pb-12 border-b border-line">
@@ -24,7 +24,7 @@ export default function AnnotationsPage() {
 
             <div className="prose max-w-none">
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Rich Annotation Tools</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Rich Annotation Tools</h2>
                 <p className="text-ink-2 mb-4">
                   Our annotation system lets you provide detailed feedback directly on student papers. Highlight text, add comments, suggest improvements, and mark specific areas that need attention.
                 </p>
@@ -37,7 +37,7 @@ export default function AnnotationsPage() {
               </section>
 
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Key Features</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Key Features</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-6 bg-white border border-line rounded-xl">
                     <h3 className="text-[17px] font-semibold text-ink mb-1.5">Visual Feedback</h3>
@@ -53,7 +53,7 @@ export default function AnnotationsPage() {
                   </div>
                   <div className="p-6 bg-white border border-line rounded-xl">
                     <h3 className="text-[17px] font-semibold text-ink mb-1.5">Multi-Format Support</h3>
-                    <p className="text-ink-2 text-sm leading-relaxed">Annotate PDFs, Word documents, and other common file formats seamlessly.</p>
+                    <p className="text-ink-2 text-sm leading-relaxed">Works on PDFs and Word documents, the formats scripts usually arrive in.</p>
                   </div>
                 </div>
               </section>

@@ -5,7 +5,7 @@ import Button from '@/components/atoms/Button'
 
 export const metadata = {
   title: 'LMS Integrations — Domax',
-  description: 'Seamlessly sync with Canvas, Blackboard, Moodle, Google Classroom, and other learning management systems.',
+  description: 'Send marks and assignments between Domax and Canvas, Blackboard, Moodle or Google Classroom.',
 }
 
 export default function IntegrationsPage() {
@@ -15,16 +15,16 @@ export default function IntegrationsPage() {
       <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl font-medium text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               LMS Integrations
             </h1>
             <p className="lede mb-12 pb-12 border-b border-line">
-              Seamlessly sync with Canvas, Blackboard, Moodle, Google Classroom, and more. Sync grades and assignments automatically without leaving your LMS.
+              If your school already uses Canvas, Blackboard, Moodle or Google Classroom, Domax can pull assignments in from it and send marks back, so you don’t enter them twice.
             </p>
 
             <div className="prose max-w-none">
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Connect Your LMS</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Connect Your LMS</h2>
                 <p className="text-ink-2 mb-4">
                   Domax integrates with all major learning management systems, allowing you to import assignments, sync grades, and deliver feedback without switching platforms.
                 </p>
@@ -37,11 +37,11 @@ export default function IntegrationsPage() {
               </section>
 
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Supported Platforms</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Supported Platforms</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-6 bg-white border border-line rounded-xl">
                     <h3 className="text-[17px] font-semibold text-ink mb-1.5">Canvas</h3>
-                    <p className="text-ink-2 text-sm leading-relaxed">Full integration with Canvas LTI and API for seamless grade syncing.</p>
+                    <p className="text-ink-2 text-sm leading-relaxed">Works through Canvas LTI and the Canvas API, so marks land in the gradebook.</p>
                   </div>
                   <div className="p-6 bg-white border border-line rounded-xl">
                     <h3 className="text-[17px] font-semibold text-ink mb-1.5">Blackboard</h3>

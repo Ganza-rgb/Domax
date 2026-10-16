@@ -15,7 +15,7 @@ export default function PartnersPage() {
       <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl font-medium text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Partners
             </h1>
             <p className="lede mb-12 pb-12 border-b border-line">
@@ -24,7 +24,7 @@ export default function PartnersPage() {
 
             <div className="prose max-w-none">
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Partnership Opportunities</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Partnership Opportunities</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-6 bg-white border border-line rounded-xl">
                     <h3 className="text-[17px] font-semibold text-ink mb-1.5">LMS Integration Partners</h3>
@@ -50,7 +50,7 @@ export default function PartnersPage() {
               </section>
 
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Benefits of Partnering</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Benefits of Partnering</h2>
                 <ul className="list-disc pl-5 text-ink-2 space-y-2 marker:text-ink-3">
                   <li>Competitive revenue sharing and commission structures</li>
                   <li>Dedicated partner support and resources</li>

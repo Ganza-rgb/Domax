@@ -15,7 +15,7 @@ export default function DocsPage() {
       <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl font-medium text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Documentation
             </h1>
             <p className="lede mb-12 pb-12 border-b border-line">
@@ -24,7 +24,7 @@ export default function DocsPage() {
 
             <div className="prose max-w-none">
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Getting Started</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Getting Started</h2>
                 <div className="space-y-4">
                   <div className="p-6 bg-white border border-line rounded-xl">
                     <h3 className="text-[17px] font-semibold text-ink mb-1.5">Quick Start Guide</h3>
@@ -40,7 +40,7 @@ export default function DocsPage() {
               </section>
 
               <section className="mb-12">
-                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Guides & Tutorials</h2>
+                <h2 className="text-[1.375rem] font-medium text-ink mb-3">Guides & Tutorials</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-6 bg-white border border-line rounded-xl">
                     <h3 className="text-[17px] font-semibold text-ink mb-1.5">Creating Rubrics</h3>

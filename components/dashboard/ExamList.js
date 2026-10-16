@@ -1,11 +1,16 @@
 'use client'
 
-import Button from '@/components/atoms/Button'
 import { useExamState } from '@/states/useExamState'
 import { useDashboardState } from '@/states/useDashboardState'
+import { ProgressBar, StatusPill } from './ui'
 
-export default function ExamList({ onCreateExam }) {
-  const { exams, setActiveExamId } = useExamState()
+const EXAM_STATUS = {
+  'in-progress': { label: 'In progress', tone: 'info' },
+  draft: { label: 'Draft', tone: 'neutral' },
+}
+
+export default function ExamList() {
+  const { exams, activeExamId, setActiveExamId } = useExamState()
   const { setSelectedExam, updatePanel } = useDashboardState()
 
   const handleSelect = (examId) => {
@@ -18,58 +23,49 @@ export default function ExamList({ onCreateExam }) {
   }
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-center gap-3">
-        <Button variant="primary" size="sm" onClick={onCreateExam}>
-          Create exam
-        </Button>
-        <Button variant="outline" size="sm">
-          Import exam
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4">
-        {exams.map((exam) => (
-          <button
-            key={exam.id}
-            type="button"
-            onClick={() => handleSelect(exam.id)}
-            className="sky-card text-left transition-all hover:-translate-y-1 hover:border-[#005ffe]"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="sky-label">{exam.level}</p>
-                <h3 className="text-xl font-semibold text-[var(--sky-text)]">{exam.title}</h3>
+    <ul className="space-y-1" role="list">
+      {exams.map((exam) => {
+        const isActive = exam.id === activeExamId
+        const status = EXAM_STATUS[exam.status] || { label: exam.status, tone: 'neutral' }
+        return (
+          <li key={exam.id}>
+            <button
+              type="button"
+              onClick={() => handleSelect(exam.id)}
+              aria-current={isActive ? 'true' : undefined}
+              className={`w-full rounded-lg px-3 py-3 text-left transition-all ${
+                isActive
+                  ? 'bg-[var(--action-accent-soft)] ring-1 ring-inset ring-[var(--action-accent)]'
+                  : 'hover:bg-[var(--sky-surface)]'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-[var(--sky-text)]">{exam.title}</p>
+                  <p className="text-xs text-[var(--sky-subtle)]">
+                    {exam.level} · {exam.scheduled}
+                  </p>
+                </div>
+                <StatusPill tone={status.tone}>{status.label}</StatusPill>
               </div>
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[var(--sky-surface)] text-[#005ffe]">
-                {exam.status === 'in-progress' ? 'In progress' : 'Draft'}
-              </span>
-            </div>
-            <div className="mt-4 grid grid-cols-3 gap-2 text-sm text-[var(--sky-subtle)]">
-              <div>
-                <p className="sky-label text-[0.65rem]">Total</p>
-                <p className="text-lg font-semibold text-[var(--sky-text)]">{exam.stats.total}</p>
+              <div className="mt-2.5 flex items-center gap-2">
+                <ProgressBar
+                  value={exam.stats.graded}
+                  max={exam.stats.total}
+                  tone={exam.stats.graded === exam.stats.total ? 'positive' : 'info'}
+                  label={`${exam.title} progress`}
+                />
+                <span className="text-xs tabular-nums text-[var(--sky-subtle)] whitespace-nowrap">
+                  {exam.stats.graded}/{exam.stats.total}
+                </span>
               </div>
-              <div>
-                <p className="sky-label text-[0.65rem]">Graded</p>
-                <p className="text-lg font-semibold text-[var(--sky-text)]">{exam.stats.graded}</p>
-              </div>
-              <div>
-                <p className="sky-label text-[0.65rem]">Review</p>
-                <p className="text-lg font-semibold text-[var(--sky-text)]">{exam.stats.needsReview}</p>
-              </div>
-            </div>
-            <div className="mt-4 h-2 rounded-full bg-[var(--sky-surface)]/70 overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-[#00cd90] to-[#005ffe]"
-                style={{ width: `${(exam.stats.graded / exam.stats.total) * 100}%` }}
-              />
-            </div>
-            <p className="text-xs text-[var(--sky-subtle)] mt-2">Scheduled {exam.scheduled}</p>
-          </button>
-        ))}
-      </div>
-    </div>
+              {exam.stats.needsReview > 0 && (
+                <p className="mt-1.5 text-xs text-[var(--vscode-orange)]">{exam.stats.needsReview} need review</p>
+              )}
+            </button>
+          </li>
+        )
+      })}
+    </ul>
   )
 }
-

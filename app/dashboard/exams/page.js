@@ -5,6 +5,7 @@ import Button from '@/components/atoms/Button'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import ExamList from '@/components/dashboard/ExamList'
 import ExamDetails from '@/components/dashboard/ExamDetails'
+import { Panel, StatGroup } from '@/components/dashboard/ui'
 import { useDashboardState } from '@/states/useDashboardState'
 import { useExamState } from '@/states/useExamState'
 import { useSubmissionState } from '@/states/useSubmissionState'
@@ -38,17 +39,18 @@ export default function ExamsPage() {
       {
         label: 'Live exams',
         value: exams.filter((exam) => exam.status === 'in-progress').length,
-        sub: 'Monitoring right now',
+        hint: 'Monitoring right now',
       },
       {
         label: 'Drafts',
         value: exams.filter((exam) => exam.status === 'draft').length,
-        sub: 'Need scheduling',
+        hint: 'Need scheduling',
       },
       {
         label: 'Awaiting review',
         value: exams.reduce((acc, exam) => acc + exam.stats.needsReview, 0),
-        sub: 'Scripts pending manual oversight',
+        hint: 'Scripts pending manual oversight',
+        tone: exams.some((exam) => exam.stats.needsReview > 0) ? 'caution' : 'neutral',
       },
     ],
     [exams]
@@ -61,53 +63,34 @@ export default function ExamsPage() {
         title="Plan, monitor, and close out exams"
         subtitle={`${exams.length} upcoming + ongoing`}
         actions={
-          <Button variant="primary" size="sm" data-tour="create-exam-button">
-            Create exam
-          </Button>
+          <>
+            <Button variant="secondary" size="sm" disabled title="Importing exams is not available yet">
+              Import exam
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              data-tour="create-exam-button"
+              disabled
+              title="Exam creation is not available yet"
+            >
+              Create exam
+            </Button>
+          </>
         }
       />
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {statusBoard.map((stat) => (
-          <article key={stat.label} className="sky-card">
-            <p className="sky-label">{stat.label}</p>
-            <p className="text-3xl font-semibold text-[var(--sky-text)] mt-3">{stat.value}</p>
-            <p className="text-xs text-[var(--sky-subtle)] mt-2">{stat.sub}</p>
-          </article>
-        ))}
-      </section>
+      <StatGroup items={statusBoard} />
 
-      <section className="grid grid-cols-1 xl:grid-cols-[380px_1fr] gap-5">
-        <article className="sky-card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="sky-label">Exam spaces</p>
-              <h3 className="text-xl font-semibold text-[var(--sky-text)]">Playbook</h3>
-            </div>
-            <Button variant="outline" size="sm">
-              Import
-            </Button>
-          </div>
-          <div className="mt-5">
-            <ExamList onCreateExam={() => {}} />
-          </div>
-        </article>
+      <div className="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)] gap-6 items-start">
+        <Panel meta="Exam spaces" title="Playbook" bodyClassName="!px-2 !pb-2">
+          <ExamList />
+        </Panel>
 
-        <article className="sky-card">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <p className="sky-label">{activeExam ? activeExam.level : 'Exam'}</p>
-              <h3 className="text-xl font-semibold text-[var(--sky-text)]">
-                {activeExam ? activeExam.title : 'Select an exam'}
-              </h3>
-            </div>
-            <Button variant="ghost" size="sm">
-              Export progress
-            </Button>
-          </div>
+        <Panel>
           <ExamDetails exam={activeExam} onOpenSubmission={handleOpenSubmission} />
-        </article>
-      </section>
+        </Panel>
+      </div>
     </div>
   )
 }

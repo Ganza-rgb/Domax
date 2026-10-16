@@ -1,80 +1,123 @@
 'use client'
 
+import Link from 'next/link'
 import Button from '@/components/atoms/Button'
+import { useSubmissionState } from '@/states/useSubmissionState'
+import { EmptyState, ProgressBar, StatGroup, LOW_CONFIDENCE, downloadCsv } from './ui'
 
-export default function ExamDetails({ exam, onOpenSubmission }) {
+export default function ExamDetails({ exam, onOpenSubmission, hideTitle = false }) {
+  const { findSubmissionById } = useSubmissionState()
+
   if (!exam) {
-    return (
-      <div className="sky-card border-dashed text-center text-sm text-[var(--sky-subtle)]">
-        Select an exam to see its progress.
-      </div>
-    )
+    return <EmptyState title="Select an exam" body="Choose an exam on the left to see its progress." />
+  }
+
+  const exportProgress = () => {
+    downloadCsv(`${exam.title.replace(/\s+/g, '-').toLowerCase()}-progress.csv`, [
+      ['Exam', 'Level', 'Student', 'Progress', 'AI confidence', 'Last update'],
+      ...exam.submissions.map((s) => [
+        exam.title,
+        exam.level,
+        s.student,
+        s.progress,
+        `${Math.round(s.aiConfidence * 100)}%`,
+        s.updatedAt,
+      ]),
+    ])
   }
 
   return (
-    <div className="space-y-6">
-      <div className="sky-card">
-        <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
-          <div>
-            <p className="sky-label">{exam.level}</p>
-            <h2 className="text-2xl font-semibold text-[var(--sky-text)]">{exam.title}</h2>
-            <p className="text-sm text-[var(--sky-subtle)]">Scheduled {exam.scheduled} • Duration {exam.duration}</p>
-          </div>
-          <div className="flex gap-2 lg:ml-auto">
-            <Button variant="outline" size="sm">
-              Export roster
-            </Button>
-            <Button variant="primary" size="sm">
-              Create assignment
-            </Button>
-          </div>
+    <div className="space-y-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          {!hideTitle && (
+            <>
+              <p className="sky-label">{exam.level}</p>
+              <h2 className="text-xl font-semibold text-[var(--sky-text)]">{exam.title}</h2>
+            </>
+          )}
+          <p className="text-sm text-[var(--sky-subtle)]">
+            {hideTitle && <>{exam.level} · </>}Scheduled {exam.scheduled} · Duration {exam.duration}
+          </p>
         </div>
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-[var(--sky-subtle)]">
-          <Stat label="Total submissions" value={exam.stats.total} />
-          <Stat label="Graded" value={exam.stats.graded} />
-          <Stat label="Needs review" value={exam.stats.needsReview} />
-          <Stat label="Low confidence" value={exam.stats.aiLowConfidence} />
+        <div className="flex gap-2 flex-shrink-0">
+          <Button variant="secondary" size="sm" onClick={exportProgress} disabled={exam.submissions.length === 0}>
+            Export CSV
+          </Button>
+          <Button variant="secondary" size="sm" disabled title="Assignment creation is not available yet">
+            Create assignment
+          </Button>
         </div>
       </div>
 
-      <div className="sky-card">
-        <p className="sky-label mb-4">Submissions</p>
-        <div className="space-y-3">
-          {exam.submissions.map((submission) => (
-            <div
-              key={submission.id}
-              className="flex items-center justify-between rounded-2xl border border-[var(--sky-panel-border)] px-4 py-3 hover:border-[#005ffe] transition-colors"
-            >
-              <div>
-                <p className="text-sm font-semibold text-[var(--sky-text)]">{submission.student}</p>
-                <p className="text-xs text-[var(--sky-subtle)]">{submission.progress}</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-xs font-semibold text-[#005ffe]">
-                  {Math.round(submission.aiConfidence * 100)}% AI confidence
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onOpenSubmission && onOpenSubmission(submission)}
-                >
-                  Open
-                </Button>
-              </div>
-            </div>
-          ))}
+      <div>
+        <div className="flex justify-between text-sm mb-1.5">
+          <span className="text-[var(--sky-subtle)]">Graded</span>
+          <span className="font-medium tabular-nums text-[var(--sky-text)]">
+            {exam.stats.graded} of {exam.stats.total}
+          </span>
         </div>
+        <ProgressBar value={exam.stats.graded} max={exam.stats.total} label="Exam progress" />
+      </div>
+
+      <StatGroup
+        items={[
+          { label: 'Total submissions', value: exam.stats.total },
+          { label: 'Graded', value: exam.stats.graded },
+          { label: 'Needs review', value: exam.stats.needsReview, tone: exam.stats.needsReview ? 'caution' : 'neutral' },
+          { label: 'Low confidence', value: exam.stats.aiLowConfidence, tone: exam.stats.aiLowConfidence ? 'caution' : 'neutral' },
+        ]}
+      />
+
+      <div>
+        <h3 className="text-sm font-semibold text-[var(--sky-text)] mb-2">Recent submissions</h3>
+        {exam.submissions.length === 0 ? (
+          <EmptyState title="No submissions yet" body="Scripts appear here once they are uploaded for this exam." />
+        ) : (
+          <div className="overflow-x-auto rounded-xl border border-[var(--sky-panel-border)]">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-[var(--sky-surface)] text-left text-xs text-[var(--sky-subtle)]">
+                  <th scope="col" className="px-4 py-2 font-medium">Student</th>
+                  <th scope="col" className="px-3 py-2 font-medium">Progress</th>
+                  <th scope="col" className="px-3 py-2 font-medium">AI confidence</th>
+                  <th scope="col" className="px-3 py-2 font-medium">Updated</th>
+                  <th scope="col" className="px-4 py-2"><span className="sr-only">Action</span></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--sky-panel-border)]">
+                {exam.submissions.map((submission) => {
+                  const reviewable = Boolean(findSubmissionById(submission.id))
+                  const low = submission.aiConfidence > 0 && submission.aiConfidence < LOW_CONFIDENCE
+                  return (
+                    <tr key={submission.id} className="hover:bg-[var(--sky-surface)]">
+                      <td className="px-4 py-2.5 font-medium text-[var(--sky-text)]">{submission.student}</td>
+                      <td className="px-3 py-2.5 text-[var(--sky-subtle)]">{submission.progress}</td>
+                      <td className={`px-3 py-2.5 tabular-nums ${low ? 'text-[var(--vscode-orange)] font-semibold' : 'text-[var(--sky-subtle)]'}`}>
+                        {submission.aiConfidence > 0 ? `${Math.round(submission.aiConfidence * 100)}%` : '—'}
+                      </td>
+                      <td className="px-3 py-2.5 tabular-nums text-[var(--sky-subtle)]">{submission.updatedAt}</td>
+                      <td className="px-4 py-2.5 text-right">
+                        {reviewable ? (
+                          <Link
+                            href={`/dashboard/submissions/${submission.id}`}
+                            onClick={() => onOpenSubmission && onOpenSubmission(submission)}
+                            className="inline-flex h-8 items-center rounded-md border border-[var(--sky-panel-border)] px-3 text-[13px] font-medium text-[var(--sky-text)] hover:border-[var(--action-accent)] hover:text-[var(--action-accent)]"
+                          >
+                            Review
+                          </Link>
+                        ) : (
+                          <span className="text-xs text-[var(--sky-subtle)]">Not ready</span>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   )
 }
-
-function Stat({ label, value }) {
-  return (
-    <div>
-      <p className="sky-label text-[0.65rem]">{label}</p>
-      <p className="text-xl font-semibold text-[var(--sky-text)] mt-1">{value}</p>
-    </div>
-  )
-}
-

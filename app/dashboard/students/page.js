@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from 'react'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import StudentList from '@/components/dashboard/StudentList'
+import { Panel, StatGroup } from '@/components/dashboard/ui'
 import { useDashboardState } from '@/states/useDashboardState'
 import { useUserState } from '@/states/useUserState'
 
@@ -18,18 +19,18 @@ export default function StudentsPage() {
     () => [
       {
         label: 'High performers',
-        count: students.filter((student) => student.avgScore >= 80).length,
-        detail: '≥ 80% average',
+        value: students.filter((student) => student.avgScore >= 80).length,
+        hint: '≥ 80% average',
       },
       {
         label: 'Needs attention',
-        count: students.filter((student) => student.avgScore < 60).length,
-        detail: '< 60% average',
+        value: students.filter((student) => student.avgScore < 60).length,
+        hint: '< 60% average',
       },
       {
         label: 'Dormant',
-        count: students.filter((student) => student.lastActive?.includes('days')).length,
-        detail: 'Inactive last 7 days',
+        value: students.filter((student) => student.lastActive?.includes('days')).length,
+        hint: 'Inactive last 7 days',
       },
     ],
     [students]
@@ -58,43 +59,24 @@ export default function StudentsPage() {
         subtitle="Profiles update automatically when exams are finalized."
       />
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {cohorts.map((cohort) => (
-          <article key={cohort.label} className="sky-card">
-            <p className="sky-label">{cohort.label}</p>
-            <p className="text-3xl font-semibold text-[var(--sky-text)] mt-3">{cohort.count}</p>
-            <p className="text-xs text-[var(--sky-subtle)] mt-2">{cohort.detail}</p>
-          </article>
-        ))}
-      </section>
+      <StatGroup items={cohorts} />
 
-      <section className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-5">
-        <article className="sky-card">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <p className="sky-label">Roster</p>
-              <h3 className="text-xl font-semibold text-[var(--sky-text)]">Active learners</h3>
-            </div>
-          </div>
-          <StudentList onCreateStudent={() => {}} />
-        </article>
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6 items-start">
+        <Panel meta="Roster" title="Active learners">
+          <StudentList />
+        </Panel>
 
-        <article className="sky-card space-y-4">
-          <div>
-            <p className="sky-label">Signals</p>
-            <h3 className="text-xl font-semibold text-[var(--sky-text)]">Teaching cues</h3>
-          </div>
-          <div className="space-y-3 text-sm text-[var(--sky-subtle)]">
+        <Panel meta="Signals" title="Teaching cues">
+          <ul className="divide-y divide-[var(--sky-panel-border)]">
             {signals.map((signal) => (
-              <div key={signal.title} className="rounded-2xl border border-[var(--sky-panel-border)] px-4 py-3">
+              <li key={signal.title} className="py-3 first:pt-0 last:pb-0">
                 <p className="text-sm font-semibold text-[var(--sky-text)]">{signal.title}</p>
-                <p className="text-xs mt-1">{signal.body}</p>
-              </div>
+                <p className="text-sm text-[var(--sky-subtle)] mt-0.5 leading-relaxed">{signal.body}</p>
+              </li>
             ))}
-          </div>
-        </article>
-      </section>
+          </ul>
+        </Panel>
+      </div>
     </div>
   )
 }
-

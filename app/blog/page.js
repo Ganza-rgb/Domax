@@ -36,7 +36,7 @@ export default function BlogPage() {
       <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl font-medium text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Blog
             </h1>
             <p className="lede mb-12 pb-12 border-b border-line">
@@ -51,7 +51,7 @@ export default function BlogPage() {
                     <span className="text-sm text-ink-3" aria-hidden="true">•</span>
                     <time className="text-[13px] text-ink-3" dateTime={post.date}>{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
                   </div>
-                  <h2 className="text-[1.5rem] leading-snug font-semibold text-ink mb-2">{post.title}</h2>
+                  <h2 className="text-[1.5rem] leading-snug font-medium text-ink mb-2">{post.title}</h2>
                   <p className="text-ink-2 leading-relaxed mb-4">{post.excerpt}</p>
                   <Link href={`/blog/${post.title.toLowerCase().replace(/\s+/g, '-')}`} className="text-accent text-sm font-semibold hover:text-accent-strong inline-flex items-center gap-1">
                     Read more

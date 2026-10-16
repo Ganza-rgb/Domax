@@ -56,37 +56,37 @@ export default function Navbar() {
       items: [
         {
           title: 'AI Grading',
-          description: 'Automate scoring with Domax intelligence.',
+          description: 'A first-pass mark and comment for every answer.',
           href: '/product/ai-grading',
         },
         {
           title: 'Rubric Builder',
-          description: 'Design reusable rubrics in minutes.',
+          description: 'Write a marking scheme once, reuse it every term.',
           href: '/product/rubrics',
         },
         {
           title: 'Annotations',
-          description: 'Comment, highlight, and suggest inline.',
+          description: 'Write on the script itself, like you would in pen.',
           href: '/product/annotations',
         },
         {
           title: 'Batch Processing',
-          description: 'Grade hundreds of papers simultaneously.',
+          description: 'Upload a whole class set at once.',
           href: '/product/batch',
         },
         {
           title: 'Analytics',
-          description: 'Track class performance and trends.',
+          description: 'See which questions the class got wrong.',
           href: '/product/analytics',
         },
         {
           title: 'LMS Integration',
-          description: 'Sync with Canvas, Moodle, and more.',
+          description: 'Send marks back to Canvas, Moodle and others.',
           href: '/product/integrations',
         },
         {
           title: 'Plagiarism Detection',
-          description: 'Ensure academic integrity automatically.',
+          description: 'Spot answers that look copied.',
           href: '/product/plagiarism',
         },
       ],
@@ -97,17 +97,17 @@ export default function Navbar() {
       items: [
         {
           title: 'Solo Teachers',
-          description: 'Grade faster with AI rubrics, annotations, and insights.',
+          description: 'For teachers marking on their own.',
           href: '/solutions/teachers',
         },
         {
           title: 'Student Access Codes',
-          description: 'Give learners free portals for past papers and assignments.',
+          description: 'Students see their marked work for free.',
           href: '/dashboard/past-papers',
         },
         {
           title: 'Integrations & API',
-          description: 'Connect Domax to your LMS or class stack.',
+          description: 'Connect Domax to the tools your school uses.',
           href: '/solutions/api',
         },
       ],
@@ -118,36 +118,34 @@ export default function Navbar() {
       items: [
         {
           title: 'Documentation',
-          description: 'Everything you need to build on Domax.',
+          description: 'Guides and API reference.',
           href: '/docs',
         },
         {
           title: 'Blog',
-          description: 'Product updates, guides, and insights.',
+          description: 'What we changed and why.',
           href: '/blog',
         },
         {
           title: 'Case Studies',
-          description: 'See how leading teachers use Domax.',
+          description: 'How teachers are using Domax.',
           href: '/case-studies',
         },
         {
           title: 'Help Center',
-          description: 'Get answers fast from our support team.',
+          description: 'Answers to common questions.',
           href: '/help',
         },
       ],
     },
   ]
 
-  // The bar stays light at all times; scrolling only adds elevation so it
-  // separates from the content underneath.
-  const containerClasses = scrolled
-    ? 'bg-white/95 border-[#E3E8EF] shadow-[0_8px_24px_-12px_rgba(10,48,89,0.18)]'
-    : 'bg-white/80 border-[#E3E8EF]/70'
+  // A plain bar: white, with a hairline that only appears once content
+  // scrolls underneath it.
+  const containerClasses = scrolled ? 'border-[#E3E8EF]' : 'border-transparent'
   const desktopLinkBase =
-    'h-9 px-3 rounded-lg text-[15px] font-medium transition-colors flex items-center gap-1'
-  const desktopLinkColor = 'text-[#4A5D75] hover:text-[#0A3059] hover:bg-[#F6F8FA]'
+    'h-9 px-3 text-[15px] transition-colors flex items-center gap-1'
+  const desktopLinkColor = 'text-[#4A5D75] hover:text-[#0A3059]'
 
   const toggleDropdown = (label) => {
     if (dropdownTimeout.current) {
@@ -174,11 +172,9 @@ export default function Navbar() {
         }`}
       aria-label="Main"
     >
-      <div className="max-w-[1200px] mx-auto px-3 sm:px-4 lg:px-6">
-        <div
-          className={`${containerClasses} text-[#0A3059] backdrop-blur-lg rounded-xl mt-2 sm:mt-3 border transition-all duration-300`}
-        >
-          <div className="flex items-center justify-between h-14 px-3 sm:px-4">
+      <div className={`bg-white border-b transition-colors ${containerClasses}`}>
+        <div className="container-custom text-[#0A3059]">
+          <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-end -space-x-1 rounded-md" aria-label="Domax home">
               <Image
@@ -209,7 +205,7 @@ export default function Navbar() {
                   {item.hasDropdown ? (
                     <button
                       type="button"
-                      className={`${desktopLinkBase} ${desktopLinkColor} ${activeDropdown === item.label ? 'text-[#0A3059] bg-[#F6F8FA]' : ''}`}
+                      className={`${desktopLinkBase} ${desktopLinkColor} ${activeDropdown === item.label ? 'text-[#0A3059]' : ''}`}
                       aria-expanded={activeDropdown === item.label}
                       aria-haspopup="true"
                       onClick={() => toggleDropdown(item.label)}
@@ -241,15 +237,15 @@ export default function Navbar() {
                         item.items.length > 4 ? 'w-[min(640px,calc(100vw-3rem))]' : 'w-[340px]'
                       }`}
                     >
-                      <div className="bg-white rounded-xl border border-[#E3E8EF] shadow-pop p-2">
+                      <div className="bg-white rounded-lg border border-[#E3E8EF] shadow-pop p-2">
                         <div className={`grid gap-0.5 ${item.items.length > 4 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                           {item.items.map((subItem, subIndex) => (
                             <Link
                               key={subIndex}
                               href={subItem.href}
-                              className="group rounded-lg px-3.5 py-3 hover:bg-[#F6F8FA] transition-colors"
+                              className="group rounded-md px-3.5 py-3 hover:bg-[#F6F8FA] transition-colors"
                             >
-                              <p className="text-sm font-semibold text-[#0A3059] group-hover:text-[#005ffe]">{subItem.title}</p>
+                              <p className="text-sm font-semibold text-[#0A3059]">{subItem.title}</p>
                               {subItem.description && (
                                 <p className="text-[13px] text-[#5B6B82] mt-0.5 leading-snug">{subItem.description}</p>
                               )}
@@ -267,12 +263,12 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-1.5">
               <Link
                 href="/login"
-                className="h-9 px-3 rounded-lg inline-flex items-center text-[15px] font-medium text-[#0A3059] hover:bg-[#F6F8FA] transition-colors"
+                className="h-9 px-3 inline-flex items-center text-[15px] text-[#0A3059] hover:text-[#005ffe] transition-colors"
               >
                 Log in
               </Link>
               <Button href="/signup" variant="primary" size="sm">
-                Get started
+                Try it free
               </Button>
             </div>
 
@@ -397,7 +393,7 @@ export default function Navbar() {
                   Log in
                 </Button>
                 <Button href="/signup" variant="primary" size="lg" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                  Get started
+                  Try it free
                 </Button>
               </div>
             </div>

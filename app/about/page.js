@@ -11,13 +11,6 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
-const impactStats = [
-  { label: 'Papers graded', value: '2.1M+', detail: 'Across 14 education boards' },
-  { label: 'Latency per script', value: '6 min', detail: 'Avg time to deliver annotated feedback' },
-  { label: 'Educators onboarded', value: '10,800+', detail: 'Teachers, faculties & examiners' },
-  { label: 'Accuracy commitment', value: '99%', detail: 'AI + human blended scoring confidence' },
-]
-
 const operatingPrinciples = [
   {
     title: 'Outcome-first design',
@@ -122,7 +115,7 @@ export default function AboutPage() {
               About Domax
             </GradientHeading>
             <p className="lede mb-12 pb-12 border-b border-line">
-              We're on a mission to transform how educators grade and provide feedback to students.
+              We build Domax so that marking a class set doesn’t eat a teacher’s whole weekend.
             </p>
 
             <div ref={sectionsRef} className="prose max-w-none">
@@ -188,22 +181,9 @@ export default function AboutPage() {
         </div>
 
         <div className="container-custom mt-20 sm:mt-24 space-y-16 sm:space-y-20">
-          <dl className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-line border border-line rounded-xl overflow-hidden">
-            {impactStats.map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-white p-5 sm:p-6"
-              >
-                <dt className="text-sm font-medium text-ink-2">{stat.label}</dt>
-                <dd className="text-3xl sm:text-4xl font-semibold font-headline tracking-tight tabular-nums mt-2">{stat.value}</dd>
-                <dd className="text-sm text-ink-3 mt-1">{stat.detail}</dd>
-              </div>
-            ))}
-          </dl>
-
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-semibold mb-4">How we operate</h2>
+              <h2 className="text-2xl sm:text-3xl font-medium mb-4">How we operate</h2>
               <p className="text-ink-2 leading-relaxed mb-8">
                 Domax squads pair product strategists with practising educators, so every shipping cycle is grounded in
                 real classrooms.
@@ -221,7 +201,7 @@ export default function AboutPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl sm:text-3xl font-semibold mb-8">Milestones</h2>
+              <h2 className="text-2xl sm:text-3xl font-medium mb-8">Milestones</h2>
               <ol className="relative border-l border-line ml-1.5 space-y-8">
                 {milestones.map((milestone, idx) => (
                   <li key={milestone.year} className="pl-7 relative">

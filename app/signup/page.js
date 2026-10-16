@@ -594,15 +594,15 @@ const hasValidSubjects = teacherData.subjects.some(
 
   const renderProfessionalIdentity = () => (
     <section className="space-y-5">
-      <p className="text-xs font-semibold tracking-[0.3em] text-[#005ffe] uppercase">Professional identity</p>
+      <p className="eyebrow">Professional identity</p>
 
       <div>
-        <label className="text-sm font-semibold text-[#0A3059] mb-2 block">Choose school</label>
+        <label className="block text-sm font-medium text-ink mb-1.5">Choose school</label>
         <select
           value={teacherData.useCustomSchool ? '' : teacherData.schoolId}
           onChange={(e) => handleSchoolSelection(e.target.value)}
           disabled={teacherData.useCustomSchool}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+          className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
         >
           <option value="">Select a school</option>
           {schoolOptions.map((school) => (
@@ -616,19 +616,19 @@ const hasValidSubjects = teacherData.subjects.some(
             {teacherData.useCustomSchool ? 'Select from list' : 'My school is not listed'}
           </Button>
           {teacherData.schoolName && !teacherData.useCustomSchool && (
-            <span className="text-xs text-gray-500">Selected: {teacherData.schoolName}</span>
+            <span className="text-[13px] text-ink-2">Selected: {teacherData.schoolName}</span>
           )}
         </div>
         {teacherData.useCustomSchool && (
           <div className="mt-3">
-            <label className="text-sm font-semibold text-[#0A3059] mb-2 block">
+            <label className="block text-sm font-medium text-ink mb-1.5">
               Enter school name
             </label>
             <input
               type="text"
               value={teacherData.customSchoolName}
               onChange={(e) => updateRoleField('teacher', 'customSchoolName', e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+              className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
               placeholder="e.g., Green Valley STEM Academy"
             />
           </div>
@@ -636,24 +636,24 @@ const hasValidSubjects = teacherData.subjects.some(
       </div>
 
       <div>
-        <p className="text-sm font-semibold text-[#0A3059] mb-2">Teaching role(s)</p>
+        <p className="text-sm font-medium text-ink mb-2">Teaching role(s)</p>
         <div className="flex flex-wrap gap-3">
           {teachingRoleOptions.map((role) => {
             const checked = teacherData.roles.includes(role.value)
             return (
               <label
                 key={role.value}
-                className={`inline-flex items-center gap-2 rounded-2xl border px-4 py-2 ${
-                  checked ? 'border-[#005ffe] bg-[#f0f7ff]' : 'border-gray-200'
+                className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 cursor-pointer transition-colors ${
+                  checked ? 'border-[#005ffe] bg-[#F0F7FF]' : 'border-line hover:border-line-strong'
                 }`}
               >
                 <input
                   type="checkbox"
-                  className="text-[#005ffe] focus:ring-[#005ffe]"
+                  className="w-4 h-4 accent-[#005ffe]"
                   checked={checked}
                   onChange={() => toggleTeachingRole(role.value)}
                 />
-                <span className="text-sm text-gray-700">{role.label}</span>
+                <span className="text-sm text-ink">{role.label}</span>
               </label>
             )
           })}
@@ -661,17 +661,17 @@ const hasValidSubjects = teacherData.subjects.some(
       </div>
 
       <div>
-        <label className="text-sm font-semibold text-[#0A3059] mb-2 block">
-          Class / invite code <span className="text-gray-400">(optional)</span>
+        <label className="block text-sm font-medium text-ink mb-1.5">
+          Class / invite code <span className="font-normal text-ink-3">(optional)</span>
         </label>
         <input
           type="text"
           value={teacherData.classCode}
           onChange={(e) => updateRoleField('teacher', 'classCode', e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+          className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
           placeholder="Leave blank to auto-generate"
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-[13px] text-ink-3 mt-1.5">
           Share this code with students to unlock their free Domax past-paper portal.
         </p>
       </div>
@@ -680,17 +680,17 @@ const hasValidSubjects = teacherData.subjects.some(
 
   const renderSubjectsSection = () => (
     <section className="space-y-5">
-      <p className="text-xs font-semibold tracking-[0.3em] text-[#005ffe] uppercase">Subjects they teach</p>
+      <p className="eyebrow">Subjects they teach</p>
       <div className="space-y-4 max-h-[22rem] overflow-y-auto pr-1 sm:pr-2">
         {teacherData.subjects.map((subjectEntry, index) => (
-          <div key={subjectEntry.id} className="rounded-2xl border border-gray-200 p-4 space-y-4">
+          <div key={subjectEntry.id} className="rounded-xl border border-line p-4 space-y-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <div className="flex-1">
-                <label className="text-sm font-semibold text-[#0A3059] mb-2 block">Subject</label>
+                <label className="block text-sm font-medium text-ink mb-1.5">Subject</label>
                 <select
                   value={subjectEntry.subject}
                   onChange={(e) => handleSubjectFieldChange(subjectEntry.id, 'subject', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+                  className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
                 >
                   <option value="">Select subject</option>
                   {subjectOptions.map((subject) => (
@@ -713,36 +713,36 @@ const hasValidSubjects = teacherData.subjects.some(
             </div>
 
             <div>
-              <p className="text-sm font-semibold text-[#0A3059] mb-2">Levels</p>
+              <p className="text-sm font-medium text-ink mb-2">Levels</p>
               <div className="flex flex-wrap gap-3">
                 {subjectLevelOptions.map((level) => (
-                  <label key={`${subjectEntry.id}-${level}`} className="inline-flex items-center gap-2">
+                  <label key={`${subjectEntry.id}-${level}`} className="inline-flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      className="text-[#005ffe] focus:ring-[#005ffe]"
+                      className="w-4 h-4 accent-[#005ffe]"
                       checked={subjectEntry.levels.includes(level)}
                       onChange={() => toggleSubjectLevel(subjectEntry.id, level)}
                     />
-                    <span className="text-sm text-gray-700">{level}</span>
+                    <span className="text-sm text-ink">{level}</span>
                   </label>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="text-sm font-semibold text-[#0A3059] mb-2 block">
-                Streams <span className="text-gray-400">(optional)</span>
+              <label className="block text-sm font-medium text-ink mb-1.5">
+                Streams <span className="font-normal text-ink-3">(optional)</span>
               </label>
               <input
                 type="text"
                 value={subjectEntry.streams}
                 onChange={(e) => handleSubjectFieldChange(subjectEntry.id, 'streams', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+                className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
                 placeholder="e.g., Blue, Senior Arts"
               />
             </div>
             {index === teacherData.subjects.length - 1 && (
-              <p className="text-xs text-gray-500">Levels and streams help us personalize rubrics.</p>
+              <p className="text-[13px] text-ink-3">Levels and streams help us personalize rubrics.</p>
             )}
           </div>
         ))}
@@ -755,25 +755,25 @@ const hasValidSubjects = teacherData.subjects.some(
 
   const renderTeachingMetadataSection = () => (
     <section className="space-y-5">
-      <p className="text-xs font-semibold tracking-[0.3em] text-[#005ffe] uppercase">Teaching metadata</p>
+      <p className="eyebrow">Teaching metadata</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="text-sm font-semibold text-[#0A3059] mb-2 block">Years of experience</label>
+          <label className="block text-sm font-medium text-ink mb-1.5">Years of experience</label>
           <input
             type="number"
             min="0"
             value={teacherData.yearsExperience}
             onChange={(e) => updateRoleField('teacher', 'yearsExperience', e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+            className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
             placeholder="e.g., 5"
           />
         </div>
         <div>
-          <label className="text-sm font-semibold text-[#0A3059] mb-2 block">Preferred teaching language</label>
+          <label className="block text-sm font-medium text-ink mb-1.5">Preferred teaching language</label>
           <select
             value={teacherData.preferredLanguage}
             onChange={(e) => updateRoleField('teacher', 'preferredLanguage', e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+            className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
           >
             <option value="">Select language</option>
             {languageOptions.map((language) => (
@@ -784,56 +784,56 @@ const hasValidSubjects = teacherData.subjects.some(
           </select>
         </div>
         <div>
-          <label className="text-sm font-semibold text-[#0A3059] mb-2 block">Weekly teaching load</label>
+          <label className="block text-sm font-medium text-ink mb-1.5">Weekly teaching load</label>
           <input
             type="number"
             min="0"
             value={teacherData.weeklyLoad}
             onChange={(e) => updateRoleField('teacher', 'weeklyLoad', e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+            className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
             placeholder="Hours per week"
           />
         </div>
         <div>
-          <label className="text-sm font-semibold text-[#0A3059] mb-2 block">Approximate class size</label>
+          <label className="block text-sm font-medium text-ink mb-1.5">Approximate class size</label>
           <input
             type="number"
             min="0"
             value={teacherData.classSize}
             onChange={(e) => updateRoleField('teacher', 'classSize', e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+            className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
             placeholder="e.g., 45"
           />
         </div>
       </div>
 
-      <label className="inline-flex items-start gap-3 rounded-2xl border border-[#dfe3ff] bg-[#f8faff] px-4 py-3">
+      <label className="flex items-start gap-3 rounded-xl border border-line bg-[#F6F8FA] px-4 py-3 cursor-pointer">
         <input
           type="checkbox"
-          className="mt-1 h-4 w-4 text-[#005ffe] focus:ring-[#005ffe]"
+          className="mt-0.5 h-4 w-4 accent-[#005ffe]"
           checked={teacherData.enableAssistant}
           onChange={(e) => updateRoleField('teacher', 'enableAssistant', e.target.checked)}
         />
         <div>
           <p className="text-sm font-semibold text-[#0A3059]">Enable Domax AI Assistant?</p>
-          <p className="text-xs text-gray-600 mt-1">Get grading nudges, wallet alerts, and live planning help.</p>
+          <p className="text-[13px] text-ink-2 mt-0.5">Get grading nudges, wallet alerts, and live planning help.</p>
         </div>
       </label>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="text-sm font-semibold text-[#0A3059] mb-2 block">
-            Teacher ID <span className="text-gray-400">(optional)</span>
+          <label className="block text-sm font-medium text-ink mb-1.5">
+            Teacher ID <span className="font-normal text-ink-3">(optional)</span>
           </label>
           <input
             type="text"
             value={teacherData.teacherId}
             onChange={(e) => updateRoleField('teacher', 'teacherId', e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005ffe] focus:outline-none"
+            className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
             placeholder="Internal staff ID"
           />
         </div>
-        <div className="rounded-2xl border border-[#e5e9ff] bg-[#f8faff] p-4 text-sm text-gray-600">
+        <div className="rounded-xl border border-line bg-[#F6F8FA] p-4 text-sm text-ink-2">
           <p className="font-semibold text-[#0A3059] mb-1">Student access</p>
           <p>Students never pay. Once you set or share a class code, they get free read-only portals.</p>
         </div>
@@ -846,20 +846,20 @@ const hasValidSubjects = teacherData.subjects.some(
       return (
         <>
           <div className="space-y-5">
-            <p className="text-xs font-semibold tracking-[0.3em] text-[#005ffe] uppercase">Basic identity</p>
+            <p className="eyebrow">Basic identity</p>
             <div>
-              <label className="block text-sm font-semibold text-[#0A3059] mb-2">Full name</label>
+              <label className="block text-sm font-medium text-ink mb-1.5">Full name</label>
               <input
                 type="text"
                 required
                 value={formData.fullName}
                 onChange={(e) => setFormData((prev) => ({ ...prev, fullName: e.target.value }))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#005ffe]"
+                className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
                 placeholder="e.g., Aline Uwase"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#0A3059] mb-2" htmlFor="email">
+              <label className="block text-sm font-medium text-ink mb-1.5" htmlFor="email">
                 Email
               </label>
               <input
@@ -870,29 +870,29 @@ const hasValidSubjects = teacherData.subjects.some(
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#005ffe]"
+                className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
                 placeholder="you@example.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#0A3059] mb-2">Phone number</label>
+              <label className="block text-sm font-medium text-ink mb-1.5">Phone number</label>
               <input
                 type="tel"
                 required
                 value={formData.phone}
                 onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#005ffe]"
+                className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
                 placeholder="+250 7XX XXX XXX"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#0A3059] mb-2">
-                Gender <span className="text-gray-400">(optional)</span>
+              <label className="block text-sm font-medium text-ink mb-1.5">
+                Gender <span className="font-normal text-ink-3">(optional)</span>
               </label>
               <select
                 value={formData.gender}
                 onChange={(e) => setFormData((prev) => ({ ...prev, gender: e.target.value }))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#005ffe]"
+                className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3"
               >
                 <option value="">Select gender</option>
                 <option value="male">Male</option>
@@ -901,7 +901,7 @@ const hasValidSubjects = teacherData.subjects.some(
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#0A3059] mb-2" htmlFor="password">
+              <label className="block text-sm font-medium text-ink mb-1.5" htmlFor="password">
                 Password
               </label>
               <div className="relative">
@@ -913,13 +913,15 @@ const hasValidSubjects = teacherData.subjects.some(
                   required
                   value={password}
                   onChange={handlePasswordChange}
-                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#005ffe]"
+                  className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder-[#5B6B82] focus:outline-none focus:ring-2 focus:ring-[#005ffe]/20 focus:border-[#005ffe] disabled:bg-[#F6F8FA] disabled:text-ink-3 pr-11"
                   placeholder="Create a password"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 w-11 flex items-center justify-center rounded-r-lg text-ink-3 hover:text-ink"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
                 >
                   {showPassword ? (
                     <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -933,7 +935,7 @@ const hasValidSubjects = teacherData.subjects.some(
                   )}
                 </button>
               </div>
-              <div className="mt-3 space-y-2">
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5" aria-live="polite">
                 {[
                   { key: 'length', text: 'At least 12 characters' },
                   { key: 'special', text: 'One special character' },
@@ -944,7 +946,7 @@ const hasValidSubjects = teacherData.subjects.some(
                   <div key={req.key} className="flex items-center text-sm">
                     <svg
                       className={`w-4 h-4 mr-2 ${
-                        passwordRequirements[req.key] ? 'text-[#00cd90]' : 'text-gray-400'
+                        passwordRequirements[req.key] ? 'text-[#007A56]' : 'text-[#9AA8BA]'
                       }`}
                       fill="none"
                       stroke="currentColor"
@@ -956,7 +958,7 @@ const hasValidSubjects = teacherData.subjects.some(
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       )}
                     </svg>
-                    <span className={passwordRequirements[req.key] ? 'text-gray-700' : 'text-gray-500'}>
+                    <span className={passwordRequirements[req.key] ? 'text-ink' : 'text-ink-3'}>
                       {req.text}
                     </span>
                   </div>
@@ -965,7 +967,7 @@ const hasValidSubjects = teacherData.subjects.some(
             </div>
           </div>
           <div>
-            <p className="text-sm font-semibold text-[#0A3059] mb-3">Choose your role</p>
+            <p className="text-sm font-medium text-ink mb-2.5">Choose your role</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {roleOptions.map((option) => {
                 const isActive = selectedRole === option.value
@@ -974,17 +976,17 @@ const hasValidSubjects = teacherData.subjects.some(
                     key={option.value}
                     type="button"
                     onClick={() => handleRoleSelection(option.value)}
-                    className={`text-left rounded-2xl border px-4 py-3 transition-all ${
-                      isActive ? 'border-[#005ffe] bg-[#f0f7ff]' : 'border-gray-200 hover:border-[#005ffe]/60'
+                    className={`text-left rounded-xl border px-4 py-3 transition-all ${
+                      isActive ? 'border-[#005ffe] bg-[#F0F7FF] ring-1 ring-[#005ffe]' : 'border-line hover:border-line-strong'
                     }`}
                   >
                     <p className="text-sm font-semibold text-[#0A3059]">{option.label}</p>
-                    <p className="text-xs text-gray-500 mt-1">{option.description}</p>
+                    <p className="text-[13px] text-ink-2 mt-0.5">{option.description}</p>
                   </button>
                 )
               })}
             </div>
-            <div className="mt-3 rounded-2xl border border-dashed border-[#dfe3ff] bg-[#f9fbff] px-4 py-3 text-xs text-gray-600">
+            <div className="mt-3 rounded-xl bg-[#F6F8FA] border border-line px-4 py-3 text-[13px] text-ink-2">
               Students don’t create accounts here. Share your Domax class code and they’ll access past papers and feedback for free.
             </div>
           </div>
@@ -995,7 +997,7 @@ const hasValidSubjects = teacherData.subjects.some(
     if (step === 2) {
       return (
         <>
-          <div className="rounded-2xl border border-[#dfe3ff] bg-[#f8faff] px-4 py-3 text-sm text-gray-600">
+          <div className="rounded-xl border border-line bg-[#F6F8FA] px-4 py-3 text-sm text-ink-2">
             <span className="font-semibold text-[#0A3059]">Role:</span>{' '}
             {roleOptions.find((role) => role.value === selectedRole)?.label}
           </div>
@@ -1007,7 +1009,7 @@ const hasValidSubjects = teacherData.subjects.some(
     if (step === 3) {
       return (
         <>
-          <div className="rounded-2xl border border-[#dfe3ff] bg-[#f8faff] px-4 py-3 text-sm text-gray-600">
+          <div className="rounded-xl border border-line bg-[#F6F8FA] px-4 py-3 text-sm text-ink-2">
             <p className="font-semibold text-[#0A3059]">Subject planner</p>
             <p>List every subject + level combo you cover. Scroll the list if it grows.</p>
           </div>
@@ -1026,10 +1028,10 @@ const hasValidSubjects = teacherData.subjects.some(
             type="checkbox"
             checked={agreedToTerms}
             onChange={(e) => setAgreedToTerms(e.target.checked)}
-            className="mt-1 h-4 w-4 text-[#005ffe] focus:ring-[#005ffe] border-gray-300 rounded"
+            className="mt-0.5 h-4 w-4 accent-[#005ffe]"
             required
           />
-          <label htmlFor="terms" className="ml-3 text-sm text-gray-600">
+          <label htmlFor="terms" className="ml-3 text-sm text-ink-2 leading-relaxed">
             I agree to the{' '}
             <Link href="/terms" className="text-[#005ffe] hover:underline">
               Terms of Service
@@ -1053,86 +1055,83 @@ const hasValidSubjects = teacherData.subjects.some(
     <div className="min-h-screen bg-white flex">
       {/* Left Side - Signup Form */}
       <div ref={leftSideRef} className="flex-1 flex flex-col bg-white">
-        <div className="flex-1 flex items-center justify-center px-8 py-12 opacity-100">
-          <div className="w-full max-w-md">
+        <div className="flex-1 flex items-center justify-center px-6 sm:px-8 py-12 opacity-100">
+          <div className="w-full max-w-[440px]">
             {/* Logo */}
-            <Link href="/" className="flex items-end -space-x-1 mb-12">
+            <Link href="/" className="inline-flex items-end -space-x-1 mb-12 rounded-md" aria-label="Domax home">
               <Image
                 src="/favicon.svg"
-                alt="Domax Logo"
+                alt=""
                 width={40}
                 height={40}
-                className="h-8 w-8"
+                className="h-7 w-7"
                 priority
               />
-              <span className="text-2xl font-bold text-[#0A3059]">OMAX</span>
+              <span className="text-lg font-bold tracking-tight text-[#0A3059]">OMAX</span>
             </Link>
 
             <div className="mb-6 sm:mb-8">
-              <p className="text-xs font-semibold tracking-[0.3em] text-[#005ffe] uppercase mb-2">
+              <p className="eyebrow mb-3">
                 Step {step} of {totalSteps}
               </p>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0A3059] mb-3 sm:mb-4 leading-[1.1] tracking-tight">
+              <h1 className="text-[1.75rem] sm:text-[2.25rem] font-medium text-[#0A3059] mb-2 leading-[1.15] tracking-[-0.02em]">
                 {activeWizardStep.title}
               </h1>
-              <p className="text-gray-600 text-base sm:text-lg">{activeWizardStep.subtitle}</p>
-              {saveState.status === 'saving' && <p className="text-xs text-[#005ffe] mt-2">Saving…</p>}
+              <p className="text-ink-2 text-base">{activeWizardStep.subtitle}</p>
+              {saveState.status === 'saving' && <p className="text-xs text-ink-3 mt-2" role="status">Saving…</p>}
               {saveState.status === 'saved' && saveState.timestamp && (
-                <p className="text-xs text-emerald-600 mt-2">
+                <p className="text-xs text-positive mt-2" role="status">
                   Autosaved at {new Date(saveState.timestamp).toLocaleTimeString()}
                 </p>
               )}
               {saveState.status === 'error' && (
-                <p className="text-xs text-red-500 mt-2">Autosave failed. We&apos;ll keep retrying.</p>
+                <p className="text-xs text-critical mt-2" role="status">Autosave failed. We&apos;ll keep retrying.</p>
               )}
             </div>
 
-            <div className="mb-6">
-              <ol className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-4">
+            <nav aria-label="Signup progress" className="mb-8">
+              <ol className="grid grid-cols-4 gap-1.5">
                 {wizardSteps.map((wizardStep, index) => {
                   const wizardIndex = index + 1
                   const isActive = wizardIndex === step
                   const isComplete = wizardIndex < step
                   return (
-                    <li key={wizardStep.id} className="flex items-center gap-2">
+                    <li key={wizardStep.id} aria-current={isActive ? 'step' : undefined}>
                       <span
-                        className={`flex h-8 w-8 items-center justify-center rounded-full border text-sm font-semibold transition-colors ${
+                        className={`block h-1 rounded-full transition-colors ${
                           isActive
-                            ? 'bg-[#005ffe] text-white border-[#005ffe]'
+                            ? 'bg-[#005ffe]'
                             : isComplete
-                              ? 'border-[#005ffe] text-[#005ffe]'
-                              : 'border-gray-300 text-gray-400'
+                              ? 'bg-[#0A3059]'
+                              : 'bg-[#E3E8EF]'
+                        }`}
+                      />
+                      <p
+                        className={`mt-2 text-xs font-semibold ${
+                          isActive ? 'text-[#005ffe]' : isComplete ? 'text-ink' : 'text-ink-3'
                         }`}
                       >
-                        {wizardIndex}
-                      </span>
-                      <div>
-                        <p
-                          className={`text-xs font-semibold ${
-                            isActive || isComplete ? 'text-[#0A3059]' : 'text-gray-500'
-                          }`}
-                        >
-                          {wizardStep.label}
-                        </p>
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 hidden md:block">
-                          {wizardStep.description}
-                        </p>
-                      </div>
+                        <span className="sr-only">Step {wizardIndex}: </span>{wizardStep.label}
+                      </p>
+                      <p className="text-xs text-ink-3 hidden md:block">
+                        {wizardStep.description}
+                      </p>
                     </li>
                   )
                 })}
               </ol>
-            </div>
+            </nav>
 
             <form onSubmit={handleFormSubmit} className="space-y-6">
               {renderStepContent()}
 
               {actionNotice && (
                 <div
-                  className={`rounded-2xl border px-4 py-3 text-sm ${
+                  role={actionNotice.type === 'error' ? 'alert' : 'status'}
+                  className={`rounded-lg border px-4 py-3 text-sm ${
                     actionNotice.type === 'error'
-                      ? 'border-red-200 bg-red-50 text-red-700'
-                      : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                      ? 'border-[#F7C6D1] bg-critical-soft text-[#B0123A]'
+                      : 'border-[#BFEBDD] bg-positive-soft text-positive'
                   }`}
                 >
                   <p className="font-semibold">{actionNotice.message}</p>
@@ -1144,7 +1143,8 @@ const hasValidSubjects = teacherData.subjects.some(
                 {step > 1 && (
                   <Button
                     type="button"
-                    variant="ghost"
+                    variant="secondary"
+                    size="lg"
                     className="flex-1"
                     onClick={() => setStep((prev) => Math.max(1, prev - 1))}
                   >
@@ -1164,8 +1164,8 @@ const hasValidSubjects = teacherData.subjects.some(
             </form>
 
             {/* Log In Link */}
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-600">
+            <div className="mt-8 pt-6 border-t border-line text-center">
+              <p className="text-sm text-ink-2">
                 Already have an account?{' '}
                 <Link
                   href="/login"
@@ -1180,37 +1180,38 @@ const hasValidSubjects = teacherData.subjects.some(
       </div>
 
       {/* Right Side - Static Content + Auto-sliding Testimonials */}
-      <div ref={rightSideRef} className="hidden lg:flex flex-1 flex-col bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] p-12 relative overflow-hidden">
+      <div ref={rightSideRef} className="hidden lg:flex flex-1 flex-col bg-[#F0F7FF] border-l border-line p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-30">
-          <div className="absolute -top-32 -right-10 w-96 h-96 bg-gradient-to-br from-[#00cd90] to-transparent blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[28rem] h-[28rem] bg-gradient-to-tr from-[#005ffe] to-transparent blur-3xl" />
+          <div className="absolute -top-40 -right-24 w-[34rem] h-[34rem] rounded-full bg-[radial-gradient(closest-side,rgba(0,205,144,0.35),rgba(0,205,144,0))]" />
+          <div className="absolute -bottom-40 -left-24 w-[34rem] h-[34rem] rounded-full bg-[radial-gradient(closest-side,rgba(0,95,254,0.25),rgba(0,95,254,0))]" />
         </div>
         
-          <div className="relative z-10 max-w-md mx-auto w-full flex flex-col justify-center px-4">
+          {/* GSAP staggers the three direct children of this .relative.z-10 column. */}
+          <div className="relative z-10 max-w-md mx-auto w-full flex-1 flex flex-col justify-center px-4">
           {/* Static Content */}
           <div className="mb-8 sm:mb-12">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#0A3059] mb-3 sm:mb-4">
-              Everything you need to grade smarter
+            <h2 className="text-[1.75rem] font-medium text-[#0A3059] mb-3">
+              What you get with a Domax account
             </h2>
-            <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8">
+            <p className="text-base text-ink-2 mb-8">
               Join thousands of educators who save hours every week with Domax.
             </p>
 
             {/* Features List */}
-            <div className="space-y-3 sm:space-y-4">
+            <ul className="space-y-3">
               {features.map((feature, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-[#005ffe] to-[#0047cc] flex items-center justify-center text-white flex-shrink-0 shadow-md">
+                <li key={index} className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#0A3059] flex items-center justify-center text-white flex-shrink-0">
                     {feature.icon}
                   </div>
-                  <span className="text-sm sm:text-base text-[#0A3059] font-medium">{feature.title}</span>
-                </div>
+                  <span className="text-[15px] text-[#0A3059] font-medium">{feature.title}</span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           {/* Dynamic Testimonials */}
-          <div className="relative h-48 sm:h-56 lg:h-64">
+          <div className="relative h-56" aria-live="polite">
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
@@ -1218,20 +1219,20 @@ const hasValidSubjects = teacherData.subjects.some(
                   index === currentTestimonial ? 'opacity-100' : 'opacity-0'
                 }`}
               >
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 sm:p-6 border-2 border-[#d8ddff] shadow-lg">
-                  <p className="text-gray-800 text-sm sm:text-base lg:text-lg mb-4 sm:mb-6 leading-relaxed">
-                    "{testimonial.quote}"
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#005ffe] to-[#00cd90] flex items-center justify-center text-white font-bold shadow-md text-sm sm:text-base">
+                <figure className="bg-white rounded-xl p-6 border border-line">
+                  <blockquote className="text-ink text-base leading-relaxed mb-5">
+                    “{testimonial.quote}”
+                  </blockquote>
+                  <figcaption className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-[#E8F0FF] flex items-center justify-center text-[#0A3059] font-semibold text-sm">
                       {testimonial.avatar}
                     </div>
                     <div>
-                      <p className="text-sm sm:text-base text-[#0A3059] font-semibold">{testimonial.author}</p>
-                      <p className="text-gray-600 text-xs sm:text-sm">{testimonial.role}</p>
+                      <p className="text-sm text-[#0A3059] font-semibold">{testimonial.author}</p>
+                      <p className="text-ink-2 text-[13px]">{testimonial.role}</p>
                     </div>
-                  </div>
-                </div>
+                  </figcaption>
+                </figure>
               </div>
             ))}
           </div>
@@ -1245,9 +1246,10 @@ const hasValidSubjects = teacherData.subjects.some(
                 className={`transition-all duration-300 ${
                   index === currentTestimonial
                     ? 'w-8 h-2 bg-[#005ffe] rounded-full'
-                    : 'w-2 h-2 bg-gray-300 rounded-full hover:bg-gray-400'
+                    : 'w-2 h-2 bg-[#CFD8E3] rounded-full hover:bg-[#5B6B82]'
                 }`}
                 aria-label={`Go to testimonial ${index + 1}`}
+                aria-current={index === currentTestimonial ? 'true' : undefined}
               />
             ))}
           </div>
