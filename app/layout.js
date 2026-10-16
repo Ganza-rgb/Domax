@@ -1,5 +1,5 @@
 import './globals.css'
-import { Inter, Fraunces, Caveat } from 'next/font/google'
+import { Inter, Bricolage_Grotesque, Caveat } from 'next/font/google'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -8,15 +8,14 @@ const inter = Inter({
   display: 'swap',
 })
 
-// Headings: a serif with some character, so the site doesn't read as one
-// more Inter/Poppins SaaS template.
-const fraunces = Fraunces({
+// Display face for headings: a grotesque with some warmth in its curves.
+const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
 })
 
-// Only used for the teacher's pen marks on the sample script.
+// Only used for students' handwriting inside the script illustrations.
 const caveat = Caveat({
   subsets: ['latin'],
   variable: '--font-hand',
@@ -64,7 +63,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${caveat.variable}`}>
+    <html lang="en" className={`${inter.variable} ${bricolage.variable} ${caveat.variable}`}>
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="alternate icon" href="/favicon.ico" />

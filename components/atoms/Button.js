@@ -14,7 +14,7 @@ export default function Button({
   ...props
 }) {
   const baseStyles =
-    'inline-flex items-center justify-center gap-2 font-semibold rounded-md whitespace-nowrap transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#005ffe] disabled:opacity-50 disabled:cursor-not-allowed'
+    'inline-flex items-center justify-center gap-2 font-semibold rounded-full whitespace-nowrap transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#005ffe] disabled:opacity-50 disabled:cursor-not-allowed'
 
   // One action color (brand blue). Teal is kept as a secondary brand action
   // with navy text — white text on teal is 2.1:1 and fails contrast.
@@ -28,6 +28,9 @@ export default function Button({
     'primary-blue': 'bg-[#00cd90] text-[#0A3059] hover:bg-[#2DD4BF]',
     dark: 'bg-[#0A3059] text-white hover:bg-[#0d3d6f]',
     light: 'bg-[#F0F7FF] text-[#0A3059] hover:bg-white',
+    // On dark sections
+    inverse: 'bg-white text-[#0A3059] hover:bg-[#E8F0FF]',
+    'inverse-outline': 'border border-white/30 text-white hover:border-white/60 hover:bg-white/5',
   }
 
   // Fixed heights keep buttons aligned with inputs in toolbars and forms.
@@ -37,6 +40,7 @@ export default function Button({
     md: 'min-h-10 px-4 text-sm',
     lg: 'min-h-11 px-5 text-[15px]',
     xl: 'min-h-12 px-6 text-base',
+    '2xl': 'min-h-14 px-7 text-[17px]',
   }
 
   const classes = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`
