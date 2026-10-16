@@ -203,24 +203,24 @@ export default function ProductPage() {
       <Navbar />
       
       {/* Hero Section */}
-      <section ref={heroRef} className="pt-24 pb-16 bg-white text-[#0A3059] relative overflow-hidden">
+      <section ref={heroRef} className="pt-32 sm:pt-36 pb-16 sm:pb-20 bg-white text-[#0A3059] relative overflow-hidden">
         <div className="absolute inset-0 opacity-0 pointer-events-none">
           <div className="absolute -top-40 -right-20 w-[28rem] h-[28rem] bg-gradient-to-br from-[#e6fffb] to-transparent blur-3xl" />
           <div className="absolute bottom-0 left-0 w-[28rem] h-[28rem] bg-gradient-to-tr from-[#e6f0ff] to-transparent blur-3xl" />
         </div>
         <div className="container-custom relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-semibold mb-5">
               Powerful Grading Tools Built for Educators
             </h1>
-            <p className="text-xl text-white/80 mb-10">
+            <p className="lede mb-9 max-w-2xl mx-auto">
               Everything you need to grade faster, provide better feedback, and scale your teaching. From automated scoring to comprehensive analytics.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button variant="primary" size="lg" href="/signup">
                 Start Free Trial
               </Button>
-              <Button variant="outline" size="lg" href="/pricing">
+              <Button variant="secondary" size="lg" href="/pricing">
                 View Pricing
               </Button>
             </div>
@@ -229,38 +229,39 @@ export default function ProductPage() {
       </section>
 
       {/* Products Grid */}
-      <section ref={productsRef} className="py-20 bg-white">
+      <section ref={productsRef} className="py-16 sm:py-20 bg-[#F6F8FA] border-y border-line">
         <div className="container-custom">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-[#0A3059] mb-4">
+          <div className="max-w-2xl mb-10 sm:mb-12">
+            <p className="eyebrow mb-3">Product</p>
+            <h2 className="text-3xl sm:text-4xl font-semibold text-ink mb-4">
               Complete Feature Set
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="lede">
               All the tools you need to transform your grading workflow and provide meaningful feedback to students.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {products.map((product, index) => (
               <Card
                 key={index}
                 variant="elevated"
                 className="p-6 hover:scale-105 transition-transform h-full flex flex-col"
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${product.color} flex items-center justify-center text-white mb-4 flex-shrink-0`}>
+                <div className="w-10 h-10 rounded-lg bg-[#F0F7FF] text-[#005ffe] flex items-center justify-center mb-5 flex-shrink-0 [&>svg]:w-5 [&>svg]:h-5">
                   {product.icon}
                 </div>
-                <h3 className="text-lg font-bold text-[#0A3059] mb-2">
+                <h3 className="text-[17px] font-semibold text-ink mb-2">
                   {product.name}
                 </h3>
-                <p className="text-gray-600 mb-4 leading-relaxed text-sm flex-grow">
+                <p className="text-ink-2 mb-5 leading-relaxed text-sm flex-grow">
                   {product.description}
                 </p>
-                <ul className="space-y-2">
+                <ul className="space-y-1.5 pt-4 border-t border-line">
                   {product.features.map((feature, fIndex) => (
-                    <li key={fIndex} className="flex items-center text-xs text-gray-600">
+                    <li key={fIndex} className="flex items-center text-[13px] text-ink-2">
                       <svg
-                        className="w-4 h-4 text-[#00cd90] mr-2 flex-shrink-0"
+                        className="w-3.5 h-3.5 text-[#007A56] mr-2 flex-shrink-0"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -283,18 +284,18 @@ export default function ProductPage() {
       </section>
 
       {/* Value Props */}
-      <section ref={valuePropsRef} className="py-20 bg-white">
+      <section ref={valuePropsRef} className="py-16 sm:py-24 bg-white">
         <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-[#0A3059] mb-4">
+          <div className="max-w-2xl mb-10 sm:mb-12">
+            <h2 className="text-3xl sm:text-4xl font-semibold text-ink mb-4">
               Why educators love Domax
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="lede">
               Practical tools that speed up grading, improve feedback, and keep students engaged.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               {
                 title: 'Save Hours Every Week',
@@ -327,12 +328,12 @@ export default function ProductPage() {
                 ),
               },
             ].map((prop, index) => (
-              <Card key={index} variant="elevated" className="p-8 text-center">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00cd90] to-[#2dd4bf] flex items-center justify-center text-white mx-auto mb-6">
+              <Card key={index} variant="elevated" className="p-7">
+                <div className="w-10 h-10 rounded-lg bg-[#E3F8F1] text-[#007A56] flex items-center justify-center mb-5">
                   {prop.icon}
                 </div>
-                <h3 className="text-xl font-bold text-[#0A3059] mb-3">{prop.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{prop.description}</p>
+                <h3 className="text-lg font-semibold text-ink mb-2">{prop.title}</h3>
+                <p className="text-[15px] text-ink-2 leading-relaxed">{prop.description}</p>
               </Card>
             ))}
           </div>
@@ -340,25 +341,27 @@ export default function ProductPage() {
       </section>
 
       {/* CTA Section */}
-      <section ref={ctaRef} className="py-16 bg-white relative overflow-hidden">
+      <section ref={ctaRef} className="pb-20 sm:pb-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-0 pointer-events-none">
           <div className="absolute top-10 -right-20 w-80 h-80 bg-gradient-to-br from-[#e6fffb] to-transparent blur-3xl" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[#e6f0ff] to-transparent blur-3xl" />
         </div>
         <div className="container-custom relative z-10 text-center">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+          <div className="rounded-2xl bg-[#0A3059] px-6 py-14 sm:py-16">
+          <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-4">
             Ready to transform your grading?
           </h2>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto mb-10">
+          <p className="text-base sm:text-lg text-white/75 max-w-xl mx-auto mb-8">
             Join thousands of educators who are saving time and improving student outcomes with Domax.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="primary" size="lg" href="/signup">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button variant="primary-blue" size="lg" href="/signup">
               Start Free Trial
             </Button>
-            <Button variant="outline" size="lg" href="/contact">
+            <Button variant="light" size="lg" href="/contact">
               Request Demo
             </Button>
+          </div>
           </div>
         </div>
       </section>

@@ -66,27 +66,33 @@ export default function HelpPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 pb-20">
+      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <GradientHeading as="h1" className="text-4xl sm:text-5xl lg:text-6xl mb-6 lg:mb-8" highlightText="Center">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Help Center
-            </GradientHeading>
-            <p className="text-xl text-gray-600 mb-12 leading-relaxed">
+            </h1>
+            <p className="lede mb-12 pb-12 border-b border-line">
               Find answers to common questions, learn how to use Domax features, and get the support you need.
             </p>
 
             <div className="space-y-12">
               {faqCategories.map((category, categoryIndex) => (
-                <section key={categoryIndex} className="mb-12">
-                  <h2 className="text-2xl font-semibold text-[#0A3059] mb-6">{category.title}</h2>
-                  <div className="space-y-4">
+                <section key={categoryIndex}>
+                  <h2 className="text-[1.375rem] font-semibold text-ink mb-5">{category.title}</h2>
+                  <div className="border-y border-line divide-y divide-line">
                     {category.questions.map((item, itemIndex) => (
-                      <details key={itemIndex} className="p-6 bg-[#f0f7ff] rounded-2xl">
-                        <summary className="font-semibold text-[#0A3059] cursor-pointer list-none">
+                      <details key={itemIndex} className="group py-1">
+                        <summary className="flex items-center justify-between gap-6 py-4 font-semibold text-ink cursor-pointer list-none [&::-webkit-details-marker]:hidden rounded-md">
                           {item.q}
+                          <span aria-hidden="true" className="w-6 h-6 rounded-full border border-line-strong flex items-center justify-center text-ink-3 flex-shrink-0">
+                            <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+                              <path d="M2 6h8" />
+                              <path d="M6 2v8" className="group-open:hidden" />
+                            </svg>
+                          </span>
                         </summary>
-                        <p className="mt-4 text-gray-600">{item.a}</p>
+                        <p className="pb-5 pr-12 text-ink-2 leading-relaxed">{item.a}</p>
                       </details>
                     ))}
                   </div>
@@ -94,9 +100,9 @@ export default function HelpPage() {
               ))}
             </div>
 
-            <div className="mt-12 p-8 bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] rounded-2xl text-center">
-              <h2 className="text-2xl font-bold text-[#0A3059] mb-4">Still need help?</h2>
-              <p className="text-gray-600 mb-6">Our support team is here to assist you.</p>
+            <div className="mt-16 p-8 sm:p-10 bg-canvas border border-line rounded-2xl text-center">
+              <h2 className="text-2xl font-semibold text-ink mb-4">Still need help?</h2>
+              <p className="text-ink-2 mb-6">Our support team is here to assist you.</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button href="/contact" variant="primary" size="lg">
                   Contact Support

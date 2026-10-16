@@ -18,36 +18,36 @@ export default function StatusPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 pb-20">
+      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <GradientHeading as="h1" className="text-4xl sm:text-5xl lg:text-6xl mb-6 lg:mb-8" highlightText="Status">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               System Status
-            </GradientHeading>
-            <p className="text-xl text-gray-600 mb-12 leading-relaxed">
+            </h1>
+            <p className="lede mb-12 pb-12 border-b border-line">
               Check the current status of Domax services. All systems are operational.
             </p>
 
             <div className="space-y-4">
               {services.map((service, index) => (
-                <div key={index} className="p-6 bg-[#f0f7ff] rounded-2xl flex items-center justify-between">
+                <div key={index} className="p-6 bg-white border border-line rounded-xl flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-1">{service.name}</h3>
-                    <p className="text-sm text-gray-600">Uptime: {service.uptime}</p>
+                    <h3 className="text-[17px] font-semibold text-ink mb-1">{service.name}</h3>
+                    <p className="text-sm text-ink-2">Uptime: {service.uptime}</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="px-4 py-2 bg-green-100 text-green-800 rounded-lg text-sm font-semibold">
+                    <span className="px-3 py-1.5 bg-positive-soft text-positive rounded-md text-sm font-semibold">
                       {service.status}
                     </span>
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <div className="w-2.5 h-2.5 bg-[#00cd90] rounded-full"></div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-12 p-8 bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] rounded-2xl text-center">
-              <p className="text-gray-600 mb-2">Last updated: {new Date().toLocaleString()}</p>
-              <p className="text-sm text-gray-500">All systems operational. No incidents reported.</p>
+            <div className="mt-16 p-8 sm:p-10 bg-canvas border border-line rounded-2xl text-center">
+              <p className="text-ink-2 mb-2">Last updated: {new Date().toLocaleString()}</p>
+              <p className="text-sm text-ink-3">All systems operational. No incidents reported.</p>
             </div>
           </div>
         </div>

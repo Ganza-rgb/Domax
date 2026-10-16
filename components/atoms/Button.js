@@ -15,31 +15,34 @@ export default function Button({
   ...props
 }) {
   const baseStyles =
-    'relative inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#005ffe] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden'
+    'relative inline-flex items-center justify-center font-semibold rounded-lg whitespace-nowrap transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#005ffe] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden'
 
+  // One action color (brand blue). Teal is kept as a secondary brand action
+  // with navy text — white text on teal is 2.1:1 and fails contrast.
   const variants = {
     primary:
-      'bg-gradient-to-r from-[#005ffe] to-[#0047cc] text-white hover:brightness-110 active:scale-[0.98]',
+      'bg-[#005ffe] text-white hover:bg-[#0047cc] active:scale-[0.98]',
     secondary:
-      'bg-white text-[#0A3059] border border-[#d6e2ff] hover:bg-[#f4f7ff] active:scale-[0.98]',
+      'bg-white text-[#0A3059] border border-[#CFD8E3] hover:border-[#0A3059]/35 hover:bg-[#F6F8FA] active:scale-[0.98]',
     outline:
       'border border-[var(--action-accent)] text-[var(--action-accent)] hover:bg-[var(--action-accent-soft)] active:scale-[0.98]',
     ghost:
-      'text-[var(--sky-text)] hover:bg-[var(--sky-surface)]/70 active:scale-[0.98]',
+      'text-[var(--sky-text)] hover:bg-[var(--action-accent-soft)] active:scale-[0.98]',
     'primary-blue':
-      'bg-gradient-to-r from-[#00cd90] to-[#2dd4bf] text-white hover:brightness-110 active:scale-[0.98]',
+      'bg-[#00cd90] text-[#0A3059] hover:bg-[#2DD4BF] active:scale-[0.98]',
     dark:
       'bg-[#0A3059] text-white hover:bg-[#0d3d6f] active:scale-[0.98]',
     light:
-      'bg-[#f1f5ff] text-[#0A3059] hover:bg-white active:scale-[0.98]',
+      'bg-[#F0F7FF] text-[#0A3059] hover:bg-white active:scale-[0.98]',
   }
 
+  // Fixed heights keep buttons aligned with inputs in toolbars and forms.
   const sizes = {
-    xs: 'px-2.5 py-1 text-xs',
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-sm',
-    lg: 'px-5 py-2.5 text-base',
-    xl: 'px-6 py-3 text-base',
+    xs: 'min-h-7 px-2.5 text-xs',
+    sm: 'min-h-9 px-3.5 text-sm',
+    md: 'min-h-10 px-4 text-sm',
+    lg: 'min-h-11 px-5 text-[15px]',
+    xl: 'min-h-12 px-6 text-base',
   }
 
   const classes = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`
@@ -55,7 +58,7 @@ export default function Button({
   // If href is provided, render as Link
   if (href) {
     return (
-      <Link href={href} className={`${classes} group`}>
+      <Link href={href} className={`${classes} group`} onClick={onClick} {...props}>
         <SkeletonFlash />
         <span className="relative z-10 inline-flex items-center justify-center gap-2">
           {children}

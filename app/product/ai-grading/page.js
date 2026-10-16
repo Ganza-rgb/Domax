@@ -12,23 +12,23 @@ export default function AIGradingPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 pb-20">
+      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <GradientHeading as="h1" className="text-4xl sm:text-5xl lg:text-6xl mb-6 lg:mb-8" highlightText="Grading">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               AI Grading
-            </GradientHeading>
-            <p className="text-xl text-gray-600 mb-12 leading-relaxed">
+            </h1>
+            <p className="lede mb-12 pb-12 border-b border-line">
               Automate paper grading with AI-powered feedback that delivers consistent, actionable comments in seconds. Cut grading time by 80% while ensuring every student receives personalized, constructive feedback.
             </p>
 
-            <div className="prose prose-lg max-w-none">
+            <div className="prose max-w-none">
               <section className="mb-12">
-                <h2 className="text-2xl font-semibold text-[#0A3059] mb-4">How It Works</h2>
-                <p className="text-gray-600 mb-4">
+                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">How It Works</h2>
+                <p className="text-ink-2 mb-4">
                   Our AI grading system uses advanced natural language processing to understand context, evaluate student work against your rubric, and generate detailed feedback that helps students improve.
                 </p>
-                <ul className="list-disc list-inside text-gray-600 space-y-2">
+                <ul className="list-disc pl-5 text-ink-2 space-y-2 marker:text-ink-3">
                   <li>Upload student papers in PDF, DOCX, or other supported formats</li>
                   <li>Apply your custom rubric or use our AI-generated suggestions</li>
                   <li>Receive instant grading with detailed feedback and annotations</li>
@@ -37,23 +37,23 @@ export default function AIGradingPage() {
               </section>
 
               <section className="mb-12">
-                <h2 className="text-2xl font-semibold text-[#0A3059] mb-4">Key Features</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Consistent Scoring</h3>
-                    <p className="text-gray-600 text-sm">AI ensures every paper is graded using the same criteria, eliminating bias and inconsistency.</p>
+                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Key Features</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-6 bg-white border border-line rounded-xl">
+                    <h3 className="text-[17px] font-semibold text-ink mb-1.5">Consistent Scoring</h3>
+                    <p className="text-ink-2 text-sm leading-relaxed">AI ensures every paper is graded using the same criteria, eliminating bias and inconsistency.</p>
                   </div>
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Personalized Feedback</h3>
-                    <p className="text-gray-600 text-sm">Each student receives tailored comments that address their specific strengths and areas for improvement.</p>
+                  <div className="p-6 bg-white border border-line rounded-xl">
+                    <h3 className="text-[17px] font-semibold text-ink mb-1.5">Personalized Feedback</h3>
+                    <p className="text-ink-2 text-sm leading-relaxed">Each student receives tailored comments that address their specific strengths and areas for improvement.</p>
                   </div>
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Rubric-Based</h3>
-                    <p className="text-gray-600 text-sm">Grading follows your rubric exactly, ensuring alignment with your course objectives.</p>
+                  <div className="p-6 bg-white border border-line rounded-xl">
+                    <h3 className="text-[17px] font-semibold text-ink mb-1.5">Rubric-Based</h3>
+                    <p className="text-ink-2 text-sm leading-relaxed">Grading follows your rubric exactly, ensuring alignment with your course objectives.</p>
                   </div>
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Fast Turnaround</h3>
-                    <p className="text-gray-600 text-sm">Grade papers in seconds instead of hours, giving students faster feedback.</p>
+                  <div className="p-6 bg-white border border-line rounded-xl">
+                    <h3 className="text-[17px] font-semibold text-ink mb-1.5">Fast Turnaround</h3>
+                    <p className="text-ink-2 text-sm leading-relaxed">Grade papers in seconds instead of hours, giving students faster feedback.</p>
                   </div>
                 </div>
               </section>

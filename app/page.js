@@ -487,88 +487,88 @@ export default function Home() {
     <main className="min-h-screen bg-white">
       <Navbar />
       {/* Hero */}
-      <section ref={heroRef} className="relative bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] text-[#0A3059] overflow-hidden py-12 sm:py-16 lg:py-20">
-        <div className="absolute inset-0 opacity-30 pointer-events-none">
-          <div className="absolute -top-32 -right-10 w-96 h-96 bg-gradient-to-br from-[#00cd90] to-transparent blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[28rem] h-[28rem] bg-gradient-to-tr from-[#005ffe] to-transparent blur-3xl" />
+      <section ref={heroRef} className="relative bg-white text-[#0A3059] overflow-hidden pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-24">
+        {/* Decorative wash. Note: the hero GSAP call selects the first `div > div`
+            in this section, which resolves to the first child below. Keep this
+            structure so the existing animation behaves exactly as before. */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-x-0 top-0 h-[520px] bg-[linear-gradient(180deg,#F0F7FF_0%,rgba(240,247,255,0)_100%)]" />
+          <div className="absolute -top-40 right-[-10%] w-[640px] h-[640px] rounded-full bg-[radial-gradient(closest-side,rgba(0,205,144,0.10),rgba(0,205,144,0))]" />
         </div>
 
         <div className="container-custom relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="space-y-7">
-              <div className="flex flex-wrap items-center gap-3">
-                {heroStatusChips.map((chip) => (
-                  <span
-                    key={chip}
-                    className="px-3 py-1 rounded-full bg-white/70 border border-[#d7e3ff] text-xs font-semibold text-[#0A3059] shadow-sm"
-                  >
+          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-12 lg:gap-16 items-center">
+            <div>
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] font-medium text-[#4A5D75] mb-6">
+                {heroStatusChips.map((chip, index) => (
+                  <span key={chip} className="inline-flex items-center gap-2.5">
+                    {index > 0 && <span aria-hidden="true" className="w-1 h-1 rounded-full bg-[#CFD8E3]" />}
                     {chip}
                   </span>
                 ))}
               </div>
 
-              <div className="space-y-4">
-                <GradientHeading
-                  as="h1"
-                  className="text-3xl sm:text-4xl lg:text-5xl"
-                  highlightText="smarter"
-                >
-                  Automate grading with modern AI workflows
-                </GradientHeading>
-                <p className="text-base sm:text-lg text-gray-700 leading-relaxed max-w-2xl">
-                  Domax pairs AI scoring with your rubric, annotations, and analytics so every class
-                  gets faster feedback without sacrificing quality.
-                </p>
-              </div>
+              <GradientHeading
+                as="h1"
+                className="text-[2.5rem] sm:text-5xl lg:text-[3.5rem]"
+                highlightText="smarter"
+              >
+                Automate grading with modern AI workflows
+              </GradientHeading>
+              <p className="lede mt-5 max-w-xl">
+                Domax pairs AI scoring with your rubric, annotations, and analytics so every class
+                gets faster feedback without sacrificing quality.
+              </p>
 
-              <form onSubmit={handleHeroSignup} className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1 rounded-2xl border border-[#dfe5ff] bg-white px-4 py-3 flex items-center gap-3">
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 12l-4 4-4-4m8-4l-4-4-4 4" />
+              <form onSubmit={handleHeroSignup} className="mt-8 flex flex-col sm:flex-row gap-2.5 max-w-xl">
+                <label className="w-full sm:flex-1 h-12 rounded-lg border border-[#CFD8E3] bg-white px-3.5 flex items-center gap-2.5 focus-within:border-[#005ffe] focus-within:ring-2 focus-within:ring-[#005ffe]/15 transition-colors">
+                  <svg className="w-[18px] h-[18px] text-[#5B6B82] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <input
                     type="email"
                     value={heroEmail}
                     onChange={(event) => setHeroEmail(event.target.value)}
                     placeholder="Enter your work email"
-                    className="flex-1 bg-transparent text-sm sm:text-base text-[#0A3059] placeholder:text-gray-400 focus:outline-none"
+                    className="flex-1 min-w-0 bg-transparent text-[15px] text-[#0A3059] placeholder:text-[#5B6B82] focus:outline-none"
                     aria-label="Work email"
                     required
                   />
-                </div>
-                <Button type="submit" variant="primary" size="md" className="whitespace-nowrap">
+                </label>
+                <Button type="submit" variant="primary" size="xl" className="whitespace-nowrap">
                   Start free trial
                 </Button>
               </form>
 
-              <div className="flex flex-col sm:flex-row sm:items-center gap-3 text-sm text-gray-600">
-                <Button href="/contact" variant="outline" size="md" className="sm:w-auto w-full">
+              <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#5B6B82]">
+                <Link href="/contact" className="inline-flex items-center gap-1 font-semibold text-[#005ffe] hover:text-[#0047cc] rounded">
                   Book a live demo
-                </Button>
-                <p className="text-xs sm:text-sm">SOC2-ready • Cancel anytime • Support included</p>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                <span>SOC2-ready • Cancel anytime • Support included</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-                {heroWorkflowSteps.map((step) => (
-                  <div
-                    key={step.title}
-                    className="rounded-2xl border border-[#e4e9ff] bg-white p-4 shadow-[0_20px_60px_-45px_rgba(10,48,89,0.4)]"
-                  >
-                    <p className="text-xs font-semibold text-[#005ffe] uppercase tracking-[0.2em] mb-2">
+              <ol className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-5 border-t border-[#E3E8EF] pt-6">
+                {heroWorkflowSteps.map((step, index) => (
+                  <li key={step.title}>
+                    <p className="text-sm font-semibold text-[#0A3059]">
+                      <span className="text-[#005ffe] tabular-nums mr-1.5">{String(index + 1).padStart(2, '0')}</span>
                       {step.title}
                     </p>
-                    <p className="text-sm text-gray-600 leading-relaxed">{step.description}</p>
-                  </div>
+                    <p className="text-sm text-[#4A5D75] leading-relaxed mt-1">{step.description}</p>
+                  </li>
                 ))}
-              </div>
+              </ol>
 
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-2 text-sm text-gray-600">
-                <div className="flex -space-x-3">
+              <div className="mt-8 flex items-center gap-3 text-sm text-[#4A5D75]">
+                <div className="flex -space-x-2" aria-hidden="true">
                   {['AC', 'ML', 'SP'].map((initials, index) => (
                     <div
                       key={initials}
-                      className={`w-10 h-10 rounded-full border-2 border-white flex items-center justify-center font-semibold ${
-                        ['bg-[#d6f5ea]', 'bg-[#e0e8ff]', 'bg-[#ffe7d6]'][index]
+                      className={`w-8 h-8 rounded-full ring-2 ring-white flex items-center justify-center text-[11px] font-semibold ${
+                        ['bg-[#E3F8F1]', 'bg-[#E8F0FF]', 'bg-[#FFF4E5]'][index]
                       } text-[#0A3059]`}
                     >
                       {initials}
@@ -579,87 +579,78 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="max-w-2xl w-full mx-auto">
+            <div className="w-full max-w-xl mx-auto lg:mr-0">
               <div
-                className="rounded-[28px] border border-[#dfe3ff] bg-white p-5 sm:p-6 shadow-[0_45px_110px_-60px_rgba(10,48,89,0.45)]"
+                className="rounded-2xl border border-[#E3E8EF] bg-white shadow-pop"
                 onMouseEnter={() => setHeroDemoPaused(true)}
                 onMouseLeave={() => setHeroDemoPaused(false)}
                 onFocus={() => setHeroDemoPaused(true)}
                 onBlur={() => setHeroDemoPaused(false)}
               >
-                <div className="flex items-center justify-between gap-4 mb-4">
+                <div className="flex items-center justify-between gap-4 px-5 pt-4 pb-3 border-b border-[#E3E8EF]">
                   <div>
                     <p className="text-sm font-semibold text-[#0A3059]">Domax demo</p>
-                    <p className="text-xs text-gray-500">See how grading runs in real time</p>
+                    <p className="text-xs text-[#5B6B82]">See how grading runs in real time</p>
                   </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#f0f7ff] text-[#005ffe]">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[#007A56]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00cd90]" aria-hidden="true" />
                     Live preview
                   </span>
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {heroDemoPanels.map((panel, index) => {
-                    const isActivePanel = heroDemoIndex === index
-                    return (
-                      <button
-                        key={panel.id}
-                        type="button"
-                        onClick={() => setHeroDemoIndex(index)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                          isActivePanel
-                            ? 'bg-[#005ffe] text-white'
-                            : 'bg-[#f0f4ff] text-[#0A3059] hover:bg-[#e4ecff]'
-                        }`}
-                      >
-                        {panel.label}
-                      </button>
-                    )
-                  })}
+                <div className="px-5 pt-4">
+                  <div className="flex sm:inline-flex w-full sm:w-auto p-1 rounded-lg bg-[#F6F8FA] border border-[#E3E8EF]" role="tablist" aria-label="Demo views">
+                    {heroDemoPanels.map((panel, index) => {
+                      const isActivePanel = heroDemoIndex === index
+                      return (
+                        <button
+                          key={panel.id}
+                          type="button"
+                          role="tab"
+                          aria-selected={isActivePanel}
+                          onClick={() => setHeroDemoIndex(index)}
+                          className={`flex-1 sm:flex-none px-3 min-h-8 py-1.5 leading-tight rounded-md text-xs font-semibold transition-colors ${
+                            isActivePanel
+                              ? 'bg-white text-[#0A3059] shadow-[0_1px_2px_rgba(10,48,89,0.12)]'
+                              : 'text-[#4A5D75] hover:text-[#0A3059]'
+                          }`}
+                        >
+                          {panel.label}
+                        </button>
+                      )
+                    })}
+                  </div>
                 </div>
 
-                <div className="rounded-2xl border border-[#ecf0ff] bg-[#f8faff] p-4 min-h-[280px] flex flex-col gap-4">
-                  <div className="flex flex-wrap gap-3">
+                <div className="p-5 min-h-[300px] flex flex-col gap-4">
+                  <dl className="grid grid-cols-3 divide-x divide-[#E3E8EF] rounded-lg border border-[#E3E8EF]">
                     {heroDemoSummary.map((item) => (
-                      <div
-                        key={item.label}
-                        className="px-3 py-2 rounded-xl bg-white border border-[#e8ecff] min-w-[110px]"
-                      >
-                        <p className="text-[10px] uppercase tracking-[0.35em] text-gray-500">{item.label}</p>
-                        <p className="text-lg font-bold text-[#0A3059]">{item.value}</p>
+                      <div key={item.label} className="px-3.5 py-2.5">
+                        <dt className="text-xs text-[#5B6B82]">{item.label}</dt>
+                        <dd className="text-lg font-semibold text-[#0A3059] tabular-nums">{item.value}</dd>
                       </div>
                     ))}
-                  </div>
+                  </dl>
 
                   {heroDemoPanels[heroDemoIndex]?.id === 'live' && (
                     <div className="space-y-4">
-                      <div>
-                        <p className="text-sm font-semibold text-[#0A3059]">Queue health</p>
-                        <p className="text-xs text-gray-500">Rubrics deployed • Accuracy trending up</p>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-2 gap-px rounded-lg overflow-hidden border border-[#E3E8EF] bg-[#E3E8EF]">
                         {heroStatHighlights.map((stat) => (
-                          <div key={stat.label} className="rounded-xl bg-white p-3 border border-[#e8ecff]">
-                            <p className="text-xl font-bold text-[#0A3059]">{stat.value}</p>
-                            <p className="text-[10px] uppercase tracking-[0.3em] text-gray-500 mt-1">
-                              {stat.label}
-                            </p>
+                          <div key={stat.label} className="bg-white px-3.5 py-3">
+                            <p className="text-xl font-semibold text-[#0A3059] tabular-nums">{stat.value}</p>
+                            <p className="text-xs text-[#5B6B82] mt-0.5">{stat.label}</p>
                           </div>
                         ))}
                       </div>
-                      <div className="rounded-xl bg-white border border-[#e8ecff] p-3">
+                      <div>
                         <div className="flex items-center justify-between mb-2">
-                          <div>
-                            <p className="text-sm font-semibold text-[#0A3059]">AI comment stream</p>
-                            <p className="text-xs text-gray-500">Updating every few seconds</p>
-                          </div>
-                          <span className="text-xs font-semibold text-[#00cd90]">+18%</span>
+                          <p className="text-sm font-semibold text-[#0A3059]">AI comment stream</p>
+                          <span className="text-xs font-semibold text-[#007A56]">+18%</span>
                         </div>
                         <div className="space-y-2">
                           {heroFeedbackSnippets.slice(0, 2).map((snippet) => (
-                            <div key={snippet.text} className="rounded-lg bg-[#f8faff] px-3 py-2">
-                              <p className="text-[10px] uppercase tracking-[0.3em] text-[#005ffe] mb-1">
-                                {snippet.badge}
-                              </p>
+                            <div key={snippet.text} className="rounded-lg bg-[#F6F8FA] px-3.5 py-2.5">
+                              <p className="text-xs font-semibold text-[#005ffe] mb-0.5">{snippet.badge}</p>
                               <p className="text-sm text-[#0A3059] leading-relaxed">{snippet.text}</p>
                             </div>
                           ))}
@@ -669,84 +660,77 @@ export default function Home() {
                   )}
 
                   {heroDemoPanels[heroDemoIndex]?.id === 'alerts' && (
-                    <div className="space-y-3">
+                    <ul className="divide-y divide-[#E3E8EF] rounded-lg border border-[#E3E8EF]">
                       {heroAttentionAlerts.map((alert) => (
-                        <div
-                          key={alert.title}
-                          className="rounded-2xl bg-white border border-[#ffe4cc] px-4 py-3 flex items-start justify-between gap-4"
-                        >
-                          <div>
-                            <p className="text-sm font-semibold text-[#d97706]">{alert.title}</p>
-                            <p className="text-xs text-gray-600 mt-1">{alert.detail}</p>
+                        <li key={alert.title} className="px-3.5 py-3 flex items-start gap-3">
+                          <span className="mt-1.5 w-2 h-2 rounded-full bg-[#FF9F43] flex-shrink-0" aria-hidden="true" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-[#0A3059]">{alert.title}</p>
+                            <p className="text-xs text-[#4A5D75] mt-0.5">{alert.detail}</p>
                           </div>
-                          <button
-                            type="button"
-                            className="text-xs font-semibold text-[#005ffe] hover:text-[#0047cc] whitespace-nowrap"
-                          >
-                            {alert.action}
-                          </button>
-                        </div>
+                          <span className="text-xs font-semibold text-[#005ffe] whitespace-nowrap">{alert.action}</span>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   )}
 
                   {heroDemoPanels[heroDemoIndex]?.id === 'delivery' && (
                     <div className="space-y-3">
-                      {heroSuccessTimeline.map((item) => (
-                        <div
-                          key={item.title}
-                          className="rounded-2xl bg-white border border-[#e4e9ff] px-4 py-3 flex items-start justify-between gap-4"
-                        >
-                          <div>
-                            <p className="text-xs uppercase tracking-[0.3em] text-gray-400">{item.time}</p>
-                            <p className="text-sm font-semibold text-[#0A3059]">{item.title}</p>
-                            <p className="text-xs text-gray-500">{item.detail}</p>
-                          </div>
-                          <span className="text-xs font-semibold text-[#00cd90]">{item.status}</span>
-                        </div>
-                      ))}
-                      <div className="rounded-2xl border border-dashed border-[#dfe3ff] bg-white px-4 py-3 space-y-2">
+                      <ul className="divide-y divide-[#E3E8EF] rounded-lg border border-[#E3E8EF]">
+                        {heroSuccessTimeline.map((item) => (
+                          <li key={item.title} className="px-3.5 py-3 flex items-start justify-between gap-4">
+                            <div>
+                              <p className="text-xs text-[#5B6B82] tabular-nums">{item.time}</p>
+                              <p className="text-sm font-semibold text-[#0A3059]">{item.title}</p>
+                              <p className="text-xs text-[#4A5D75]">{item.detail}</p>
+                            </div>
+                            <span className="text-xs font-semibold text-[#007A56]">{item.status}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="rounded-lg border border-dashed border-[#CFD8E3] px-3.5 py-3 space-y-2" aria-hidden="true">
                         {heroSkeletonRows.map((_, index) => (
                           <div
                             key={`skeleton-${index}`}
-                            className="h-3 rounded-full bg-gradient-to-r from-[#eef2ff] via-white to-[#eef2ff] animate-pulse"
+                            className="h-2.5 rounded-full bg-gradient-to-r from-[#eef2ff] via-white to-[#eef2ff] animate-pulse"
                           />
                         ))}
                       </div>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between pt-3 border-t border-white/60 text-xs text-gray-500">
+                  <div className="mt-auto flex items-center justify-between pt-3 border-t border-[#E3E8EF] text-xs text-[#5B6B82]">
                     <span>Auto-updating every 5s</span>
-                    <span>AI draft ETA 3m 12s</span>
+                    <span className="tabular-nums">AI draft ETA 3m 12s</span>
                   </div>
                 </div>
               </div>
-              <div className="mt-4 flex items-center gap-3 text-xs text-gray-500">
-                <svg className="w-4 h-4 text-[#00cd90]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <p className="mt-4 flex items-center gap-2 text-xs text-[#5B6B82]">
+                <svg className="w-4 h-4 text-[#007A56]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
                 SOC2, FERPA, and GDPR-ready with regional data hosting.
-              </div>
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust badges */}
-      <section ref={trustBadgesRef} className="py-10 sm:py-12 lg:py-16 bg-[#eff3ff]">
+      {/* Capabilities. The GSAP call animates every <div> in this section,
+          so the div structure below is intentionally unchanged. */}
+      <section ref={trustBadgesRef} className="py-14 sm:py-16 bg-[#F6F8FA] border-y border-[#E3E8EF]">
         <div className="container-custom">
-          <div className="text-center max-w-5xl mx-auto">
-            <p className="text-base sm:text-lg font-semibold text-[#0A3059] mb-6 sm:mb-8">Everything you need to grade smarter</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 sm:gap-x-6 gap-y-6 sm:gap-y-8 text-left">
+          <div className="max-w-5xl mx-auto">
+            <p className="eyebrow text-center w-full mb-8">Everything you need to grade smarter</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-5 text-left">
               {trustBadges.map((badge) => (
-                <div key={badge} className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#00cd90] to-[#2DD4BF] text-white flex items-center justify-center mt-1 flex-shrink-0">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <div key={badge} className="flex items-center gap-2.5">
+                  <div className="w-5 h-5 rounded-full bg-[#E3F8F1] text-[#007A56] flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <span className="text-[#0A3059] font-semibold">{badge}</span>
+                  <span className="text-[15px] text-[#0A3059] font-medium">{badge}</span>
                 </div>
               ))}
             </div>
@@ -755,82 +739,62 @@ export default function Home() {
       </section>
 
       {/* Pillars */}
-      <section ref={pillarsRef} className="py-12 sm:py-16 lg:py-20 bg-white">
-        <div className="container-custom grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {productPillars.map((pillar) => (
-            <div key={pillar.title} className="rounded-2xl sm:rounded-3xl border border-[#eceeff] p-5 sm:p-6 lg:p-8 shadow-[0_25px_65px_-40px_rgba(10,48,89,0.15)] hover:-translate-y-1 transition-all bg-white">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0A3059] mb-3 sm:mb-4">{pillar.title}</h3>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{pillar.copy}</p>
+      <section ref={pillarsRef} className="section-spacing bg-white">
+        <div className="container-custom grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+          {productPillars.map((pillar, index) => (
+            // `rounded-3xl` is the GSAP selector hook for this section; the
+            // element itself is transparent, so the radius is not visible.
+            <div key={pillar.title} className="rounded-3xl hover:-translate-y-1 transition-all">
+              <div className="border-t-2 border-[#0A3059] pt-6">
+                <p className="text-sm font-semibold text-[#005ffe] tabular-nums mb-3">{String(index + 1).padStart(2, '0')}</p>
+                <h3 className="text-2xl font-semibold text-[#0A3059] mb-3">{pillar.title}</h3>
+                <p className="text-[15px] text-[#4A5D75] leading-relaxed">{pillar.copy}</p>
+              </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-12 sm:py-16 bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff]">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-            <div>
-              <GradientHeading as="h2" className="text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-6" highlightText="smarter">
-                Start grading smarter today
-              </GradientHeading>
-              <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8 leading-relaxed">
-                Get started in seconds with AI-powered grading that saves you hours every week. No credit card required, no commitments, no catch.
-              </p>
-              <Button
-                href="/signup"
-                variant="primary"
-                size="md"
-              >
-                Try FREE for 14 Days
-                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </Button>
-            </div>
-            <div className="rounded-2xl sm:rounded-3xl border-2 border-[#d8ddff] bg-white p-6 sm:p-8 lg:p-10 text-center shadow-xl">
-              <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-gray-500 mb-3 sm:mb-4">GRADING EFFICIENCY</p>
-              <p className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#005ffe]">80%</p>
-              <p className="text-sm sm:text-base text-gray-600 mt-3 sm:mt-4">average time saved per assignment</p>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* Value props */}
-      <section ref={valueCardsRef} className="py-12 sm:py-16 lg:py-20 bg-[#eff3ff]">
-        <div className="container-custom grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {valueCards.map((card) => (
-            <div key={card.title} className="rounded-2xl sm:rounded-3xl bg-white p-5 sm:p-6 lg:p-8 border border-[#e0e4ff] shadow-[0_40px_90px_-50px_rgba(10,48,89,0.2)]">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0A3059] mb-3 sm:mb-4">{card.title}</h3>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{card.copy}</p>
-            </div>
-          ))}
+      <section ref={valueCardsRef} className="pb-20 sm:pb-24 bg-white">
+        <div className="container-custom">
+          <div className="border-t border-[#E3E8EF]">
+            {valueCards.map((card) => (
+              // `rounded-3xl` is the GSAP selector hook for this section.
+              <div key={card.title} className="rounded-3xl">
+                <div className="grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-3 md:gap-12 py-8 sm:py-10 border-b border-[#E3E8EF]">
+                  <h3 className="text-xl sm:text-2xl font-semibold text-[#0A3059]">{card.title}</h3>
+                  <p className="text-base text-[#4A5D75] leading-relaxed max-w-xl">{card.copy}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Hop to the edge and never look back - Circular Product Layout */}
-      <section ref={productEcosystemRef} className="py-12 sm:py-16 lg:py-20 bg-white">
+      {/* Product ecosystem — interactive overview of the platform */}
+      <section ref={productEcosystemRef} className="section-spacing bg-[#F6F8FA] border-t border-[#E3E8EF]">
         <div className="container-custom">
-          <div className="text-center mb-20 sm:mb-8 lg:mb-12">
-            <p className="text-xs sm:text-sm font-semibold tracking-[0.3em] text-[#005ffe] mb-3 sm:mb-4">PRODUCT ECOSYSTEM</p>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0A3059] mb-4 sm:mb-6">Everything you need to grade smarter</h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4">
+          <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-6">
+            <p className="eyebrow mb-3">Product ecosystem</p>
+            <h2 className="text-3xl sm:text-4xl font-semibold text-[#0A3059]">Everything you need to grade smarter</h2>
+            <p className="lede mt-4">
               A complete platform for automated grading, feedback, and analytics.
             </p>
           </div>
 
           {/* Desktop layout */}
           <div className="hidden lg:block">
-            <div className="relative mx-auto max-w-[1500px] aspect-3/2">
-              <div className="absolute inset-[18%] rounded-full border-2 border-[#d8ddff]/70"></div>
-              <div className="absolute inset-[28%] rounded-full border border-[#eef2ff]/70"></div>
+            <div className="relative mx-auto max-w-[1100px] aspect-3/2">
+              <div className="absolute inset-[18%] rounded-full border border-[#CFD8E3]"></div>
+              <div className="absolute inset-[28%] rounded-full border border-dashed border-[#E3E8EF]"></div>
 
               {/* Connector lines */}
               <svg
                 className="absolute inset-0 w-full h-full pointer-events-none"
                 viewBox="0 0 100 100"
                 preserveAspectRatio="none"
+                aria-hidden="true"
               >
                 {ecosystemPositions.map((pos, index) => (
                   <line
@@ -839,9 +803,10 @@ export default function Home() {
                     y1="50"
                     x2={pos.left}
                     y2={pos.top}
-                    stroke={activeEcosystemIndex === index ? '#005ffe' : 'rgba(0,95,254,0.12)'}
+                    stroke={activeEcosystemIndex === index ? '#005ffe' : 'rgba(10,48,89,0.10)'}
                     strokeWidth={activeEcosystemIndex === index ? 1.5 : 1}
                     strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
                   />
                 ))}
               </svg>
@@ -857,8 +822,8 @@ export default function Home() {
                   }}
                 >
                   <span
-                    className={`block w-3 h-3 rounded-full ${
-                      activeEcosystemIndex === index ? 'bg-[#005ffe]' : 'bg-[#cdd8ff]'
+                    className={`block w-2.5 h-2.5 rounded-full ${
+                      activeEcosystemIndex === index ? 'bg-[#005ffe]' : 'bg-[#CFD8E3]'
                     }`}
                   />
                 </div>
@@ -881,25 +846,25 @@ export default function Home() {
                       type="button"
                       aria-pressed={isActive}
                       data-ecosystem-card
-                      className={`w-[25rem] max-w-xs bg-white border ${
-                        isActive ? 'border-[#005ffe] shadow-2xl shadow-[#005ffe]/15' : 'border-[#e0e4ff]'
-                      } rounded-3xl px-5 py-4 flex items-center gap-4 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_25px_65px_-40px_rgba(10,48,89,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#005ffe]`}
+                      className={`w-[25rem] max-w-[17.5rem] bg-white border ${
+                        isActive ? 'border-[#005ffe] ring-4 ring-[#005ffe]/10' : 'border-[#E3E8EF]'
+                      } rounded-xl px-4 py-3.5 flex items-center gap-3.5 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#005ffe]`}
                       onMouseEnter={() => setActiveEcosystemIndex(index)}
                       onFocus={() => setActiveEcosystemIndex(index)}
                       onClick={() => setActiveEcosystemIndex(index)}
                     >
                       <div
-                        className={`w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 text-2xl transition-colors ${
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 [&>svg]:w-5 [&>svg]:h-5 transition-colors ${
                           isActive
-                            ? 'bg-gradient-to-br from-[#005ffe] to-[#0047cc] text-white shadow-lg shadow-[#005ffe]/30'
-                            : 'bg-[#f0f7ff] text-[#005ffe]'
+                            ? 'bg-[#005ffe] text-white'
+                            : 'bg-[#F0F7FF] text-[#005ffe]'
                         }`}
                       >
                         {item.icon}
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-[#0A3059]">{item.name}</h3>
-                        <p className="text-sm text-gray-500 leading-relaxed">{item.description}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-[15px] font-semibold text-[#0A3059] font-body tracking-normal">{item.name}</h3>
+                        <p className="text-[13px] text-[#4A5D75] leading-snug mt-0.5">{item.description}</p>
                       </div>
                     </button>
                   </div>
@@ -907,22 +872,22 @@ export default function Home() {
               })}
 
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                <div className="w-44 h-44 xl:w-62 xl:h-62 rounded-full bg-gradient-to-br from-[#005ffe] to-[#0047cc] border-4 border-white shadow-[0_35px_80px_-45px_rgba(0,71,204,0.9)] flex items-center justify-center p-6">
-                  <div className="text-white space-y-4">
+                <div className="w-48 h-48 xl:w-60 xl:h-60 rounded-full bg-[#0A3059] ring-8 ring-white shadow-pop flex items-center justify-center p-7">
+                  <div className="text-white space-y-3" aria-live="polite">
 
                     {currentDetail && (
                       <div className="mx-auto">
-                        <p className="text-base font-semibold text-white mb-1">
+                        <p className="text-[15px] font-semibold text-white mb-1">
                           {currentDetail.title}
                         </p>
-                        <p className="text-sm text-white/80 leading-relaxed">
+                        <p className="text-[13px] text-white/75 leading-snug">
                           {currentDetail.description}
                         </p>
                       </div>
                     )}
 
                     {activeDetailList.length > 1 && (
-                      <div className="flex items-center justify-center gap-2 pt-1">
+                      <div className="flex items-center justify-center gap-1.5 pt-1">
                         {activeDetailList.map((_, idx) => (
                           <button
                             key={`detail-dot-${idx}`}
@@ -930,10 +895,11 @@ export default function Home() {
                             onClick={() => setActiveDetailIndex(idx)}
                             className={`transition-all duration-200 ${
                               idx === detailIndex
-                                ? 'w-6 h-2 rounded-full bg-white'
-                                : 'w-2 h-2 rounded-full bg-white/40 hover:bg-white/70'
+                                ? 'w-5 h-1.5 rounded-full bg-white'
+                                : 'w-1.5 h-1.5 rounded-full bg-white/40 hover:bg-white/70'
                             }`}
                             aria-label={`Show insight ${idx + 1}`}
+                            aria-current={idx === detailIndex ? 'true' : undefined}
                           />
                         ))}
                       </div>
@@ -945,87 +911,60 @@ export default function Home() {
           </div>
 
           {/* Mobile/tablet fallback */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden mb-10 sm:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:hidden">
             {ecosystemItems.map((item, index) => (
-              <div
+              <button
                 key={item.name}
+                type="button"
                 className={`bg-white border ${
-                  activeEcosystemIndex === index ? 'border-[#005ffe] shadow-lg' : 'border-[#e0e4ff]'
-                } rounded-2xl p-4 sm:p-5 shadow-sm hover:border-[#005ffe] transition-all flex items-start gap-4 text-left`}
+                  activeEcosystemIndex === index ? 'border-[#005ffe]' : 'border-[#E3E8EF]'
+                } rounded-xl p-4 hover:border-[#005ffe] transition-all flex items-start gap-3.5 text-left`}
                 onMouseEnter={() => setActiveEcosystemIndex(index)}
                 onFocus={() => setActiveEcosystemIndex(index)}
                 onClick={() => setActiveEcosystemIndex(index)}
-                role="button"
-                tabIndex={0}
+                aria-pressed={activeEcosystemIndex === index}
               >
-                <div className="w-14 h-14 rounded-xl bg-[#f0f7ff] text-[#005ffe] flex items-center justify-center text-2xl flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-[#F0F7FF] text-[#005ffe] flex items-center justify-center flex-shrink-0 [&>svg]:w-5 [&>svg]:h-5">
                   {item.icon}
                 </div>
                 <div>
-                  <h3 className="text-base font-semibold text-[#0A3059]">{item.name}</h3>
-                  <p className="text-sm text-gray-600">{item.description}</p>
+                  <h3 className="text-[15px] font-semibold text-[#0A3059] font-body tracking-normal">{item.name}</h3>
+                  <p className="text-sm text-[#4A5D75] mt-0.5">{item.description}</p>
                 </div>
-              </div>
+              </button>
             ))}
-          </div>
-
-          {/* Stats Section */}
-          <div className="bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 border-2 border-[#d8ddff]">
-            <div className="text-center mb-6 sm:mb-8">
-              <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-[#005ffe] mb-2 font-semibold">DOMAX GRADING PLATFORM</p>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#005ffe] mb-1 sm:mb-2">1.5M+</div>
-                <div className="text-sm sm:text-base text-gray-700 font-medium">Papers Graded</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#005ffe] mb-1 sm:mb-2">80%</div>
-                <div className="text-sm sm:text-base text-gray-700 font-medium">Time Saved</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#005ffe] mb-1 sm:mb-2">10K+</div>
-                <div className="text-sm sm:text-base text-gray-700 font-medium">Educators</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#005ffe] mb-1 sm:mb-2">99%</div>
-                <div className="text-sm sm:text-base text-gray-700 font-medium">Accuracy Rate</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Simple to start. Built to scale. - Interactive Dropdown Section */}
+      {/* Simple to start. Built to scale. */}
       <FeaturesDropdown />
 
-      {/* A global network built for more than speed */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+      {/* Built for teachers */}
+      <section className="section-spacing bg-white border-t border-[#E3E8EF]">
         <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Left content */}
             <div>
-              <p className="text-xs sm:text-sm font-semibold tracking-[0.3em] text-[#005ffe] mb-3 sm:mb-4">TRUSTED WORLDWIDE</p>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0A3059] mb-4 sm:mb-6">
+              <p className="eyebrow mb-3">Trusted worldwide</p>
+              <h2 className="text-3xl sm:text-4xl font-semibold text-[#0A3059]">
                 Built for teachers, trusted by their students
               </h2>
-              <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-10 leading-relaxed">
+              <p className="lede mt-5">
                 Domax gives classroom teachers the same AI power as enterprise teams—without the bureaucracy. Keep grading fast, keep context-rich feedback flowing, and let students revisit annotated work through the free portals unlocked by your access codes.
               </p>
-              <div className="grid grid-cols-3 gap-4 sm:gap-6">
-                <div>
-                  <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#005ffe] mb-1 sm:mb-2">1.5M+</p>
-                  <p className="text-xs sm:text-sm text-gray-600">Papers Graded</p>
-                </div>
-                <div>
-                  <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#005ffe] mb-1 sm:mb-2">10K+</p>
-                  <p className="text-xs sm:text-sm text-gray-600">Active Educators</p>
-                </div>
-                <div>
-                  <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#005ffe] mb-1 sm:mb-2">50+</p>
-                  <p className="text-xs sm:text-sm text-gray-600">Countries</p>
-                </div>
-              </div>
+              <dl className="mt-10 grid grid-cols-3 border-t border-[#E3E8EF]">
+                {[
+                  { value: '1.5M+', label: 'Papers Graded' },
+                  { value: '10K+', label: 'Active Educators' },
+                  { value: '50+', label: 'Countries' },
+                ].map((stat, index) => (
+                  <div key={stat.label} className={`pt-5 ${index > 0 ? 'pl-5 border-l border-[#E3E8EF]' : ''}`}>
+                    <dd className="text-3xl sm:text-4xl font-semibold text-[#0A3059] tabular-nums font-headline tracking-tight">{stat.value}</dd>
+                    <dt className="text-sm text-[#4A5D75] mt-1">{stat.label}</dt>
+                  </div>
+                ))}
+              </dl>
             </div>
 
             {/* Right globe visualization */}
@@ -1036,110 +975,45 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Build faster */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-[#eff3ff]">
-        <div className="container-custom grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-          <div className="rounded-2xl sm:rounded-3xl border-2 border-[#d8ddff] bg-white p-6 sm:p-8 lg:p-10 shadow-xl">
-            <p className="text-xs sm:text-sm font-semibold tracking-[0.3em] text-[#005ffe] mb-3 sm:mb-4">EDUCATORS FIRST</p>
-            <GradientHeading as="h2" className="text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-6" highlightText="minutes">
-              Get started in minutes
-            </GradientHeading>
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-              Start grading smarter from day one with AI-powered feedback, intuitive rubrics, and seamless integrations. Every feature designed to save you time.
-            </p>
-            <div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-left">
-              <div>
-                <p className="text-2xl sm:text-3xl font-bold text-[#0A3059]">2 min</p>
-                <p className="text-xs sm:text-sm text-gray-500">Average setup time</p>
-              </div>
-              <div>
-                <p className="text-2xl sm:text-3xl font-bold text-[#0A3059]">80%</p>
-                <p className="text-xs sm:text-sm text-gray-500">Time saved per assignment</p>
-              </div>
-            </div>
-          </div>
-          <div className="rounded-2xl sm:rounded-3xl bg-white border-2 border-[#e0e4ff] p-6 sm:p-8 lg:p-10 shadow-xl">
-            <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-[#005ffe] mb-3 sm:mb-4 font-semibold">WORKFLOW</p>
-            <ul className="space-y-4 sm:space-y-6 text-[#0A3059]">
-              <li className="flex items-start gap-3 sm:gap-4">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#00cd90] to-[#2DD4BF] text-white flex items-center justify-center font-semibold flex-shrink-0 text-sm sm:text-base">1</div>
-                <div>
-                  <p className="text-sm sm:text-base font-semibold">Upload student papers</p>
-                  <p className="text-xs sm:text-sm text-gray-500">Support for PDF, DOCX, and more formats.</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 sm:gap-4">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#00cd90] to-[#2DD4BF] text-white flex items-center justify-center font-semibold flex-shrink-0 text-sm sm:text-base">2</div>
-                <div>
-                  <p className="text-sm sm:text-base font-semibold">Apply your rubric</p>
-                  <p className="text-xs sm:text-sm text-gray-500">Use AI-powered grading or customize your own criteria.</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 sm:gap-4">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#00cd90] to-[#2DD4BF] text-white flex items-center justify-center font-semibold flex-shrink-0 text-sm sm:text-base">3</div>
-                <div>
-                  <p className="text-sm sm:text-base font-semibold">Review & deliver feedback</p>
-                  <p className="text-xs sm:text-sm text-gray-500">Get instant results with detailed analytics and feedback.</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* Final CTA */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute top-10 right-0 w-80 h-80 bg-gradient-to-br from-[#00cd90] to-transparent blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-[22rem] h-[22rem] bg-gradient-to-tr from-[#005ffe] to-transparent blur-[160px]" />
-        </div>
-        <div className="container-custom relative z-10 text-center px-4">
-          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-[#005ffe] mb-3 sm:mb-4 font-semibold">READY TO GET STARTED?</p>
-          <GradientHeading as="h2" className="text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-6" highlightText="smarter">
+      <section className="bg-[#0A3059] text-white">
+        <div className="container-custom py-20 sm:py-24 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#7FE3C3] mb-4">Ready to get started?</p>
+          <h2 className="text-3xl sm:text-[2.75rem] font-semibold text-white max-w-2xl mx-auto leading-tight">
             Start grading smarter in minutes
-          </GradientHeading>
-          <p className="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto mb-8 sm:mb-10">
+          </h2>
+          <p className="text-base sm:text-lg text-white/75 max-w-xl mx-auto mt-5">
             Join thousands of educators who save hours every week while delivering better feedback to their students.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-10">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-9">
             <Button
               href="/signup"
-              variant="primary"
-              size="md"
+              variant="primary-blue"
+              size="xl"
             >
               Try FREE for 14 Days
-              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </Button>
             <Button
               href="/contact"
-              variant="outline"
-              size="md"
+              variant="light"
+              size="xl"
             >
               Schedule a Demo
             </Button>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-[#00cd90]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Free 14-day trial</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-[#00cd90]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>No credit card required</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-[#00cd90]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Cancel anytime</span>
-            </div>
-          </div>
+          <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/75 mt-8">
+            {['Free 14-day trial', 'No credit card required', 'Cancel anytime'].map((item) => (
+              <li key={item} className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-[#00cd90]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
       <Footer />

@@ -89,28 +89,27 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] text-[#0A3059] border-t border-[#dfe7f5]">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12">
+    <footer className="bg-[#F6F8FA] text-[#0A3059] border-t border-[#E3E8EF]">
+      <div className="container-custom py-14 lg:py-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.6fr_repeat(5,1fr)] gap-x-8 gap-y-10">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
             {/* Logo */}
-            <Link href="/" className="flex items-end -space-x-1">
+            <Link href="/" className="inline-flex items-end -space-x-1 mb-4" aria-label="Domax home">
               <Image
                 src="/favicon.svg"
-                alt="Domax Logo"
+                alt=""
                 width={40}
                 height={40}
-                className="h-8 w-8"
-                priority
+                className="h-7 w-7"
               />
               <span
-                className={`text-lg sm:text-xl font-bold tracking-tight text-[#0A3059]`}
+                className={`text-lg font-bold tracking-tight text-[#0A3059]`}
               >
                 OMAX
               </span>
             </Link>
-            <p className="text-sm text-[#0A3059]/70 mb-6 leading-relaxed">
+            <p className="text-sm text-[#4A5D75] mb-6 leading-relaxed max-w-xs">
               The AI-powered grading platform that saves educators time while delivering personalized, actionable feedback to students.
             </p>
 
@@ -122,7 +121,7 @@ export default function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 flex items-center justify-center rounded-lg bg-white text-[#0A3059] hover:bg-[#0A3059] hover:text-white transition-all duration-300 border border-[#dfe7f5]"
+                  className="w-9 h-9 flex items-center justify-center rounded-lg bg-white text-[#4A5D75] hover:bg-[#0A3059] hover:text-white transition-all duration-300 border border-[#E3E8EF]"
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -134,15 +133,15 @@ export default function Footer() {
           {/* Footer Links Columns */}
           {footerSections.map((section, index) => (
             <div key={index} className="col-span-1">
-              <h4 className="text-sm font-semibold text-[#0A3059] mb-4">
+              <h4 className="text-[13px] font-semibold text-[#0A3059] mb-3.5 font-body tracking-normal">
                 {section.title}
               </h4>
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="group flex items-center gap-2 text-sm text-[#0A3059]/70 hover:text-[#005ffe] transition-all duration-300"
+                      className="group flex items-center gap-1.5 text-sm text-[#4A5D75] hover:text-[#005ffe] transition-all duration-300"
                     >
                       <span>{link.label}</span>
                       <svg
@@ -167,16 +166,16 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-[#dfe7f5]">
+        <div className="mt-12 pt-6 border-t border-[#E3E8EF]">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-[#0A3059]/70">
+            <div className="text-sm text-[#5B6B82]">
               © {currentYear} Domax, Inc. All rights reserved.
             </div>
 
             <div className="flex items-center gap-6 text-sm">
               <Link
                 href="/status"
-                className="group flex items-center gap-2 text-[#0A3059]/70 hover:text-[#005ffe] transition-all duration-300"
+                className="group flex items-center gap-1.5 text-[#5B6B82] hover:text-[#005ffe] transition-all duration-300"
               >
                 <span>Status</span>
                 <svg
@@ -195,7 +194,7 @@ export default function Footer() {
               </Link>
               <Link
                 href="/support"
-                className="group flex items-center gap-2 text-[#0A3059]/70 hover:text-[#005ffe] transition-all duration-300"
+                className="group flex items-center gap-1.5 text-[#5B6B82] hover:text-[#005ffe] transition-all duration-300"
               >
                 <span>Support</span>
                 <svg

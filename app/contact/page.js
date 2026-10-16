@@ -168,96 +168,104 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-surface-neutral text-[#0A3059]">
       <Navbar />
-      <main className="pt-20 sm:pt-24 lg:pt-32 pb-12 sm:pb-20">
+      <main className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
-          <div className="max-w-5xl mx-auto px-4">
-            <div ref={headerRef} className="text-center mb-10 sm:mb-12">
-              <h1 className="text-3xl sm:text-4xl font-semibold leading-tight mb-4">Talk to the Domax team</h1>
-              <p className="text-base sm:text-lg text-text-muted">
+          <div className="max-w-6xl mx-auto">
+            <div ref={headerRef} className="max-w-2xl mb-10 sm:mb-12">
+              <h1 className="text-4xl sm:text-5xl font-semibold leading-[1.1] tracking-[-0.025em] mb-4">Talk to the Domax team</h1>
+              <p className="lede">
                 Route your request directly to the squad that can help—sales engineers, billing specialists, or
                 integrations.
               </p>
-              <div className="mt-6 flex flex-wrap justify-center gap-3 text-xs uppercase tracking-[0.25em] text-[#005ffe]">
-                <span className="px-4 py-1 rounded-full bg-white border border-white/60">24/7 support desks</span>
-                <span className="px-4 py-1 rounded-full bg-white border border-white/60">Follow-the-sun coverage</span>
-                <span className="px-4 py-1 rounded-full bg-white border border-white/60">SLA-backed responses</span>
+              <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm font-medium text-ink-2">
+                {['24/7 support desks', 'Follow-the-sun coverage', 'SLA-backed responses'].map((item) => (
+                  <span key={item} className="inline-flex items-center gap-2">
+                    <span aria-hidden="true" className="w-1.5 h-1.5 rounded-full bg-[#00cd90]" />
+                    {item}
+                  </span>
+                ))}
               </div>
             </div>
 
-            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
-              <div className="space-y-6">
-                <div className="rounded-[28px] border border-[#dfe7f5] bg-white p-4 sm:p-6">
-                  <p className="text-sm font-semibold text-[#005ffe] tracking-[0.3em] mb-3">Choose an intent</p>
-                  <div className="grid sm:grid-cols-3 gap-3">
+            <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-6 lg:gap-8 items-start">
+              <div className="space-y-4">
+                <fieldset className="rounded-2xl border border-line bg-white p-4 sm:p-5">
+                  <legend className="sr-only">Choose an intent</legend>
+                  <p className="text-sm font-semibold text-ink mb-3">What can we help with?</p>
+                  <div className="grid sm:grid-cols-3 gap-2.5">
                     {contactIntents.map((intent) => {
                       const active = intent.id === activeIntent
                       return (
                         <button
                           key={intent.id}
+                          type="button"
+                          aria-pressed={active}
                           onClick={() => handleIntentSelect(intent.id)}
-                          className={`text-left rounded-2xl border px-4 py-3 transition-all flex flex-col gap-2 ${
+                          className={`text-left rounded-xl border p-3.5 transition-all flex flex-col gap-1.5 ${
                             active
-                              ? 'border-[#005ffe] bg-[#005ffe]/10 text-[#005ffe]'
-                              : 'border-[#e0e4ff] text-[#0A3059]'
+                              ? 'border-[#005ffe] bg-[#F0F7FF] ring-1 ring-[#005ffe]'
+                              : 'border-line hover:border-line-strong bg-white'
                           }`}
                         >
-                          <span className="flex items-center gap-2 text-sm font-semibold">
-                            <span className="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-[#005ffe]">
+                          <span className="flex items-center gap-2 text-sm font-semibold text-ink">
+                            <span className={`w-7 h-7 rounded-lg flex items-center justify-center [&>svg]:w-4 [&>svg]:h-4 ${active ? 'bg-[#005ffe] text-white' : 'bg-[#F0F7FF] text-[#005ffe]'}`}>
                               {intent.icon}
                             </span>
                             {intent.label}
                           </span>
-                          <span className="text-xs text-gray-500">{intent.description}</span>
-                          <span className="text-[11px] uppercase tracking-[0.2em] text-gray-400">
-                            SLA {intent.sla}
+                          <span className="text-[13px] leading-snug text-ink-2">{intent.description}</span>
+                          <span className="text-xs text-ink-3 tabular-nums">
+                            Response: {intent.sla}
                           </span>
                         </button>
                       )
                     })}
                   </div>
-                </div>
+                </fieldset>
 
                 <div ref={formRef}>
-                  <Card className="p-5 sm:p-6 lg:p-8">
-                    <h2 className="text-xl sm:text-2xl font-semibold mb-4">
+                  <Card className="p-5 sm:p-7" hover={false}>
+                    <h2 className="text-xl sm:text-2xl font-semibold mb-6">
                       {selectedIntent?.label || 'Reach out'}
                     </h2>
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-5">
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor="name" className="block text-sm font-medium mb-2">
-                            Name *
+                          <label htmlFor="name" className="block text-sm font-medium text-ink mb-1.5">
+                            Name <span className="text-ink-3" aria-hidden="true">*</span>
                           </label>
                           <input
                             type="text"
                             id="name"
                             name="name"
                             required
+                            autoComplete="name"
                             value={formData.name}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary-blue focus:border-transparent"
+                            className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder:text-ink-3 focus:outline-none focus:border-[#005ffe] focus:ring-2 focus:ring-brand-primary-blue/20 transition-colors"
                           />
                         </div>
                         <div>
-                          <label htmlFor="email" className="block text-sm font-medium mb-2">
-                            Email *
+                          <label htmlFor="email" className="block text-sm font-medium text-ink mb-1.5">
+                            Email <span className="text-ink-3" aria-hidden="true">*</span>
                           </label>
                           <input
                             type="email"
                             id="email"
                             name="email"
                             required
+                            autoComplete="email"
                             value={formData.email}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary-blue focus:border-transparent"
+                            className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder:text-ink-3 focus:outline-none focus:border-[#005ffe] focus:ring-2 focus:ring-brand-primary-blue/20 transition-colors"
                           />
                         </div>
                       </div>
 
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor="organization" className="block text-sm font-medium mb-2">
-                            Class / community (optional)
+                          <label htmlFor="organization" className="block text-sm font-medium text-ink mb-1.5">
+                            Class / community <span className="font-normal text-ink-3">(optional)</span>
                           </label>
                           <input
                             type="text"
@@ -266,27 +274,28 @@ export default function ContactPage() {
                             value={formData.organization}
                             onChange={handleChange}
                             placeholder="e.g., Kigali Lit Circle, Grade 11 STEM pod"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary-blue focus:border-transparent"
+                            className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder:text-ink-3 focus:outline-none focus:border-[#005ffe] focus:ring-2 focus:ring-brand-primary-blue/20 transition-colors"
                           />
                         </div>
                         <div>
-                          <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                          <label htmlFor="phone" className="block text-sm font-medium text-ink mb-1.5">
                             Phone / WhatsApp
                           </label>
                           <input
                             type="tel"
                             id="phone"
                             name="phone"
+                            autoComplete="tel"
                             value={formData.phone}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary-blue focus:border-transparent"
+                            className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder:text-ink-3 focus:outline-none focus:border-[#005ffe] focus:ring-2 focus:ring-brand-primary-blue/20 transition-colors"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium mb-2">Urgency</label>
-                        <div className="flex flex-wrap gap-3">
+                        <p id="urgency-label" className="block text-sm font-medium text-ink mb-1.5">Urgency</p>
+                        <div className="inline-flex p-1 rounded-lg bg-[#F6F8FA] border border-line" role="group" aria-labelledby="urgency-label">
                           {[
                             { id: 'standard', label: 'Standard' },
                             { id: 'priority', label: 'Priority' },
@@ -295,11 +304,12 @@ export default function ContactPage() {
                             <button
                               type="button"
                               key={option.id}
+                              aria-pressed={formData.urgency === option.id}
                               onClick={() => setFormData((prev) => ({ ...prev, urgency: option.id }))}
-                              className={`px-4 py-2 rounded-full border text-sm ${
+                              className={`px-3.5 h-8 rounded-md text-sm font-medium ${
                                 formData.urgency === option.id
-                                  ? 'border-[#005ffe] bg-[#005ffe]/10 text-[#005ffe]'
-                                  : 'border-gray-200 text-gray-600'
+                                  ? 'bg-white text-ink shadow-[0_1px_2px_rgba(10,48,89,0.12)]'
+                                  : 'text-ink-2 hover:text-ink'
                               }`}
                             >
                               {option.label}
@@ -309,8 +319,8 @@ export default function ContactPage() {
                       </div>
 
                       <div>
-                        <label htmlFor="message" className="block text-sm font-medium mb-2">
-                          Message *
+                        <label htmlFor="message" className="block text-sm font-medium text-ink mb-1.5">
+                          Message <span className="text-ink-3" aria-hidden="true">*</span>
                         </label>
                         <textarea
                           id="message"
@@ -320,17 +330,18 @@ export default function ContactPage() {
                           value={formData.message}
                           onChange={handleChange}
                           placeholder={selectedIntent?.prompt}
-                          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary-blue focus:border-transparent"
+                          className="w-full h-11 px-3.5 bg-white border border-line-strong rounded-lg text-[15px] text-ink placeholder:text-ink-3 focus:outline-none focus:border-[#005ffe] focus:ring-2 focus:ring-brand-primary-blue/20 transition-colors h-auto py-3 leading-relaxed"
                         />
                       </div>
 
                       {submitted && (
-                        <div className="p-4 bg-brand-success-start/10 border border-brand-success-start rounded-lg text-brand-success-start">
+                        <div role="status" className="flex items-center gap-2.5 p-3.5 bg-positive-soft border border-[#BFEBDD] rounded-lg text-sm font-medium text-positive">
+                          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                           Thank you! We'll get back to you soon.
                         </div>
                       )}
 
-                      <Button type="submit" className="w-full">
+                      <Button type="submit" size="lg" className="w-full">
                         Send message
                       </Button>
                     </form>
@@ -338,53 +349,55 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div ref={infoRef} className="space-y-5">
-                <div data-info-card className="rounded-[28px] border border-[#dfe7f5] bg-white p-5">
-                  <p className="text-sm font-semibold text-[#005ffe] tracking-[0.3em] mb-2">Current route</p>
-                  <h3 className="text-xl font-semibold mb-2">{selectedIntent?.label}</h3>
-                  <p className="text-sm text-text-muted mb-4">{selectedIntent?.description}</p>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+              <div ref={infoRef} className="space-y-4">
+                <div data-info-card className="rounded-2xl border border-line bg-white p-5 sm:p-6">
+                  <p className="sky-label mb-2">Current route</p>
+                  <h3 className="text-lg font-semibold mb-1">{selectedIntent?.label}</h3>
+                  <p className="text-sm text-ink-2 mb-5">{selectedIntent?.description}</p>
+                  <dl className="grid grid-cols-2 gap-4 pt-4 border-t border-line text-sm">
                     <div>
-                      <p className="text-gray-500 mb-1">SLA</p>
-                      <p className="font-semibold">{selectedIntent?.sla}</p>
+                      <dt className="text-ink-3 mb-0.5">Response time</dt>
+                      <dd className="font-semibold text-ink tabular-nums">{selectedIntent?.sla}</dd>
                     </div>
-                    <div>
-                      <p className="text-gray-500 mb-1">Primary inbox</p>
-                      <a className="font-semibold text-[#005ffe]" href={`mailto:${selectedIntent?.inbox}`}>
+                    <div className="min-w-0">
+                      <dt className="text-ink-3 mb-0.5">Primary inbox</dt>
+                      <dd><a className="font-semibold text-[#005ffe] hover:underline break-all" href={`mailto:${selectedIntent?.inbox}`}>
                         {selectedIntent?.inbox}
-                      </a>
+                      </a></dd>
                     </div>
-                  </div>
+                  </dl>
                 </div>
 
-                <Card data-info-card className="p-5">
-                  <h3 className="text-lg font-semibold mb-3">Live response board</h3>
-                  <ul className="space-y-3 text-sm text-text-muted">
+                <Card data-info-card className="p-5 sm:p-6" hover={false}>
+                  <h3 className="text-base font-semibold mb-4">Live response board</h3>
+                  <ul className="divide-y divide-line text-sm">
                     {responseFeed.map((item) => (
-                      <li key={item.org} className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-[#00cd90] mt-2" />
-                        <div>
-                          <p className="text-[#0A3059] font-semibold">{item.org}</p>
-                          <p>{item.type} • {item.status}</p>
-                          <p className="text-xs text-gray-400">{item.time}</p>
+                      <li key={item.org} className="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
+                        <span className="w-2 h-2 rounded-full bg-[#00cd90] mt-1.5 flex-shrink-0" aria-hidden="true" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-ink font-semibold">{item.org}</p>
+                          <p className="text-ink-2">{item.type} • {item.status}</p>
                         </div>
+                        <span className="text-xs text-ink-3 whitespace-nowrap">{item.time}</span>
                       </li>
                     ))}
                   </ul>
                 </Card>
 
-                <Card data-info-card className="p-5">
-                  <h3 className="text-lg font-semibold mb-3">Regional contact points</h3>
-                  <div className="space-y-3 text-sm text-text-muted">
+                <Card data-info-card className="p-5 sm:p-6" hover={false}>
+                  <h3 className="text-base font-semibold mb-4">Regional contact points</h3>
+                  <ul className="divide-y divide-line text-sm">
                     {regionalOffices.map((office) => (
-                      <div key={office.region} className="border border-[#eef2ff] rounded-2xl p-3">
-                        <p className="text-[#0A3059] font-semibold">{office.region}</p>
-                        <p>{office.role}</p>
-                        <p className="text-xs text-gray-500">{office.hours}</p>
-                        <p className="text-xs text-[#005ffe]">{office.phone}</p>
-                      </div>
+                      <li key={office.region} className="py-3 first:pt-0 last:pb-0 flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-ink font-semibold">{office.region}</p>
+                          <p className="text-ink-2">{office.role}</p>
+                          <p className="text-xs text-ink-3 mt-0.5">{office.hours}</p>
+                        </div>
+                        <a href={`tel:${office.phone.replace(/\s/g, '')}`} className="text-[13px] font-medium text-[#005ffe] hover:underline whitespace-nowrap tabular-nums">{office.phone}</a>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </Card>
               </div>
             </div>
@@ -395,4 +408,3 @@ export default function ContactPage() {
     </div>
   )
 }
-

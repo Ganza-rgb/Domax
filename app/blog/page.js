@@ -33,27 +33,27 @@ export default function BlogPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 pb-20">
+      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <GradientHeading as="h1" className="text-4xl sm:text-5xl lg:text-6xl mb-6 lg:mb-8" highlightText="Blog">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Blog
-            </GradientHeading>
-            <p className="text-xl text-gray-600 mb-12 leading-relaxed">
+            </h1>
+            <p className="lede mb-12 pb-12 border-b border-line">
               Latest news, tips, and insights about AI-powered grading, education technology, and teaching best practices.
             </p>
 
-            <div className="space-y-8">
+            <div className="divide-y divide-line">
               {blogPosts.map((post, index) => (
-                <article key={index} className="p-6 bg-[#f0f7ff] rounded-2xl hover:shadow-lg transition-shadow">
+                <article key={index} className="py-8 first:pt-0 transition-shadow">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="text-sm font-semibold text-[#005ffe]">{post.category}</span>
-                    <span className="text-sm text-gray-500">•</span>
-                    <time className="text-sm text-gray-500">{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+                    <span className="text-[13px] font-semibold text-accent">{post.category}</span>
+                    <span className="text-sm text-ink-3" aria-hidden="true">•</span>
+                    <time className="text-[13px] text-ink-3" dateTime={post.date}>{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
                   </div>
-                  <h2 className="text-2xl font-bold text-[#0A3059] mb-3">{post.title}</h2>
-                  <p className="text-gray-600 mb-4">{post.excerpt}</p>
-                  <Link href={`/blog/${post.title.toLowerCase().replace(/\s+/g, '-')}`} className="text-[#005ffe] font-semibold hover:underline inline-flex items-center gap-2">
+                  <h2 className="text-[1.5rem] leading-snug font-semibold text-ink mb-2">{post.title}</h2>
+                  <p className="text-ink-2 leading-relaxed mb-4">{post.excerpt}</p>
+                  <Link href={`/blog/${post.title.toLowerCase().replace(/\s+/g, '-')}`} className="text-accent text-sm font-semibold hover:text-accent-strong inline-flex items-center gap-1">
                     Read more
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

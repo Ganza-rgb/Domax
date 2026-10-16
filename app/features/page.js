@@ -167,33 +167,34 @@ export default function FeaturesPage() {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <main className="pt-20 sm:pt-24 lg:pt-32 pb-12 sm:pb-16 lg:pb-20">
+      <main className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
-          <div ref={headerRef} className="text-center mb-10 sm:mb-12 lg:mb-16 px-4">
-            <GradientHeading as="h1" className="text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-6" highlightText="educators">
+          <div ref={headerRef} className="max-w-3xl mb-12 sm:mb-16">
+            <GradientHeading as="h1" className="text-4xl sm:text-5xl mb-5" highlightText="educators">
               Powerful features for modern educators
             </GradientHeading>
-            <p className="text-base sm:text-lg lg:text-xl text-text-muted max-w-3xl mx-auto">
+            <p className="lede">
               Everything you need to streamline grading, provide better feedback, and
               scale your teaching impact.
             </p>
           </div>
 
-          <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-4">
+          <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((feature, index) => (
-              <Card key={feature.title} className="p-5 sm:p-6 lg:p-8">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#005ffe] to-[#0041c2] text-white flex items-center justify-center mb-4 shadow-lg shadow-[#005ffe]/25">
+              <Card key={feature.title} className="p-6 sm:p-7 flex flex-col">
+                <div className="w-11 h-11 rounded-lg bg-[#0A3059] text-white flex items-center justify-center mb-5 [&>svg]:w-6 [&>svg]:h-6">
                   {feature.icon}
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{feature.title}</h3>
-                <p className="text-sm sm:text-base text-text-muted mb-4">{feature.description}</p>
-                <div className="flex flex-wrap gap-2">
+                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <p className="text-[15px] leading-relaxed text-ink-2 mb-5">{feature.description}</p>
+                <ul className="mt-auto pt-4 border-t border-line flex flex-wrap gap-x-4 gap-y-1.5">
                   {feature.meta?.map((meta) => (
-                    <span key={meta} className="text-xs font-semibold tracking-wide uppercase px-3 py-1 rounded-full bg-[#f0f4ff] text-[#0A3059]">
+                    <li key={meta} className="flex items-center gap-1.5 text-[13px] font-medium text-ink-2">
+                      <span aria-hidden="true" className="w-1 h-1 rounded-full bg-[#00cd90]" />
                       {meta}
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </Card>
             ))}
           </div>
@@ -203,4 +204,3 @@ export default function FeaturesPage() {
     </div>
   )
 }
-

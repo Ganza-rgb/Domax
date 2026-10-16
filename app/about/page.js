@@ -113,55 +113,57 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white text-[#0A3059]">
       <Navbar />
-      <main ref={containerRef} className="pt-20 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 lg:pb-24">
-        <div className="container-custom px-4">
-          <div className="max-w-4xl mx-auto">
-            <GradientHeading as="h1" className="text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-6" highlightText="Domax">
+      {/* GSAP fades in the two direct children of <main> and each <section>
+          inside the story column — keep that structure. */}
+      <main ref={containerRef} className="pt-32 sm:pt-36 pb-20 sm:pb-28">
+        <div className="container-custom">
+          <div className="max-w-3xl mx-auto">
+            <GradientHeading as="h1" className="text-4xl sm:text-5xl mb-5" highlightText="Domax">
               About Domax
             </GradientHeading>
-            <p className="text-base sm:text-lg lg:text-xl text-text-muted mb-8 sm:mb-12">
+            <p className="lede mb-12 pb-12 border-b border-line">
               We're on a mission to transform how educators grade and provide feedback to students.
             </p>
 
-            <div ref={sectionsRef} className="prose prose-lg max-w-none">
-              <section className="mb-8 sm:mb-12">
-                <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">Our Mission</h2>
-                <p className="text-sm sm:text-base text-text-muted mb-3 sm:mb-4">
+            <div ref={sectionsRef} className="prose max-w-none">
+              <section className="mb-12">
+                <h2>Our Mission</h2>
+                <p>
                   Domax was founded with a simple goal: help educators spend less time on administrative tasks and more
                   time on what matters most—teaching and mentoring students.
                 </p>
-                <p className="text-sm sm:text-base text-text-muted">
+                <p>
                   We believe that automated grading tools should enhance, not replace, the human connection between
                   teachers and students. Our platform provides powerful automation while ensuring educators remain in
                   control of the grading process.
                 </p>
               </section>
 
-              <section className="mb-8 sm:mb-12">
-                <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">Our Values</h2>
-                <ul className="space-y-3 text-text-muted">
-                  <li className="flex items-start">
-                    <span className="text-brand-success-start mr-2">✓</span>
+              <section className="mb-12">
+                <h2>Our Values</h2>
+                <ul className="!list-none !pl-0 space-y-3">
+                  <li className="flex items-start !pl-0">
+                    <svg className="w-4 h-4 mt-1 mr-3 flex-shrink-0 text-[#007A56]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                     <span>
                       <strong>Educator-First:</strong> Every feature is designed with real teacher workflows in mind.
                     </span>
                   </li>
-                  <li className="flex items-start">
-                    <span className="text-brand-success-start mr-2">✓</span>
+                  <li className="flex items-start !pl-0">
+                    <svg className="w-4 h-4 mt-1 mr-3 flex-shrink-0 text-[#007A56]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                     <span>
                       <strong>Privacy & Security:</strong> Student data is protected with enterprise-grade security and
                       GDPR compliance.
                     </span>
                   </li>
-                  <li className="flex items-start">
-                    <span className="text-brand-success-start mr-2">✓</span>
+                  <li className="flex items-start !pl-0">
+                    <svg className="w-4 h-4 mt-1 mr-3 flex-shrink-0 text-[#007A56]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                     <span>
                       <strong>Accessibility:</strong> Our platform is designed to be usable by everyone, regardless of
                       ability.
                     </span>
                   </li>
-                  <li className="flex items-start">
-                    <span className="text-brand-success-start mr-2">✓</span>
+                  <li className="flex items-start !pl-0">
+                    <svg className="w-4 h-4 mt-1 mr-3 flex-shrink-0 text-[#007A56]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                     <span>
                       <strong>Continuous Improvement:</strong> We listen to our users and iterate based on real feedback.
                     </span>
@@ -170,13 +172,13 @@ export default function AboutPage() {
               </section>
 
               <section>
-                <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">Join Us</h2>
-                <p className="text-sm sm:text-base text-text-muted mb-4 sm:mb-6">
+                <h2>Join Us</h2>
+                <p className="mb-6">
                   We're always looking for talented people who share our passion for education technology.
                 </p>
                 <a
                   href="/careers"
-                  className="inline-block px-4 sm:px-6 py-2 sm:py-3 bg-brand-primary-blue text-white text-sm sm:text-base font-semibold rounded-lg hover:bg-opacity-90 transition-all"
+                  className="inline-flex items-center min-h-11 px-5 bg-[#005ffe] text-white text-[15px] font-semibold rounded-lg hover:bg-[#0047cc] transition-all no-underline"
                 >
                   View Open Positions
                 </a>
@@ -185,52 +187,51 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="container-custom px-4 mt-16 space-y-16">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="container-custom mt-20 sm:mt-24 space-y-16 sm:space-y-20">
+          <dl className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-line border border-line rounded-xl overflow-hidden">
             {impactStats.map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-3xl border border-[#e0e4ff] bg-gradient-to-b from-white to-[#f8fbff] p-5 shadow-[0_25px_65px_-40px_rgba(10,48,89,0.5)]"
+                className="bg-white p-5 sm:p-6"
               >
-                <p className="text-sm uppercase tracking-[0.3em] text-[#005ffe]/70 mb-2">{stat.label}</p>
-                <p className="text-3xl font-semibold mb-1">{stat.value}</p>
-                <p className="text-sm text-text-muted">{stat.detail}</p>
+                <dt className="text-sm font-medium text-ink-2">{stat.label}</dt>
+                <dd className="text-3xl sm:text-4xl font-semibold font-headline tracking-tight tabular-nums mt-2">{stat.value}</dd>
+                <dd className="text-sm text-ink-3 mt-1">{stat.detail}</dd>
               </div>
             ))}
-          </div>
+          </dl>
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            <div className="rounded-[32px] border border-[#e0e4ff] p-6 bg-gradient-to-b from-white to-[#f8fbff] shadow-[0_30px_90px_-60px_rgba(0,95,254,0.8)]">
-              <h3 className="text-2xl font-semibold mb-4">How we operate</h3>
-              <p className="text-text-muted mb-6">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-semibold mb-4">How we operate</h2>
+              <p className="text-ink-2 leading-relaxed mb-8">
                 Domax squads pair product strategists with practising educators, so every shipping cycle is grounded in
                 real classrooms.
               </p>
-              <div className="space-y-4">
+              <div className="divide-y divide-line border-y border-line">
                 {operatingPrinciples.map((principle) => (
-                  <div key={principle.title}>
-                    <p className="text-sm font-semibold tracking-[0.2em] text-[#005ffe] uppercase mb-1">
+                  <div key={principle.title} className="py-5">
+                    <p className="text-[15px] font-semibold text-ink mb-1">
                       {principle.title}
                     </p>
-                    <p className="text-sm text-text-muted">{principle.description}</p>
+                    <p className="text-sm text-ink-2 leading-relaxed">{principle.description}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-[32px] border border-[#dfe7f5] p-6 bg-white">
-              <h3 className="text-2xl font-semibold mb-4">Milestones</h3>
-              <div className="space-y-5">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-semibold mb-8">Milestones</h2>
+              <ol className="relative border-l border-line ml-1.5 space-y-8">
                 {milestones.map((milestone, idx) => (
-                  <div key={milestone.year} className="flex gap-4">
-                    <div className="text-[#005ffe] font-semibold">{milestone.year}</div>
-                    <div>
-                      <p className="text-lg font-semibold">{milestone.title}</p>
-                      <p className="text-sm text-text-muted">{milestone.detail}</p>
-                    </div>
-                  </div>
+                  <li key={milestone.year} className="pl-7 relative">
+                    <span aria-hidden="true" className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#005ffe]" />
+                    <p className="text-sm font-semibold text-[#005ffe] tabular-nums">{milestone.year}</p>
+                    <p className="text-lg font-semibold mt-0.5">{milestone.title}</p>
+                    <p className="text-sm text-ink-2 leading-relaxed mt-1">{milestone.detail}</p>
+                  </li>
                 ))}
-              </div>
+              </ol>
             </div>
           </div>
         </div>
@@ -239,4 +240,3 @@ export default function AboutPage() {
     </div>
   )
 }
-

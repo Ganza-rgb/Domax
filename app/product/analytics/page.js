@@ -12,23 +12,23 @@ export default function AnalyticsPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 pb-20">
+      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <GradientHeading as="h1" className="text-4xl sm:text-5xl lg:text-6xl mb-6 lg:mb-8" highlightText="Dashboard">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Analytics Dashboard
-            </GradientHeading>
-            <p className="text-xl text-gray-600 mb-12 leading-relaxed">
+            </h1>
+            <p className="lede mb-12 pb-12 border-b border-line">
               Track student performance, identify trends, and make data-driven decisions. Get insights into class-wide patterns and individual student progress.
             </p>
 
-            <div className="prose prose-lg max-w-none">
+            <div className="prose max-w-none">
               <section className="mb-12">
-                <h2 className="text-2xl font-semibold text-[#0A3059] mb-4">Comprehensive Insights</h2>
-                <p className="text-gray-600 mb-4">
+                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Comprehensive Insights</h2>
+                <p className="text-ink-2 mb-4">
                   Our analytics dashboard provides detailed insights into student performance, grading efficiency, and class trends. Visualize data with charts, graphs, and reports.
                 </p>
-                <ul className="list-disc list-inside text-gray-600 space-y-2">
+                <ul className="list-disc pl-5 text-ink-2 space-y-2 marker:text-ink-3">
                   <li>View class-wide performance metrics and distributions</li>
                   <li>Track individual student progress over time</li>
                   <li>Identify common areas where students struggle</li>
@@ -37,23 +37,23 @@ export default function AnalyticsPage() {
               </section>
 
               <section className="mb-12">
-                <h2 className="text-2xl font-semibold text-[#0A3059] mb-4">Key Features</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Performance Trends</h3>
-                    <p className="text-gray-600 text-sm">Track how class performance changes over time with visual trend analysis.</p>
+                <h2 className="text-[1.375rem] font-semibold text-ink mb-3">Key Features</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-6 bg-white border border-line rounded-xl">
+                    <h3 className="text-[17px] font-semibold text-ink mb-1.5">Performance Trends</h3>
+                    <p className="text-ink-2 text-sm leading-relaxed">Track how class performance changes over time with visual trend analysis.</p>
                   </div>
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Rubric Analysis</h3>
-                    <p className="text-gray-600 text-sm">See which rubric criteria students struggle with most across all assignments.</p>
+                  <div className="p-6 bg-white border border-line rounded-xl">
+                    <h3 className="text-[17px] font-semibold text-ink mb-1.5">Rubric Analysis</h3>
+                    <p className="text-ink-2 text-sm leading-relaxed">See which rubric criteria students struggle with most across all assignments.</p>
                   </div>
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Grading Efficiency</h3>
-                    <p className="text-gray-600 text-sm">Monitor how much time you save and track your grading productivity.</p>
+                  <div className="p-6 bg-white border border-line rounded-xl">
+                    <h3 className="text-[17px] font-semibold text-ink mb-1.5">Grading Efficiency</h3>
+                    <p className="text-ink-2 text-sm leading-relaxed">Monitor how much time you save and track your grading productivity.</p>
                   </div>
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Custom Reports</h3>
-                    <p className="text-gray-600 text-sm">Generate custom reports for specific time periods, assignments, or student groups.</p>
+                  <div className="p-6 bg-white border border-line rounded-xl">
+                    <h3 className="text-[17px] font-semibold text-ink mb-1.5">Custom Reports</h3>
+                    <p className="text-ink-2 text-sm leading-relaxed">Generate custom reports for specific time periods, assignments, or student groups.</p>
                   </div>
                 </div>
               </section>

@@ -39,30 +39,30 @@ export default function CaseStudiesPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 pb-20">
+      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
         <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <GradientHeading as="h1" className="text-4xl sm:text-5xl lg:text-6xl mb-6 lg:mb-8" highlightText="Studies">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1] mb-5">
               Case Studies
-            </GradientHeading>
-            <p className="text-xl text-gray-600 mb-12 leading-relaxed">
+            </h1>
+            <p className="lede mb-12 pb-12 border-b border-line">
               Real stories from teachers using Domax to transform their grading workflows and save time while improving feedback quality.
             </p>
 
             <div className="space-y-12">
               {caseStudies.map((study, index) => (
-                <div key={index} className="p-8 bg-[#f0f7ff] rounded-2xl">
+                <div key={index} className="p-8 bg-white border border-line rounded-xl">
                   <div className="mb-6">
-                    <p className="text-sm font-semibold text-[#005ffe] mb-1">{study.cohort}</p>
-                    <h2 className="text-2xl font-bold text-[#0A3059] mb-2">{study.name}</h2>
-                    <p className="text-gray-600">{study.role}</p>
+                    <p className="eyebrow mb-2">{study.cohort}</p>
+                    <h2 className="text-2xl font-semibold text-ink mb-2">{study.name}</h2>
+                    <p className="text-ink-2">{study.role}</p>
                   </div>
-                  <blockquote className="text-lg text-gray-700 mb-6 italic border-l-4 border-[#005ffe] pl-4">
+                  <blockquote className="text-lg text-ink mb-6 border-l-2 border-accent pl-5">
                     "{study.quote}"
                   </blockquote>
-                  <div className="flex flex-wrap gap-4">
+                  <div className="flex flex-wrap gap-2">
                     {study.metrics.map((metric, metricIndex) => (
-                      <span key={metricIndex} className="px-4 py-2 bg-white rounded-lg text-sm font-semibold text-[#0A3059]">
+                      <span key={metricIndex} className="px-3 py-1.5 bg-white border border-line rounded-md text-sm font-semibold text-ink">
                         {metric}
                       </span>
                     ))}

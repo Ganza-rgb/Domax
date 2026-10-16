@@ -64,123 +64,66 @@ const workflowSteps = [
   },
 ]
 
-const pricingFeatures = [
-  'AI-powered grading',
-  'Rubric builder',
-  'In-document annotations',
-  'Batch processing',
-  'LMS integrations',
-  'Plagiarism detection',
-  'Analytics dashboard',
-  '14-day free trial',
-]
-
 export default function FeaturesDropdown() {
   return (
-    <section className="py-20 bg-[#eff3ff]">
+    <section className="section-spacing bg-white">
       <div className="container-custom">
         {/* Header */}
-        <div className="text-center mb-16">
-          <GradientHeading as="h2" className="text-4xl lg:text-5xl mb-6" highlightText="scale">
+        <div className="max-w-2xl mb-12 lg:mb-14">
+          <GradientHeading as="h2" className="text-3xl sm:text-4xl" highlightText="scale">
             Simple to start. Built to scale.
           </GradientHeading>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="lede mt-4">
             Start grading smarter from day one with AI-powered feedback, intuitive rubrics, and seamless integrations. Every feature designed to save you time.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-start">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-6 lg:gap-8 items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px rounded-2xl overflow-hidden border border-[#E3E8EF] bg-[#E3E8EF]">
             {featureCards.map((feature) => (
               <div
                 key={feature.title}
-                className="rounded-3xl border-2 border-[#e0e4ff] bg-white p-6 sm:p-7 shadow-[0_30px_70px_-40px_rgba(10,48,89,0.25)] hover:border-[#005ffe] transition-all"
+                className="bg-white p-6 sm:p-7 hover:bg-[#FBFCFE] transition-all"
               >
                 <div className="flex flex-col gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-[#f0f7ff] text-[#005ffe] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-[#F0F7FF] text-[#005ffe] flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-semibold text-[#0A3059]">{feature.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">{feature.copy}</p>
+                  <h3 className="text-lg font-semibold text-[#0A3059] mt-1">{feature.title}</h3>
+                  <p className="text-[15px] text-[#4A5D75] leading-relaxed">{feature.copy}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="rounded-3xl bg-white border-2 border-[#e0e4ff] shadow-[0_40px_90px_-45px_rgba(10,48,89,0.35)] p-6 sm:p-8 flex flex-col gap-8">
-            <div className="rounded-2xl bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] p-6 border border-[#d8ddff]">
-              <p className="text-xs uppercase tracking-[0.4em] text-gray-500 mb-4">INSTANT SETUP</p>
-              <div className="flex items-center justify-between gap-6">
-                <div>
-                  <p className="text-4xl font-bold text-[#0A3059]">2 min</p>
-                  <p className="text-sm text-gray-500 mt-1">Average setup time</p>
+          <div className="rounded-2xl bg-white border border-[#E3E8EF] p-6 sm:p-8 flex flex-col gap-8">
+            <div>
+              <p className="eyebrow mb-4">Instant setup</p>
+              <dl className="grid grid-cols-2 border-t border-[#E3E8EF]">
+                <div className="pt-4">
+                  <dd className="text-4xl font-semibold text-[#0A3059] font-headline tracking-tight tabular-nums">2 min</dd>
+                  <dt className="text-sm text-[#4A5D75] mt-1">Average setup time</dt>
                 </div>
-                <div className="text-right">
-                  <p className="text-4xl font-bold text-[#005ffe]">80%</p>
-                  <p className="text-sm text-gray-500 mt-1">Time saved per assignment</p>
+                <div className="pt-4 pl-5 border-l border-[#E3E8EF]">
+                  <dd className="text-4xl font-semibold text-[#005ffe] font-headline tracking-tight tabular-nums">80%</dd>
+                  <dt className="text-sm text-[#4A5D75] mt-1">Time saved per assignment</dt>
                 </div>
-              </div>
+              </dl>
             </div>
 
-            <div className="space-y-4">
+            <ol className="space-y-5">
               {workflowSteps.map((step, index) => (
-                <div key={step.title} className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[#f0f7ff] text-[#005ffe] font-semibold flex items-center justify-center flex-shrink-0">
-                    {String(index + 1).padStart(2, '0')}
-                  </div>
+                <li key={step.title} className="flex gap-4">
+                  <span className="w-8 h-8 rounded-full border border-[#CFD8E3] text-[#0A3059] text-sm font-semibold flex items-center justify-center flex-shrink-0 tabular-nums">
+                    {index + 1}
+                  </span>
                   <div>
-                    <p className="text-base font-semibold text-[#0A3059]">{step.title}</p>
-                    <p className="text-sm text-gray-500 leading-relaxed">{step.copy}</p>
+                    <p className="text-[15px] font-semibold text-[#0A3059]">{step.title}</p>
+                    <p className="text-sm text-[#4A5D75] leading-relaxed mt-0.5">{step.copy}</p>
                   </div>
-                </div>
+                </li>
               ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Pricing Features Section */}
-        <div className="mt-16 bg-white rounded-3xl p-6 lg:p-8 border-2 border-[#eceeff] shadow-xl">
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#00cd90] to-[#2DD4BF] flex items-center justify-center flex-shrink-0">
-              <svg
-                className="w-5 h-5 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl lg:text-2xl font-bold text-[#0A3059] text-center">
-              Everything you need to grade smarter
-            </h3>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-            {pricingFeatures.map((feature, index) => (
-              <div key={index} className="flex items-start gap-3">
-                <svg
-                  className="w-5 h-5 text-[#005ffe] flex-shrink-0 mt-0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span className="text-[#0A3059] font-semibold text-sm lg:text-base leading-tight">
-                  {feature}
-                </span>
-              </div>
-            ))}
+            </ol>
           </div>
         </div>
       </div>
