@@ -61,7 +61,7 @@ export default function AcceptableUsePage() {
                 </p>
                 <ul className="list-disc pl-5 mb-4 space-y-2 marker:text-ink-3">
                   <li>Be related to legitimate educational assessment activities</li>
-                  <li>Comply with applicable privacy laws (FERPA, GDPR, etc.)</li>
+                  <li>Comply with applicable privacy law, including Rwanda’s Law No. 058/2021</li>
                   <li>Respect student privacy and confidentiality</li>
                   <li>Not contain personally identifiable information unless properly authorized</li>
                 </ul>
@@ -86,9 +86,8 @@ export default function AcceptableUsePage() {
                   When using Domax, you must ensure compliance with all applicable data protection laws, including:
                 </p>
                 <ul className="list-disc pl-5 mb-4 space-y-2 marker:text-ink-3">
-                  <li>FERPA (Family Educational Rights and Privacy Act) in the United States</li>
-                  <li>GDPR (General Data Protection Regulation) in the European Union</li>
-                  <li>Local privacy and data protection regulations in your jurisdiction</li>
+                  <li>Rwanda’s Law No. 058/2021 on the protection of personal data and privacy</li>
+                  <li>Guidance from the National Cyber Security Authority (NCSA), including on children’s data</li>
                   <li>Institutional policies regarding student data</li>
                 </ul>
               </section>

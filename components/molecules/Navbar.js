@@ -48,96 +48,31 @@ export default function Navbar() {
   }
 
   const navItems = [
-    { label: 'Features', href: '/features' },
+    { label: 'How it works', href: '/how-it-works' },
+    {
+      label: 'Who it’s for',
+      hasDropdown: true,
+      items: [
+        {
+          title: 'Universities & polytechnics',
+          description: 'Long scripts, large cohorts. Where pilots start.',
+          href: '/solutions/universities',
+        },
+        {
+          title: 'Secondary schools',
+          description: 'O-Level and A-Level assessments.',
+          href: '/solutions/schools',
+        },
+        {
+          title: 'Sponsors & districts',
+          description: 'Fund marking for public schools.',
+          href: '/solutions/sponsors',
+        },
+      ],
+    },
     { label: 'Pricing', href: '/pricing' },
-    {
-      label: 'Product',
-      hasDropdown: true,
-      items: [
-        {
-          title: 'AI Grading',
-          description: 'A first-pass mark and comment for every answer.',
-          href: '/product/ai-grading',
-        },
-        {
-          title: 'Rubric Builder',
-          description: 'Write a marking scheme once, reuse it every term.',
-          href: '/product/rubrics',
-        },
-        {
-          title: 'Annotations',
-          description: 'Write on the script itself, like you would in pen.',
-          href: '/product/annotations',
-        },
-        {
-          title: 'Batch Processing',
-          description: 'Upload a whole class set at once.',
-          href: '/product/batch',
-        },
-        {
-          title: 'Analytics',
-          description: 'See which questions the class got wrong.',
-          href: '/product/analytics',
-        },
-        {
-          title: 'LMS Integration',
-          description: 'Send marks back to Canvas, Moodle and others.',
-          href: '/product/integrations',
-        },
-        {
-          title: 'Plagiarism Detection',
-          description: 'Spot answers that look copied.',
-          href: '/product/plagiarism',
-        },
-      ],
-    },
-    {
-      label: 'Use Cases',
-      hasDropdown: true,
-      items: [
-        {
-          title: 'Solo Teachers',
-          description: 'For teachers marking on their own.',
-          href: '/solutions/teachers',
-        },
-        {
-          title: 'Student Access Codes',
-          description: 'Students see their marked work for free.',
-          href: '/dashboard/past-papers',
-        },
-        {
-          title: 'Integrations & API',
-          description: 'Connect Domax to the tools your school uses.',
-          href: '/solutions/api',
-        },
-      ],
-    },
-    {
-      label: 'Resources',
-      hasDropdown: true,
-      items: [
-        {
-          title: 'Documentation',
-          description: 'Guides and API reference.',
-          href: '/docs',
-        },
-        {
-          title: 'Blog',
-          description: 'What we changed and why.',
-          href: '/blog',
-        },
-        {
-          title: 'Case Studies',
-          description: 'How teachers are using Domax.',
-          href: '/case-studies',
-        },
-        {
-          title: 'Help Center',
-          description: 'Answers to common questions.',
-          href: '/help',
-        },
-      ],
-    },
+    { label: 'Student data', href: '/data-protection' },
+    { label: 'About', href: '/about' },
   ]
 
   // A plain bar: white, with a hairline that only appears once content
@@ -267,8 +202,8 @@ export default function Navbar() {
               >
                 Log in
               </Link>
-              <Button href="/signup" variant="primary" size="sm">
-                Try it free
+              <Button href="/pilot" variant="primary" size="sm">
+                Request a pilot
               </Button>
             </div>
 
@@ -392,8 +327,8 @@ export default function Navbar() {
                 <Button href="/login" variant="secondary" size="lg" className="w-full" onClick={() => setMobileMenuOpen(false)}>
                   Log in
                 </Button>
-                <Button href="/signup" variant="primary" size="lg" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                  Try it free
+                <Button href="/pilot" variant="primary" size="lg" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                  Request a pilot
                 </Button>
               </div>
             </div>

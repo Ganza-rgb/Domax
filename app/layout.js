@@ -24,9 +24,9 @@ const caveat = Caveat({
 })
 
 export const metadata = {
-  title: 'Domax — marking help for teachers',
+  title: 'Domax — marking help for teachers in Rwanda',
   description:
-    'Upload your students\' scripts and marking scheme. Domax suggests a mark and a comment for every answer, and you review them before anything reaches a student.',
+    'Photograph your students\' handwritten scripts. Domax checks every page, suggests a mark for each answer against your marking scheme, and you sign off every mark before it reaches a student.',
   keywords: [
     'automated grading',
     'AI grading software',
@@ -43,7 +43,7 @@ export const metadata = {
   ],
   authors: [{ name: 'Domax' }],
   openGraph: {
-    title: 'Domax — marking help for teachers',
+    title: 'Domax — marking help for teachers in Rwanda',
     description:
       'Domax marks a first pass of your students\' scripts against your scheme. You check it, change what you disagree with, and release.',
     type: 'website',
@@ -52,7 +52,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Domax — marking help for teachers',
+    title: 'Domax — marking help for teachers in Rwanda',
     description:
       'Domax marks a first pass of your students\' scripts against your scheme. You check it, change what you disagree with, and release.',
   },

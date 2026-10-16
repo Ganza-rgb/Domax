@@ -54,7 +54,7 @@ export default function PrivacyPage() {
               <section className="mb-8">
                 <h2 className="text-[1.375rem] font-medium text-ink mb-3">4. Data Security</h2>
                 <p className="mb-4">
-                  We implement industry-standard security measures to protect your data, including encryption, secure data storage, and access controls. We are FERPA compliant and follow best practices for educational data protection.
+                  We implement industry-standard security measures to protect your data, including encryption, secure data storage, and access controls. Student data is handled under Rwanda’s Law No. 058/2021 on the protection of personal data and privacy; see our <a href="/data-protection">student data page</a> for details.
                 </p>
               </section>
 

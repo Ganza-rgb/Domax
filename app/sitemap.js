@@ -3,20 +3,23 @@ export default function sitemap() {
 
   const routes = [
     '',
-    '/features',
+    '/how-it-works',
+    '/solutions/universities',
+    '/solutions/schools',
+    '/solutions/sponsors',
     '/pricing',
+    '/data-protection',
     '/about',
-    '/blog',
+    '/pilot',
     '/contact',
-    '/login',
-    '/signup',
+    '/privacy',
+    '/terms',
   ]
 
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
-    changeFrequency: route === '' ? 'daily' : 'weekly',
-    priority: route === '' ? 1.0 : 0.8,
+    changeFrequency: route === '' ? 'weekly' : 'monthly',
+    priority: route === '' ? 1.0 : 0.7,
   }))
 }
-
