@@ -1,7 +1,10 @@
 import Link from 'next/link'
 import Navbar from '@/components/molecules/Navbar'
 import Footer from '@/components/organisms/Footer'
-import Button from '@/components/atoms/Button'
+import PageHero from '@/components/site/PageHero'
+import ClosingCta from '@/components/site/ClosingCta'
+import Reveal from '@/components/site/Reveal'
+import { Tick } from '@/components/site/ProductVisuals'
 import { EXAM_PRICES, BATCH_MINIMUM_RWF, formatRwf } from '@/lib/site'
 
 export const metadata = {
@@ -16,6 +19,24 @@ const examplePrice = EXAM_PRICES.find((level) => level.key === 'o-level').price
 const exampleExams = example.students * example.subjects * example.terms
 const exampleTotal = exampleExams * examplePrice
 
+const included = [
+  'Page and identity checks on every script',
+  'Suggested marks with the evidence shown',
+  'Teacher review and sign-off',
+  'Mark sheets set out for CAMIS',
+  'Free results for every student',
+]
+
+const payers = [
+  { title: 'Universities & polytechnics', copy: 'Pay per exam directly, invoiced per batch.' },
+  { title: 'Private secondary schools', copy: 'Pay per exam directly, invoiced per term.' },
+  {
+    title: 'Public schools',
+    copy: 'Covered by a sponsor at a published cost-plus price, so the school and its students pay nothing.',
+    href: '/solutions/sponsors',
+  },
+]
+
 const faqs = [
   {
     q: 'What counts as one exam?',
@@ -23,7 +44,7 @@ const faqs = [
   },
   {
     q: 'What if a script is longer than the page allowance?',
-    a: 'Scripts over the allowance for their level are charged at a higher rate for long or complex exams, which we agree with you before the assessment. You’ll know the price before anything is marked.',
+    a: 'Longer or unusually complex exams are charged at a higher rate, which we agree with you before the assessment. You’ll know the price before anything is marked.',
   },
   {
     q: 'Who pays at a public school?',
@@ -31,11 +52,11 @@ const faqs = [
   },
   {
     q: 'Do students ever pay?',
-    a: 'No. Students see their own marked scripts and any material their teacher shares with them for free. That is written into every contract, and access never depends on whether an invoice has been paid.',
+    a: 'No. Students see their own marked scripts, and anything their teacher shares with them, for free. That is written into every contract, and access never depends on whether an invoice has been paid.',
   },
   {
     q: 'What does a pilot cost?',
-    a: 'We agree that with each pilot site in writing before it starts. The point of a pilot is to find out whether Domax is worth paying for, so we don’t expect you to commit to a full term up front.',
+    a: 'We agree that with each pilot site in writing before it starts. The point of a pilot is to find out whether Domax is worth paying for, so we don’t ask you to commit to a full term up front.',
   },
 ]
 
@@ -43,107 +64,99 @@ export default function PricingPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
+      <PageHero
+        kicker="Pricing"
+        title="Pay per exam. Students never pay."
+        lede="One price for one student’s script in one subject, with a page allowance for each level. These are pilot prices; we confirm them with each site once we’ve measured what marking really costs."
+      />
+
+      <Reveal>
         <div className="container-custom">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl sm:text-5xl text-ink">Pricing</h1>
-            <p className="lede mt-5">
-              You pay per exam marked: one student’s script in one subject. Each level includes a set
-              number of pages. Students never pay.
+          <ul data-reveal data-reveal-stagger className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {EXAM_PRICES.map((level) => (
+              <li key={level.key} className="rounded-[24px] border border-line p-7 sm:p-8 flex flex-col">
+                <h2 className="text-xl leading-tight">{level.label}</h2>
+                <p className="mt-8 font-headline text-[clamp(2.75rem,5vw,3.5rem)] font-semibold tracking-[-0.045em] leading-none text-ink tabular-nums">
+                  {formatRwf(level.price)}
+                </p>
+                <p className="text-[15px] text-ink-2 mt-3">per student, per exam</p>
+                <p className="mt-8 pt-5 border-t border-line text-[15px] text-ink">
+                  Up to <span className="font-semibold tabular-nums">{level.includedPages}</span> pages included
+                </p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-5 text-[14px] text-ink-3">
+            Minimum per batch: {formatRwf(BATCH_MINIMUM_RWF)}. Primary levels aren’t available yet.
+          </p>
+        </div>
+
+        <section className="container-custom py-20 sm:py-28 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div data-reveal className="rounded-[24px] bg-canvas p-7 sm:p-10">
+            <h2 className="text-2xl">Every exam includes</h2>
+            <ul className="mt-6 space-y-3.5">
+              {included.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-[17px] text-ink">
+                  <Tick className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div data-reveal className="on-dark rounded-[24px] bg-[#071A33] p-7 sm:p-10 text-white flex flex-col">
+            <p className="text-[13px] font-semibold text-[#8db8ff]">An example year</p>
+            <p className="text-[17px] text-white/75 leading-relaxed mt-4">
+              A secondary school with {example.students} O-Level students, {example.subjects} subjects marked
+              through Domax, {example.terms} terms: {new Intl.NumberFormat('en-US').format(exampleExams)} exams.
+            </p>
+            <p className="mt-auto pt-10 font-headline text-[clamp(2.5rem,5vw,3.75rem)] font-semibold tracking-[-0.045em] leading-none tabular-nums">
+              {formatRwf(exampleTotal)}
+            </p>
+            <p className="text-[15px] text-white/60 mt-3">
+              a year if the school pays directly. At a public school, we’d rather a sponsor paid.
             </p>
           </div>
+        </section>
 
-          <div className="mt-14 grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-20">
-            <div>
-              <table className="w-full text-left">
-                <caption className="sr-only">Price per exam by level</caption>
-                <thead>
-                  <tr className="border-b border-ink text-sm text-ink-3">
-                    <th scope="col" className="font-normal pb-3">Level</th>
-                    <th scope="col" className="font-normal pb-3">Pages included</th>
-                    <th scope="col" className="font-normal pb-3 text-right">Per exam</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {EXAM_PRICES.map((level) => (
-                    <tr key={level.key} className="border-b border-line">
-                      <th scope="row" className="py-4 pr-4 font-normal text-[17px] text-ink">{level.label}</th>
-                      <td className="py-4 pr-4 text-[15px] text-ink-2 tabular-nums">Up to {level.includedPages}</td>
-                      <td className="py-4 text-right text-[17px] font-semibold text-ink tabular-nums">
-                        {formatRwf(level.price)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <ul className="mt-5 space-y-1.5 text-sm text-ink-3 leading-relaxed">
-                <li>Minimum per batch: {formatRwf(BATCH_MINIMUM_RWF)}.</li>
-                <li>Primary levels aren’t available yet.</li>
-                <li>
-                  These are pilot prices. We’ll confirm them with each site once we’ve measured what
-                  marking really costs.
-                </li>
-              </ul>
-            </div>
+        <section className="container-custom pb-20 sm:pb-28">
+          <h2 data-reveal className="max-w-2xl">Who pays depends on where you teach.</h2>
+          <ul data-reveal data-reveal-stagger className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+            {payers.map((item) => (
+              <li key={item.title} className="rounded-[20px] border border-line p-7">
+                <h3 className="text-xl">{item.title}</h3>
+                <p className="text-[15px] text-ink-2 leading-relaxed mt-2">{item.copy}</p>
+                {item.href && (
+                  <Link href={item.href} className="link inline-block mt-4 text-[15px]">
+                    For sponsors
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
 
-            <div className="rounded-lg bg-[#FAF8F4] border border-[#ECE7DE] p-6 sm:p-7 self-start">
-              <h2 className="text-xl">An example year</h2>
-              <p className="text-[15px] text-ink-2 leading-relaxed mt-3">
-                A secondary school with {example.students} O-Level students, {example.subjects} subjects
-                marked through Domax, {example.terms} terms a year: that’s{' '}
-                {new Intl.NumberFormat('en-US').format(exampleExams)} exams.
-              </p>
-              <p className="mt-4 text-3xl font-headline text-ink tabular-nums">{formatRwf(exampleTotal)}</p>
-              <p className="text-sm text-ink-3 mt-1">a year, if the school pays directly</p>
-              <p className="text-[15px] text-ink-2 leading-relaxed mt-4">
-                At a public school, we’d rather that came from a sponsor so the school pays nothing.
-              </p>
-            </div>
+        <section className="container-custom pb-24 sm:pb-28 grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16">
+          <h2 data-reveal>Questions</h2>
+          <div data-reveal className="border-t border-line">
+            {faqs.map((item) => (
+              <details key={item.q} className="group border-b border-line">
+                <summary className="flex items-center justify-between gap-6 py-5 cursor-pointer list-none text-lg font-semibold text-ink [&::-webkit-details-marker]:hidden">
+                  {item.q}
+                  <span
+                    aria-hidden="true"
+                    className="flex-shrink-0 w-8 h-8 rounded-full border border-line-strong flex items-center justify-center text-ink-2 transition-transform duration-200 group-open:rotate-45"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p className="text-[17px] text-ink-2 leading-relaxed pb-6 pr-12">{item.a}</p>
+              </details>
+            ))}
           </div>
+        </section>
+      </Reveal>
 
-          <section className="mt-20 grid grid-cols-1 lg:grid-cols-3 gap-px bg-line border border-line rounded-lg overflow-hidden">
-            <div className="bg-white p-6 sm:p-7">
-              <h2 className="text-xl">Universities & polytechnics</h2>
-              <p className="text-[15px] text-ink-2 leading-relaxed mt-3">
-                Pay per exam directly. Long scripts and lecturer time make the case clearest here.
-              </p>
-            </div>
-            <div className="bg-white p-6 sm:p-7">
-              <h2 className="text-xl">Private secondary schools</h2>
-              <p className="text-[15px] text-ink-2 leading-relaxed mt-3">
-                Pay per exam directly, invoiced per term.
-              </p>
-            </div>
-            <div className="bg-white p-6 sm:p-7">
-              <h2 className="text-xl">Public schools</h2>
-              <p className="text-[15px] text-ink-2 leading-relaxed mt-3">
-                Covered by a sponsor at a published cost-plus price. The school and its students pay
-                nothing.{' '}
-                <Link href="/solutions/sponsors" className="text-accent underline underline-offset-2">
-                  For sponsors
-                </Link>
-              </p>
-            </div>
-          </section>
-
-          <section className="mt-20 max-w-3xl">
-            <h2 className="text-3xl">Questions</h2>
-            <dl className="mt-6 border-t border-line">
-              {faqs.map((item) => (
-                <div key={item.q} className="py-6 border-b border-line">
-                  <dt className="text-lg font-semibold text-ink">{item.q}</dt>
-                  <dd className="text-[17px] text-ink-2 leading-relaxed mt-2">{item.a}</dd>
-                </div>
-              ))}
-            </dl>
-            <div className="mt-10">
-              <Button href="/pilot" variant="primary" size="lg">
-                Request a pilot
-              </Button>
-            </div>
-          </section>
-        </div>
-      </div>
+      <ClosingCta />
       <Footer />
     </main>
   )

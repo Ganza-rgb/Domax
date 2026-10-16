@@ -1,4 +1,5 @@
 import AudiencePage from '@/components/organisms/AudiencePage'
+import { EXAM_PRICES, formatRwf } from '@/lib/site'
 
 export const metadata = {
   title: 'For universities & polytechnics — Domax',
@@ -9,7 +10,13 @@ export const metadata = {
 export default function UniversitiesPage() {
   return (
     <AudiencePage
-      title="For universities & polytechnics"
+      kicker="For universities & polytechnics"
+      facts={[
+        { value: formatRwf(EXAM_PRICES.find((l) => l.key === 'university').price), label: 'per student, per exam' },
+        { value: 'Up to 15 pages', label: 'included in every exam' },
+        { value: 'Lecturers sign', label: 'every mark before it is released' },
+      ]}
+      title="Long scripts, big cohorts, a first read for every one."
       lede="Long scripts, big cohorts, and marking that lands on lecturers at the busiest point of the semester. This is where Domax starts."
       sections={[
         {
@@ -30,12 +37,6 @@ export default function UniversitiesPage() {
           title: 'What the exams office gets',
           body: [
             'A complete record of who marked what, what was suggested, and what was changed, ready for moderation and appeals. Marks come out in a sheet you can import, not retype.',
-          ],
-        },
-        {
-          title: 'Price',
-          body: [
-            'RWF 500 per student per exam, with up to 15 pages included. Longer scripts are priced before marking starts.',
           ],
         },
       ]}

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Navbar from '@/components/molecules/Navbar'
 import Footer from '@/components/organisms/Footer'
 import Button from '@/components/atoms/Button'
+import { Tick } from '@/components/site/ProductVisuals'
 import { CONTACT_EMAIL, mailtoLink } from '@/lib/site'
 
 const institutionTypes = [
@@ -25,7 +26,14 @@ const roles = [
 ]
 
 const inputClass =
-  'w-full h-11 px-3.5 bg-white border border-line-strong rounded-md text-[15px] text-ink placeholder:text-ink-3 focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/15'
+  'w-full h-12 px-4 bg-white border border-line-strong rounded-xl text-[15px] text-ink placeholder:text-ink-3 transition-[border-color,box-shadow] focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10'
+
+const asks = [
+  'A set of past scripts in two subjects, with consent arranged through you.',
+  'Two experienced teachers to mark them independently. We pay for their time.',
+  'One live assessment per subject, marked with Domax and signed off by your teachers.',
+  'An honest conversation at the end about whether it was worth it.',
+]
 
 function Field({ id, label, optional, children }) {
   return (
@@ -74,30 +82,39 @@ export default function PilotPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
-        <div className="container-custom grid grid-cols-1 lg:grid-cols-[1fr_minmax(0,34rem)] gap-12 lg:gap-20">
-          <div className="max-w-md">
-            <h1 className="text-4xl sm:text-5xl text-ink">Request a pilot</h1>
-            <p className="lede mt-5">
+      <div className="relative pt-32 sm:pt-40 pb-24 sm:pb-32 overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-[32rem] bg-[radial-gradient(60%_70%_at_30%_0%,#E8F0FF_0%,rgba(232,240,255,0)_100%)]"
+        />
+        <div className="container-custom relative grid grid-cols-1 lg:grid-cols-[1fr_minmax(0,36rem)] gap-14 lg:gap-20 items-start">
+          <div className="lg:sticky lg:top-28">
+            <p className="kicker">Pilot</p>
+            <h1 className="text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.98] tracking-[-0.04em] text-ink mt-4">
+              Request a pilot.
+            </h1>
+            <p className="lede mt-6 max-w-md">
               We’re choosing a small number of pilot sites in Rwanda: universities, polytechnics and
               secondary schools, and the sponsors who support them.
             </p>
-            <h2 className="text-xl mt-10">What we’ll ask of you</h2>
-            <ul className="mt-3 space-y-2.5 text-[15px] text-ink-2 leading-relaxed list-disc pl-5 marker:text-ink-3">
-              <li>A set of past scripts in two subjects, with student consent arranged through you.</li>
-              <li>Two experienced teachers to mark them independently. We pay for their time.</li>
-              <li>One live assessment per subject, marked with Domax and signed off by your teachers.</li>
-              <li>An honest conversation at the end about whether it was worth it.</li>
+            <h2 className="text-xl mt-12">What we’ll ask of you</h2>
+            <ul className="mt-5 space-y-4">
+              {asks.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-[16px] text-ink-2 leading-relaxed max-w-md">
+                  <Tick className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
             </ul>
-            <p className="text-[15px] text-ink-2 leading-relaxed mt-6">
-              Before any real student data is used, we sign a data-sharing agreement with you. Nothing
-              about your students leaves Rwanda without the authorisation the law requires.
+            <p className="text-[15px] text-ink-3 leading-relaxed mt-8 max-w-md">
+              Before any real student data is used, we sign a data-sharing agreement with you. Nothing about
+              your students leaves Rwanda without the authorisation the law requires.
             </p>
           </div>
 
           <div>
             {opened ? (
-              <div className="rounded-lg border border-line p-6 sm:p-8">
+              <div className="rounded-[28px] border border-line bg-white p-7 sm:p-10 shadow-[0_30px_60px_-40px_rgba(10,48,89,0.4)]">
                 <h2 className="text-2xl">Your email app should have opened</h2>
                 <p className="text-[15px] text-ink-2 leading-relaxed mt-3">
                   Your details are in a new message to {CONTACT_EMAIL}. Press send and we’ll reply
@@ -116,7 +133,7 @@ export default function PilotPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="rounded-lg border border-line p-5 sm:p-7 space-y-5">
+              <form onSubmit={handleSubmit} className="rounded-[28px] border border-line bg-white p-6 sm:p-10 space-y-5 shadow-[0_30px_60px_-40px_rgba(10,48,89,0.4)]">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <Field id="name" label="Your name">
                     <input id="name" name="name" required autoComplete="name" value={form.name} onChange={update} className={inputClass} />
@@ -168,7 +185,7 @@ export default function PilotPage() {
                   />
                 </Field>
                 <div className="pt-1">
-                  <Button type="submit" size="lg" className="w-full sm:w-auto">
+                  <Button type="submit" size="xl" className="w-full">
                     Send request
                   </Button>
                   <p className="text-xs text-ink-3 mt-3">

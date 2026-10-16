@@ -1,4 +1,5 @@
 import AudiencePage from '@/components/organisms/AudiencePage'
+import { EXAM_PRICES, formatRwf } from '@/lib/site'
 
 export const metadata = {
   title: 'For secondary schools — Domax',
@@ -9,7 +10,14 @@ export const metadata = {
 export default function SchoolsPage() {
   return (
     <AudiencePage
-      title="For secondary schools"
+      kicker="For secondary schools"
+      facts={[
+        { value: formatRwf(EXAM_PRICES.find((l) => l.key === 'o-level').price), label: 'per O-Level exam, up to 8 pages' },
+        { value: formatRwf(EXAM_PRICES.find((l) => l.key === 'a-level').price), label: 'per A-Level exam, up to 12 pages' },
+        { value: 'Free', label: 'for students to see their results' },
+        { value: 'Sponsored', label: 'at public schools, so the school pays nothing' },
+      ]}
+      title="End-of-term marking, with the judgement still yours."
       lede="A teacher with several streams of forty or more students marks hundreds of scripts at the end of every term, usually at night. Domax does the first read so they can spend that time on the answers that need them."
       sections={[
         {
@@ -35,12 +43,6 @@ export default function SchoolsPage() {
           title: 'Students see their results free',
           body: [
             'Each class gets an access code. Students use it to see their marked scripts and anything their teacher chooses to share. They never pay, and access never depends on the school’s account.',
-          ],
-        },
-        {
-          title: 'Price',
-          body: [
-            'O-Level: RWF 250 per student per exam, up to 8 pages. A-Level: RWF 350, up to 12 pages. Private schools pay directly. For public schools, we look for a sponsor so the school pays nothing.',
           ],
         },
       ]}

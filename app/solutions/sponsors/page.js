@@ -9,7 +9,13 @@ export const metadata = {
 export default function SponsorsPage() {
   return (
     <AudiencePage
-      title="For sponsors & districts"
+      kicker="For sponsors & districts"
+      facts={[
+        { value: 'Cost-plus', label: 'price per exam, with our margin published' },
+        { value: 'RWF 0', label: 'paid by schools and students' },
+        { value: 'Per term', label: 'reports measured in the product, not estimated' },
+      ]}
+      title="Fund something teachers feel, and you can measure."
       lede="Public schools don’t have a budget line for marking, and teachers’ marking happens in unpaid evenings. If your organisation funds teacher support, Domax gives you something concrete and measurable to fund."
       sections={[
         {

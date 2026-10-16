@@ -1,7 +1,16 @@
-import Link from 'next/link'
 import Navbar from '@/components/molecules/Navbar'
 import Footer from '@/components/organisms/Footer'
 import Button from '@/components/atoms/Button'
+import PageHero from '@/components/site/PageHero'
+import ClosingCta from '@/components/site/ClosingCta'
+import Reveal from '@/components/site/Reveal'
+import {
+  CaptureVisual,
+  PageCheckVisual,
+  FirstReadVisual,
+  ReviewQueueVisual,
+  ReleaseVisual,
+} from '@/components/site/ProductVisuals'
 
 export const metadata = {
   title: 'How it works — Domax',
@@ -11,46 +20,49 @@ export const metadata = {
 
 const stages = [
   {
-    title: 'Before the exam: print a header sheet',
+    label: 'Capture',
+    title: 'A header sheet, then a photo.',
     body: [
-      'Each script gets a header sheet with a code that identifies the student, the exam, and how many pages the script should have. Students write their answers as they normally would.',
-      'The header sheet is how Domax knows whose work a page is. It never has to guess from a name scrawled at the top.',
+      'Each script starts with a header sheet carrying a code for the student, the exam, and the number of pages. Students write their answers as they always have.',
+      'Afterwards, photograph each script with a phone or run the pile through a scanner. Blurred, dark or cut-off pages are caught on the spot, and capture keeps working offline. Pages upload when the school’s connection allows.',
     ],
+    Visual: CaptureVisual,
   },
   {
-    title: 'Capture the scripts',
+    label: 'Check',
+    title: 'Every page accounted for.',
     body: [
-      'Photograph each script with a phone or put the pile through a scanner. Domax checks each picture as you take it and asks for a retake straight away if a page is blurred, too dark, or cut off.',
-      'Capture works without a connection. Pages upload when the school’s connection is available.',
+      'Before any marking, each page is matched to its script using the header sheet. A missing, repeated or out-of-place page stops that script and comes to you.',
+      'A missing page is never treated as a blank answer, and Domax never guesses whose page it is.',
     ],
+    Visual: PageCheckVisual,
   },
   {
-    title: 'Every page is accounted for',
+    label: 'Read',
+    title: 'A first read against your scheme.',
     body: [
-      'Before any marking, Domax matches each page to its script. If a page is missing, appears twice, or looks like it belongs to someone else, it stops and shows you. A missing page is never treated as a blank answer.',
+      'Add the marking scheme you already use. Domax suggests a mark for each point in it, and shows the words in the answer each mark was given for.',
+      'It transcribes what the student actually wrote. A wrong answer stays wrong; it isn’t quietly tidied up. Multiple choice and short numeric answers are checked against your key.',
     ],
+    Visual: FirstReadVisual,
   },
   {
-    title: 'A first read against your marking scheme',
+    label: 'Review',
+    title: 'Riskiest first, then the rest.',
     body: [
-      'You add the marking scheme you already use. Domax reads each answer and suggests a mark for every point in the scheme, along with the part of the answer the mark was given for.',
-      'It reads what the student wrote, including their mistakes. A wrong answer stays wrong in the transcription; it isn’t quietly tidied up.',
-      'Multiple choice and short numeric answers are checked against the key. Diagrams and long working get a suggestion only. A teacher marks those.',
+      'Your queue is sorted so the answers most likely to need your judgement come first. Diagrams and long working are yours to mark; Domax only organises them.',
+      'Accept, change, or mark it yourself, and note why if you change it. If anything goes wrong along the way, the answer comes to you. Domax never fills in a default mark.',
     ],
+    Visual: ReviewQueueVisual,
   },
   {
-    title: 'You review, riskiest first',
+    label: 'Release',
+    title: 'Signed, released, recorded.',
     body: [
-      'Answers are sorted so the ones most likely to need your judgement come first. Each one shows the student’s handwriting beside the suggested marks. Accept, change, or mark it yourself, and note why if you change it.',
-      'If anything goes wrong along the way, like an unreadable page or a failed connection, the answer comes to you. Domax never fills in a default mark.',
+      'Nothing reaches a student until you sign. Students then see their marked scripts for free with their class code, and you download a mark sheet set out for CAMIS.',
+      'Every suggestion, change and signature is kept, so a teacher hearing an appeal can see exactly what happened.',
     ],
-  },
-  {
-    title: 'Sign, release, and record',
-    body: [
-      'Nothing reaches a student until you sign it. Once you release, students see their marked scripts for free with their class code, and you download mark sheets set out for entry into CAMIS.',
-      'Every suggestion, change and signature is kept in a record, so if a student appeals, the teacher hearing it can see exactly what happened.',
-    ],
+    Visual: ReleaseVisual,
   },
 ]
 
@@ -58,53 +70,66 @@ export default function HowItWorksPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
-        <div className="container-custom">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl sm:text-5xl text-ink">How Domax works</h1>
-            <p className="lede mt-5">
-              Domax is built around one rule: it can suggest a mark, but only a teacher can give one.
-              Here is what happens between a pile of handwritten scripts and marks you’ve signed.
-            </p>
-          </div>
+      <PageHero
+        kicker="How it works"
+        title="It can suggest a mark. Only a teacher can give one."
+        lede="Here is everything that happens between a pile of handwritten scripts and marks you’ve signed."
+      />
 
-          <ol className="mt-14 max-w-3xl border-t border-line">
-            {stages.map((stage, index) => (
-              <li key={stage.title} className="grid grid-cols-1 sm:grid-cols-[4rem_1fr] gap-2 sm:gap-6 py-9 border-b border-line">
-                <p className="text-sm text-ink-3 tabular-nums pt-1.5">{index + 1}</p>
-                <div>
-                  <h2 className="text-2xl">{stage.title}</h2>
-                  {stage.body.map((paragraph) => (
-                    <p key={paragraph} className="text-[17px] text-ink-2 leading-relaxed mt-3">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </li>
-            ))}
-          </ol>
+      <Reveal>
+        <ol className="container-custom space-y-20 sm:space-y-28 pb-24 sm:pb-32">
+          {stages.map((stage, index) => (
+            <li
+              key={stage.label}
+              data-reveal
+              className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center"
+            >
+              <div className={index % 2 === 1 ? 'lg:order-2' : ''}>
+                <p className="text-[13px] font-semibold text-accent tabular-nums">
+                  {String(index + 1).padStart(2, '0')} · {stage.label}
+                </p>
+                <h2 className="mt-3 text-[clamp(1.875rem,3.4vw,2.75rem)]">{stage.title}</h2>
+                {stage.body.map((paragraph) => (
+                  <p key={paragraph} className="text-[17px] text-ink-2 leading-relaxed mt-4 max-w-lg">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+              <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
+                <stage.Visual />
+              </div>
+            </li>
+          ))}
+        </ol>
 
-          <div className="mt-14 max-w-2xl">
-            <h2 className="text-2xl">What Domax won’t do yet</h2>
-            <p className="text-[17px] text-ink-2 leading-relaxed mt-3">
-              We only offer suggested marks for a type of question once our pilots show they agree with
-              experienced teachers at least as well as two teachers agree with each other. Until then,
-              that type of question is marked by the teacher, with Domax only organising the scripts.
-              Primary school scripts aren’t supported yet.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <Button href="/pilot" variant="primary" size="lg">
-                Request a pilot
-              </Button>
-              <Link
-                href="/data-protection"
-                className="text-[15px] font-semibold text-accent underline decoration-accent/30 underline-offset-4 hover:decoration-accent"
-              >
-                How we handle student data
-              </Link>
+        <section className="bg-canvas py-24 sm:py-28">
+          <div data-reveal className="container-custom grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-20">
+            <div>
+              <p className="kicker">Limits</p>
+              <h2 className="mt-3">What Domax won’t do yet.</h2>
+            </div>
+            <div className="space-y-5 text-[17px] text-ink-2 leading-relaxed">
+              <p>
+                We only suggest marks for a type of question once our pilots show Domax agrees with
+                experienced teachers at least as closely as two teachers agree with each other. Until then,
+                that type of question is marked by the teacher, with Domax only organising the scripts.
+              </p>
+              <p>
+                Primary school scripts aren’t supported yet. Young children’s handwriting is the hardest to
+                read reliably.
+              </p>
+              <div className="pt-2">
+                <Button href="/data-protection" variant="secondary" size="lg">
+                  How we handle student data
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
+      </Reveal>
+
+      <div className="pt-24 sm:pt-28">
+        <ClosingCta />
       </div>
       <Footer />
     </main>

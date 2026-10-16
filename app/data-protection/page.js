@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import Navbar from '@/components/molecules/Navbar'
 import Footer from '@/components/organisms/Footer'
+import PageHero from '@/components/site/PageHero'
+import ClosingCta from '@/components/site/ClosingCta'
+import Reveal from '@/components/site/Reveal'
 import { CONTACT_EMAIL } from '@/lib/site'
 
 export const metadata = {
@@ -55,39 +58,39 @@ export default function DataProtectionPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-32 sm:pt-36 pb-20 sm:pb-28">
-        <div className="container-custom">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl sm:text-5xl text-ink">Student data</h1>
-            <p className="lede mt-5">
-              Exam scripts are personal data, and most of them are written by children. This page says
-              plainly what we do with them.
-            </p>
-          </div>
+      <PageHero
+        kicker="Student data"
+        title="Exam scripts are personal data. Most are written by children."
+        lede="This page says plainly what we do with them, and what we have promised never to do."
+      />
 
-          <div className="mt-14 max-w-3xl border-t border-line">
-            {sections.map((section) => (
-              <section key={section.title} className="py-9 border-b border-line">
-                <h2 className="text-2xl">{section.title}</h2>
+      <Reveal>
+        <div className="container-custom pb-20 sm:pb-24">
+          <ol data-reveal data-reveal-stagger className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {sections.map((section, index) => (
+              <li key={section.title} className="rounded-[24px] border border-line p-7 sm:p-9">
+                <p className="text-[13px] font-semibold text-accent tabular-nums">{String(index + 1).padStart(2, '0')}</p>
+                <h2 className="text-2xl mt-3">{section.title}</h2>
                 {section.body.map((paragraph) => (
-                  <p key={paragraph} className="text-[17px] text-ink-2 leading-relaxed mt-3">
+                  <p key={paragraph} className="text-[16px] text-ink-2 leading-relaxed mt-3">
                     {paragraph}
                   </p>
                 ))}
-              </section>
+              </li>
             ))}
-          </div>
+          </ol>
 
-          <p className="mt-10 max-w-2xl text-[15px] text-ink-2 leading-relaxed">
+          <p data-reveal className="mt-12 max-w-2xl text-[17px] text-ink-2 leading-relaxed">
             Questions about student data go to{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent underline underline-offset-2">
+            <a href={`mailto:${CONTACT_EMAIL}`} className="link">
               {CONTACT_EMAIL}
             </a>
-            . Our full <Link href="/privacy" className="text-accent underline underline-offset-2">privacy policy</Link> covers
-            the rest of the site.
+            . Our <Link href="/privacy" className="link">privacy policy</Link> covers the rest of the site.
           </p>
         </div>
-      </div>
+      </Reveal>
+
+      <ClosingCta />
       <Footer />
     </main>
   )
