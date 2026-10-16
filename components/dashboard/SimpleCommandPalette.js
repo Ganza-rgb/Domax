@@ -33,7 +33,7 @@ const commands = [
   { label: 'Create Rubric', href: '/dashboard/rubrics', category: 'Actions' },
   { label: 'Create Exam', href: '/dashboard/exams', category: 'Actions' },
   { label: 'Create Course', href: '/dashboard/courses', category: 'Actions' },
-  { label: 'Top-up Wallet', href: '/dashboard/billing', category: 'Actions' },
+  { label: 'View billing', href: '/dashboard/billing', category: 'Actions' },
 ]
 
 export default function SimpleCommandPalette() {

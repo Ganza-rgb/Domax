@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import { Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
+import { Panel, fieldClass, labelClass, TickMark } from '@/components/dashboard/ui'
 import { useDashboardState } from '@/states/useDashboardState'
 import { useUserState } from '@/states/useUserState'
 import { useThemeState } from '@/states/useThemeState'
@@ -67,7 +67,7 @@ export default function SettingsPage() {
         <p className="text-xs text-[var(--sky-subtle)] mt-3">Profile details are managed by your school administrator.</p>
       </Panel>
 
-      <Panel meta="Marking" title="Preferences">
+      <Panel title="Marking">
         <div className="divide-y divide-[var(--sky-panel-border)]">
           <Toggle
             id="pref-notifications"
@@ -76,13 +76,16 @@ export default function SettingsPage() {
             label="Email me when Domax is unsure about an answer"
             description="A daily summary of answers that need a closer look."
           />
-          <Toggle
-            id="pref-autorelease"
-            checked={teacher.preferences.autoRelease}
-            onChange={(value) => updatePreferences({ autoRelease: value })}
-            label="Auto-release submissions with confidence above 95%"
-            description="Off by default. When off, every script waits for you to finalize it."
-          />
+          {/* Not a setting: a teacher signs every released mark, always. */}
+          <div className="flex items-start gap-3 py-4">
+            <TickMark className="w-5 h-5 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-[var(--sky-text)]">You sign every mark</p>
+              <p className="text-sm text-[var(--sky-subtle)] mt-0.5">
+                Domax never releases a mark on its own, however sure it is. This can’t be switched off.
+              </p>
+            </div>
+          </div>
         </div>
       </Panel>
 

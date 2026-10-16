@@ -21,6 +21,8 @@ import { useDashboardState } from '@/states/useDashboardState'
 import { useSubmissionState } from '@/states/useSubmissionState'
 import { useExamState } from '@/states/useExamState'
 import { useUserState } from '@/states/useUserState'
+import { usageAmount } from '@/components/dashboard/BillingOverview'
+import { formatRwf } from '@/lib/pricing'
 
 // Review cases first, then scripts that are ready to finalize
 const queueOrder = { 'needs-review': 0, ready: 1 }
@@ -31,7 +33,9 @@ export default function DashboardPage() {
   const { setCurrentSection, updatePanel } = useDashboardState()
   const { submissions } = useSubmissionState()
   const { exams } = useExamState()
-  const { teacher } = useUserState()
+  const { billing } = useUserState()
+  const termExams = billing.usage.reduce((sum, row) => sum + row.exams, 0)
+  const termAmount = billing.usage.reduce((sum, row) => sum + usageAmount(row), 0)
   const [queueFilter, setQueueFilter] = useState('pending')
   const [notes, setNotes] = useState([])
   const [noteDraft, setNoteDraft] = useState('')
@@ -234,13 +238,13 @@ export default function DashboardPage() {
             )}
           </Panel>
 
-          <Panel title="Wallet">
+          <Panel title={billing.term}>
             <p className="font-headline text-3xl font-semibold tracking-[-0.03em] text-[var(--sky-text)] tabular-nums">
-              {teacher.balancePages.toLocaleString()}
-              <span className="text-base font-medium text-[var(--sky-subtle)] ml-1.5 tracking-normal">pages left</span>
+              {termExams.toLocaleString()}
+              <span className="text-base font-medium text-[var(--sky-subtle)] ml-1.5 tracking-normal">exams marked</span>
             </p>
             <p className="text-[13px] text-[var(--sky-subtle)] mt-2 leading-relaxed">
-              Top-ups are arranged with the Domax team for now.{' '}
+              {formatRwf(termAmount)} so far, invoiced at the end of term.{' '}
               <Link href="/dashboard/billing" className="text-[var(--action-accent)] hover:underline rounded">Billing</Link>
             </p>
           </Panel>

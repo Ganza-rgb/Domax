@@ -75,10 +75,25 @@ export default function UploadPage() {
     if (!uploading) inputRef.current?.click()
   }
 
+  const checklist = [
+    {
+      title: 'Your marking scheme is in Domax',
+      body: 'Suggestions are made against it, point by point.',
+      action: { href: '/dashboard/rubrics', label: 'Rubrics' },
+    },
+    {
+      title: 'Every script has its header sheet',
+      body: 'It tells Domax whose script it is and how many pages to expect.',
+    },
+    {
+      title: 'One file per student’s script',
+      body: 'Pages in order, nothing cut off at the edges.',
+    },
+  ]
+
   return (
     <div className="space-y-6">
       <WorkspaceHeader
-        meta="Document upload"
         title="Upload"
         subtitle="PDF, DOCX or TXT files for now. Photo capture of handwritten scripts is on the way."
         actions={
@@ -88,110 +103,112 @@ export default function UploadPage() {
         }
       />
 
-      {/* Drop zone — click or press Enter/Space to browse */}
-      <div
-        data-tour="upload-button"
-        role="button"
-        tabIndex={0}
-        aria-label="Upload files: drop files here or press Enter to browse"
-        aria-busy={uploading}
-        onClick={openPicker}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            openPicker()
-          }
-        }}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        className={`rounded-xl border-2 border-dashed transition-all cursor-pointer ${
-          isDragging
-            ? 'border-[var(--action-accent)] bg-[var(--action-accent-soft)]'
-            : 'border-[var(--sky-panel-border)] bg-[var(--sky-panel)] hover:border-[var(--action-accent)]'
-        }`}
-      >
-        <div className="flex flex-col items-center justify-center py-14 px-6 text-center">
-          <div className="w-12 h-12 rounded-full bg-[var(--action-accent-soft)] text-[var(--action-accent)] flex items-center justify-center mb-4">
-            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
-            </svg>
-          </div>
-          <p className="text-base font-semibold text-[var(--sky-text)]">
-            {uploading ? 'Uploading…' : isDragging ? 'Drop files here' : 'Drag and drop files here'}
-          </p>
-          <p className="text-sm text-[var(--sky-subtle)] mt-1 mb-5">Or click to browse. Supports PDF, DOCX, TXT files</p>
-          <span
-            aria-hidden="true"
-            className={`inline-flex h-9 items-center rounded-md px-3.5 text-sm font-semibold text-white ${uploading ? 'bg-[#005ffe]/50' : 'bg-[#005ffe]'}`}
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_20rem] gap-6 items-start">
+        <div className="space-y-6 min-w-0">
+          {/* Drop zone — click or press Enter/Space to browse */}
+          <div
+            data-tour="upload-button"
+            role="button"
+            tabIndex={0}
+            aria-label="Upload files: drop files here or press Enter to browse"
+            aria-busy={uploading}
+            onClick={openPicker}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                openPicker()
+              }
+            }}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`rounded-2xl border-2 border-dashed transition-colors cursor-pointer ${
+              isDragging
+                ? 'border-[var(--action-accent)] bg-[var(--action-accent-soft)]'
+                : 'border-[var(--sky-panel-border)] bg-[var(--sky-panel)] hover:border-[var(--action-accent)]'
+            }`}
           >
-            {uploading ? 'Uploading…' : 'Choose files'}
-          </span>
-          <input
-            ref={inputRef}
-            type="file"
-            multiple
-            accept={ACCEPTED}
-            onChange={handleFileSelect}
-            className="sr-only"
-            tabIndex={-1}
-            disabled={uploading}
-          />
+            <div className="flex flex-col items-center justify-center py-16 sm:py-20 px-6 text-center">
+              {/* A small pile of scripts */}
+              <svg viewBox="0 0 64 64" className="w-16 h-16 mb-5" aria-hidden="true">
+                <rect x="16" y="12" width="32" height="42" rx="4" fill="var(--sky-surface)" stroke="var(--sky-panel-border)" strokeWidth="1.5" transform="rotate(-9 32 33)" />
+                <rect x="16" y="11" width="32" height="42" rx="4" fill="var(--sky-surface)" stroke="var(--sky-panel-border)" strokeWidth="1.5" transform="rotate(5 32 32)" />
+                <rect x="16" y="10" width="32" height="42" rx="4" fill="var(--sky-panel)" stroke="var(--sky-subtle)" strokeOpacity="0.5" strokeWidth="1.5" />
+                <path d="M23 20h18M23 26h18M23 32h12" stroke="var(--sky-subtle)" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" />
+                <circle cx="46" cy="46" r="9" fill="var(--action-accent)" />
+                <path d="M46 50.5v-9m-3.5 3.5L46 41.5l3.5 3.5" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <p className="font-headline text-xl font-semibold tracking-[-0.02em] text-[var(--sky-text)]">
+                {uploading ? 'Uploading…' : isDragging ? 'Drop to upload' : 'Drop a class’s scripts here'}
+              </p>
+              <p className="text-sm text-[var(--sky-subtle)] mt-1.5 mb-6">or choose them from your computer · PDF, DOCX or TXT</p>
+              <span
+                aria-hidden="true"
+                className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-semibold text-white ${uploading ? 'bg-[#005ffe]/50' : 'bg-[#005ffe]'}`}
+              >
+                {uploading ? 'Uploading…' : 'Choose files'}
+              </span>
+              <input
+                ref={inputRef}
+                type="file"
+                multiple
+                accept={ACCEPTED}
+                onChange={handleFileSelect}
+                className="sr-only"
+                tabIndex={-1}
+                disabled={uploading}
+              />
+            </div>
+          </div>
+
+          {error && <Notice tone="caution" onDismiss={() => setError(null)}>{error}</Notice>}
+
+          {/* Uploaded files */}
+          {uploadedFiles.length > 0 && (
+            <Panel title="Uploaded this session" bodyClassName="!px-0 !pb-0">
+              <ul className="divide-y divide-[var(--sky-panel-border)] border-t border-[var(--sky-panel-border)]">
+                {uploadedFiles.map((file) => (
+                  <li key={file.id} className="flex items-center justify-between gap-3 px-5 py-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-[var(--sky-text)]">{file.name}</p>
+                      <p className="text-xs text-[var(--sky-subtle)] tabular-nums">
+                        {(file.size / 1024).toFixed(1)} KB · {new Date(file.uploadedAt).toLocaleTimeString()}
+                      </p>
+                    </div>
+                    <span className="text-xs text-[var(--sky-subtle)] whitespace-nowrap">Received · processing not yet available</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="px-5 py-3 border-t border-[var(--sky-panel-border)]">
+                <Link href="/dashboard/submissions" className="text-sm font-medium text-[var(--action-accent)] hover:underline rounded">
+                  Go to the review queue
+                </Link>
+              </div>
+            </Panel>
+          )}
         </div>
-      </div>
 
-      {error && <Notice tone="caution" onDismiss={() => setError(null)}>{error}</Notice>}
-
-      {/* Uploaded files */}
-      {uploadedFiles.length > 0 && (
-        <Panel meta="This session" title="Uploaded files" bodyClassName="!px-0 !pb-0">
-          <ul className="divide-y divide-[var(--sky-panel-border)] border-t border-[var(--sky-panel-border)]">
-            {uploadedFiles.map((file) => (
-              <li key={file.id} className="flex items-center justify-between gap-3 px-5 py-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-lg bg-[var(--action-accent-soft)] text-[var(--action-accent)] flex items-center justify-center flex-shrink-0">
-                    <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
-                      <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
-                    </svg>
-                  </div>
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-[var(--sky-text)]">{file.name}</p>
-                    <p className="text-xs text-[var(--sky-subtle)] tabular-nums">
-                      {(file.size / 1024).toFixed(1)} KB · {new Date(file.uploadedAt).toLocaleTimeString()}
-                    </p>
-                  </div>
+        {/* Before you upload */}
+        <Panel title="Before you upload">
+          <ol className="space-y-5">
+            {checklist.map((item, index) => (
+              <li key={item.title} className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full border border-[var(--sky-panel-border)] text-[12px] font-semibold text-[var(--sky-subtle)] flex items-center justify-center tabular-nums">
+                  {index + 1}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[var(--sky-text)]">{item.title}</p>
+                  <p className="text-[13px] text-[var(--sky-subtle)] mt-0.5 leading-relaxed">{item.body}</p>
+                  {item.action && (
+                    <Link href={item.action.href} className="inline-block mt-1.5 text-[13px] font-medium text-[var(--action-accent)] hover:underline rounded">
+                      {item.action.label}
+                    </Link>
+                  )}
                 </div>
-                <span className="text-xs text-[var(--sky-subtle)] whitespace-nowrap">Received · processing not yet available</span>
               </li>
             ))}
-          </ul>
-          <div className="px-5 py-3 border-t border-[var(--sky-panel-border)]">
-            <Link href="/dashboard/submissions" className="text-sm font-medium text-[var(--action-accent)] hover:underline rounded">
-              Go to the review queue
-            </Link>
-          </div>
+          </ol>
         </Panel>
-      )}
-
-      {/* Next steps */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {[
-          { href: '/dashboard/rubrics', title: 'Create rubric', body: 'Set up grading criteria before uploading' },
-          { href: '/dashboard/exams', title: 'Create exam', body: 'Set up a new exam or assignment' },
-          { href: '/dashboard/submissions', title: 'View submissions', body: 'Review and grade uploaded papers' },
-        ].map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="group rounded-xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] p-4 hover:border-[var(--action-accent)] transition-colors"
-          >
-            <p className="text-sm font-semibold text-[var(--sky-text)] group-hover:text-[var(--action-accent)]">
-              {item.title} <span aria-hidden="true">→</span>
-            </p>
-            <p className="text-sm text-[var(--sky-subtle)] mt-0.5">{item.body}</p>
-          </Link>
-        ))}
       </div>
     </div>
   )

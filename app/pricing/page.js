@@ -5,7 +5,7 @@ import PageHero from '@/components/site/PageHero'
 import ClosingCta from '@/components/site/ClosingCta'
 import Reveal from '@/components/site/Reveal'
 import { Tick } from '@/components/site/ProductVisuals'
-import { EXAM_PRICES, BATCH_MINIMUM_RWF, formatRwf } from '@/lib/site'
+import { EXAM_PRICES, EXTRA_PAGE_RWF, BATCH_MINIMUM_RWF, formatRwf, examPrice } from '@/lib/pricing'
 
 export const metadata = {
   title: 'Pricing — Domax',
@@ -28,7 +28,7 @@ const included = [
 ]
 
 const payers = [
-  { title: 'Universities & polytechnics', copy: 'Pay per exam directly, invoiced per batch.' },
+  { title: 'Universities & polytechnics', copy: 'Pay per exam directly, invoiced per term.' },
   { title: 'Private secondary schools', copy: 'Pay per exam directly, invoiced per term.' },
   {
     title: 'Public schools',
@@ -44,7 +44,7 @@ const faqs = [
   },
   {
     q: 'What if a script is longer than the page allowance?',
-    a: 'Longer or unusually complex exams are charged at a higher rate, which we agree with you before the assessment. You’ll know the price before anything is marked.',
+    a: `Each page over the allowance costs ${formatRwf(EXTRA_PAGE_RWF)}. A 20-page O-Level script, for example, is ${formatRwf(examPrice('o-level', 20))}: the exam price plus 12 extra pages.`,
   },
   {
     q: 'Who pays at a public school?',
@@ -87,7 +87,8 @@ export default function PricingPage() {
             ))}
           </ul>
           <p className="mt-5 text-[14px] text-ink-3">
-            Minimum per batch: {formatRwf(BATCH_MINIMUM_RWF)}. Primary levels aren’t available yet.
+            Pages over the allowance are {formatRwf(EXTRA_PAGE_RWF)} each. Invoiced per term, with a minimum of{' '}
+            {formatRwf(BATCH_MINIMUM_RWF)} per batch. Primary levels aren’t available yet.
           </p>
         </div>
 
