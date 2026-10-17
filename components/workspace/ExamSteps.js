@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { WsButton as Button, Panel, ConfirmDialog, ProgressBar, TickMark, downloadCsv, fieldClass } from '@/components/dashboard/ui'
 import { useWorkspace, latestVersion, rubricVersion, rubricWarnings } from '@/states/useWorkspaceState'
 import { processPhoto } from '@/lib/capture'
+import { portal } from '@/lib/portalClient'
 import { putPage, deletePage } from '@/lib/deviceStore'
 import { ScriptPage } from '@/components/workspace/examStatus'
 import Materials from '@/components/workspace/Materials'
@@ -103,7 +104,7 @@ export function PrepareStep({ exam, cls, rubric, progress }) {
       </Panel>
 
       <div className="lg:col-span-2">
-        <Materials exam={exam} />
+        <Materials exam={exam} cls={cls} />
       </div>
     </div>
   )
@@ -372,8 +373,21 @@ export function MarkStep({ exam, progress }) {
 /* Step 4: Release & record                                             */
 /* ------------------------------------------------------------------ */
 export function ReleaseStep({ exam, cls, progress }) {
-  const { release } = useWorkspace()
+  const { release, findRubric } = useWorkspace()
   const [confirming, setConfirming] = useState(false)
+  const [sent, setSent] = useState(null)
+  const [sending, setSending] = useState(false)
+
+  // Only ever runs for an exam the teacher has released.
+  const sendToPortal = async (releasedExam) => {
+    setSending(true)
+    const result = await portal.pushResults(cls, releasedExam, findRubric(exam.rubricId))
+    setSending(false)
+    if (result.ok) setSent({ tone: 'positive', text: `${result.data.saved} students can now see their results in the student portal.` })
+    else if (result.status === 409) setSent({ tone: 'caution', text: result.error, href: `/dashboard/classes/${cls.id}`, link: 'Open the class' })
+    else if (result.status === 401) setSent({ tone: 'caution', text: result.error, href: '/login', link: 'Sign in' })
+    else setSent({ tone: 'caution', text: result.error })
+  }
   const [previewId, setPreviewId] = useState(progress.collected[0]?.id || '')
   const preview = progress.collected.find((s) => s.id === previewId)
   const allMarked = progress.marksNeeded > 0 && progress.marksDone === progress.marksNeeded
@@ -410,6 +424,16 @@ export function ReleaseStep({ exam, cls, progress }) {
             <p className="text-[13px] font-semibold text-[#8db8ff]">Released</p>
             <p className="mt-2 text-2xl font-semibold text-white">Results released on {formatDate(exam.releasedAt)}</p>
             <p className="mt-2 text-[15px] text-white/65">Released by you. Every mark was given by a teacher.</p>
+            <div className="mt-5">
+              <Button size="md" variant="secondary" onClick={() => sendToPortal(exam)} disabled={sending}>
+                {sending ? 'Sending…' : sent?.tone === 'positive' ? 'Send again' : 'Send to the student portal'}
+              </Button>
+            </div>
+            {sent && (
+              <p className={`mt-3 text-sm ${sent.tone === 'positive' ? 'text-white' : 'text-[#ffd8a8]'}`}>
+                {sent.text} {sent.href && <Link href={sent.href} className="font-semibold underline">{sent.link}</Link>}
+              </p>
+            )}
           </section>
         ) : (
           <Panel title="Before you release">
@@ -483,9 +507,10 @@ export function ReleaseStep({ exam, cls, progress }) {
         onConfirm={() => {
           release(exam.id)
           setConfirming(false)
+          sendToPortal({ ...exam, releasedAt: new Date().toISOString() })
         }}
       >
-        Students will see their marks and your comments. Released results can’t be taken back, but a student can still ask for a remark.
+        Students will see their marks in the student portal if you have shared the class code. Released results can’t be taken back, but a student can still ask for a remark.
       </ConfirmDialog>
     </div>
   )

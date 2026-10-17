@@ -1,10 +1,12 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { WsButton as Button, Notice, Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
+import Link from 'next/link'
+import { WsButton as Button, ConfirmDialog, Notice, Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
 import { useWorkspace, MATERIAL_KINDS } from '@/states/useWorkspaceState'
 import { putPage, getPage, deletePage } from '@/lib/deviceStore'
 import { extractText } from '@/lib/extractText'
+import { portal } from '@/lib/portalClient'
 
 const MAX_BYTES = 25 * 1024 * 1024
 const kindLabel = (value) => MATERIAL_KINDS.find((k) => k.value === value)?.label || value
@@ -19,11 +21,12 @@ export const materialKey = (id) => `material:${id}`
  * assistant to know about. Files stay on this device until the teacher
  * chooses to share one with a class.
  */
-export default function Materials({ exam, onShare }) {
+export default function Materials({ exam, cls }) {
   const { addMaterial, updateMaterial, removeMaterial, setMarkingNotes, setPassMark } = useWorkspace()
   const inputRef = useRef(null)
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState(null)
+  const [sharing, setSharing] = useState(null)
   const [notes, setNotes] = useState(exam.markingNotes || '')
   const [syncedNotes, setSyncedNotes] = useState(exam.markingNotes || '')
   const materials = exam.materials || []
@@ -72,6 +75,23 @@ export default function Materials({ exam, onShare }) {
     removeMaterial(exam.id, material.id)
   }
 
+  const share = async (material) => {
+    setSharing(null)
+    const blob = await getPage(materialKey(material.id)).catch(() => null)
+    if (!blob) {
+      setMessage({ tone: 'caution', text: `${material.name} isn’t on this device, so it can’t be shared from here.` })
+      return
+    }
+    const file = new File([blob], material.name, { type: material.mime })
+    const result = await portal.addPaper(cls.id, file, { title: `${exam.title} · ${kindLabel(material.kind)}`, kind: material.kind === 'paper' ? 'paper' : material.kind === 'memo' ? 'memo' : 'reference', allowDownload: true })
+    if (result.ok) {
+      updateMaterial(exam.id, material.id, { sharedAt: new Date().toISOString() })
+      setMessage({ tone: 'positive', text: `${material.name} is now shared with ${cls.name}.` })
+    } else {
+      setMessage({ tone: 'caution', text: result.status === 409 ? 'Create the class code first, from the class page.' : result.error, href: result.status === 409 ? `/dashboard/classes/${cls.id}` : result.status === 401 ? '/login' : null })
+    }
+  }
+
   const memoCount = materials.filter((m) => m.kind === 'memo' || m.kind === 'notes').length
 
   return (
@@ -87,7 +107,9 @@ export default function Materials({ exam, onShare }) {
 
       {message && (
         <div className="mt-4">
-          <Notice tone={message.tone} onDismiss={() => setMessage(null)}>{message.text}</Notice>
+          <Notice tone={message.tone} onDismiss={() => setMessage(null)}>
+            {message.text} {message.href && <Link href={message.href} className="font-semibold underline">Open</Link>}
+          </Notice>
         </div>
       )}
 
@@ -110,8 +132,8 @@ export default function Materials({ exam, onShare }) {
               </select>
               <div className="flex items-center gap-1.5">
                 <Button size="xs" variant="secondary" onClick={() => open(m)}>Open</Button>
-                {onShare && (m.kind === 'paper' || m.kind === 'memo' || m.kind === 'reference') && (
-                  <Button size="xs" variant="secondary" onClick={() => onShare(m)}>{m.sharedAt ? 'Shared · update' : 'Share with class'}</Button>
+                {cls && m.kind !== 'notes' && (
+                  <Button size="xs" variant="secondary" onClick={() => (m.kind === 'memo' ? setSharing(m) : share(m))}>{m.sharedAt ? 'Share again' : 'Share with class'}</Button>
                 )}
                 <Button size="xs" variant="ghost" onClick={() => remove(m)} aria-label={`Remove ${m.name}`}>Remove</Button>
               </div>
@@ -159,6 +181,15 @@ export default function Materials({ exam, onShare }) {
           {memoCount === 0 ? 'No memo or notes yet: the assistant will have only the rubric to go on.' : `${memoCount} memo or notes file${memoCount === 1 ? '' : 's'} attached.`}
         </p>
       </div>
+      <ConfirmDialog
+        open={Boolean(sharing)}
+        title="Share the memo with students?"
+        confirmLabel="Share memo"
+        onCancel={() => setSharing(null)}
+        onConfirm={() => share(sharing)}
+      >
+        Every student with the class code will be able to read the full answers in {sharing?.name}. Share it after the exam, once marking is done.
+      </ConfirmDialog>
     </Panel>
   )
 }

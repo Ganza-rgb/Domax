@@ -281,6 +281,17 @@ export function WorkspaceStateProvider({ children }) {
       setPassMark(examId, passMark) {
         updateExam(examId, (exam) => ({ ...exam, passMark: Math.min(100, Math.max(1, Number(passMark) || DEFAULT_PASS_MARK)) }))
       },
+      /** What the marking assistant suggested for one answer, kept so it can be compared with the teacher's final mark. */
+      recordSuggestion(examId, studentId, questionId, suggestion) {
+        updateExam(
+          examId,
+          (exam) => ({
+            ...exam,
+            ai: { ...(exam.ai || {}), [studentId]: { ...(exam.ai?.[studentId] || {}), [questionId]: { ...suggestion, at: new Date().toISOString() } } },
+          }),
+          { action: 'Assistant suggested a mark', detail: `${questionId} · ${suggestion.score}`, studentId }
+        )
+      },
       /** Only ever called from the teacher's release button. */
       release(examId) {
         updateExam(examId, (exam) => (exam.releasedAt ? exam : { ...exam, releasedAt: new Date().toISOString() }), {
@@ -343,7 +354,7 @@ export function WorkspaceStateProvider({ children }) {
                   ...cls,
                   students: [
                     ...cls.students,
-                    ...rows.map((row) => ({ id: newId('stu'), name: row.name.trim(), ids: { camis: row.camis || '', urubuto: row.urubuto || '', regNo: row.regNo || '' } })),
+                    ...rows.map((row) => ({ id: newId('stu'), name: row.name.trim(), ids: { camis: row.camis || '', urubuto: row.urubuto || '', regNo: row.regNo || '' }, email: row.email || '', phone: row.phone || '' })),
                   ],
                 }
               : cls
@@ -356,13 +367,6 @@ export function WorkspaceStateProvider({ children }) {
           classes: prev.classes.map((cls) =>
             cls.id === classId ? { ...cls, students: cls.students.map((s) => (s.id === studentId ? { ...s, ...patch } : s)) } : cls
           ),
-        }))
-      },
-      /** Student-portal settings for a class: its shared code and what students may do. */
-      setClassAccess(classId, access) {
-        update((prev) => ({
-          ...prev,
-          classes: prev.classes.map((cls) => (cls.id === classId ? { ...cls, access: { ...(cls.access || {}), ...access } } : cls)),
         }))
       },
       removeStudent(classId, studentId) {
