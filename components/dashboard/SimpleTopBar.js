@@ -11,6 +11,7 @@ const pageTitles = {
   '/dashboard/exams': 'Exams',
   '/dashboard/rubrics': 'Rubrics',
   '/dashboard/results': 'Results',
+  '/dashboard/messages': 'Messages',
   '/dashboard/classes': 'Classes',
   '/dashboard/settings': 'Settings',
 }
