@@ -7,6 +7,7 @@ import { useWorkspace, latestVersion, rubricVersion, rubricWarnings } from '@/st
 import { processPhoto } from '@/lib/capture'
 import { putPage, deletePage } from '@/lib/deviceStore'
 import { ScriptPage } from '@/components/workspace/examStatus'
+import Materials from '@/components/workspace/Materials'
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`
 const formatDate = (iso) => (iso ? new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : '')
@@ -100,6 +101,10 @@ export function PrepareStep({ exam, cls, rubric, progress }) {
           </p>
         )}
       </Panel>
+
+      <div className="lg:col-span-2">
+        <Materials exam={exam} />
+      </div>
     </div>
   )
 }

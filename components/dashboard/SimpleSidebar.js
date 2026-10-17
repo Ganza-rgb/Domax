@@ -23,13 +23,14 @@ const icons = {
   more: 'M5 12h.01M12 12h.01M19 12h.01',
 }
 
-// Five places, named the way a teacher would say them. Each exam carries its
+// The places a teacher goes, named the way a teacher would say them. Each exam carries its
 // own steps (prepare, collect, mark, release), so they don't need sections here.
 const navItems = [
-  { label: 'Today', href: '/dashboard', icon: 'home' },
-  { label: 'Exams', href: '/dashboard/exams', icon: 'exams' },
+  { label: 'Today', href: '/dashboard', icon: 'home', primary: true },
+  { label: 'Exams', href: '/dashboard/exams', icon: 'exams', primary: true },
+  { label: 'Classes', href: '/dashboard/classes', icon: 'students', primary: true },
+  { label: 'Results', href: '/dashboard/results', icon: 'analytics', primary: true },
   { label: 'Rubrics', href: '/dashboard/rubrics', icon: 'rubrics' },
-  { label: 'Classes', href: '/dashboard/classes', icon: 'students' },
   { label: 'Settings', href: '/dashboard/settings', icon: 'settings' },
 ]
 
@@ -48,6 +49,17 @@ export default function SimpleSidebar() {
   const pathname = usePathname()
   const { teacher } = useUserState()
   const [isExpanded, setIsExpanded] = useState(true)
+  const [moreOpen, setMoreOpen] = useState(false)
+  const mobilePrimary = navItems.filter((item) => item.primary)
+  const mobileMore = navItems.filter((item) => !item.primary)
+  const moreActive = mobileMore.some((item) => isActivePath(pathname, item.href))
+
+  useEffect(() => {
+    if (!moreOpen) return undefined
+    const onKey = (event) => event.key === 'Escape' && setMoreOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [moreOpen])
 
   useEffect(() => {
     try {
@@ -139,15 +151,35 @@ export default function SimpleSidebar() {
         </div>
       </aside>
 
-      {/* Phone: all five places as tabs at the bottom */}
+      {/* Phone: main places as tabs at the bottom, the rest under More */}
+      {moreOpen && (
+        <div role="dialog" aria-label="More sections" className="lg:hidden fixed bottom-[calc(4rem+env(safe-area-inset-bottom))] left-3 right-3 z-50 rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] p-2 shadow-[var(--sky-shadow)]">
+          <ul>
+            {mobileMore.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={() => setMoreOpen(false)}
+                  aria-current={isActivePath(pathname, item.href) ? 'page' : undefined}
+                  className="flex items-center gap-3 h-11 rounded-lg px-3 text-[15px] font-medium text-[var(--sky-text)] hover:bg-[var(--sky-surface)]"
+                >
+                  <Icon name={item.icon} className="w-5 h-5 text-[var(--sky-subtle)]" />
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <nav aria-label="Workspace" className="lg:hidden fixed bottom-0 left-0 right-0 bg-[var(--sky-panel)] border-t border-[var(--sky-panel-border)] z-40 pb-[env(safe-area-inset-bottom)]">
         <div className="flex items-stretch justify-around h-16 px-1">
-          {navItems.map((item) => {
+          {mobilePrimary.map((item) => {
             const isActive = isActivePath(pathname, item.href)
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setMoreOpen(false)}
                 aria-current={isActive ? 'page' : undefined}
                 className={`flex flex-col items-center justify-center flex-1 gap-1 transition-colors ${isActive ? 'text-[var(--action-accent)]' : 'text-[var(--sky-subtle)]'}`}
               >
@@ -156,6 +188,15 @@ export default function SimpleSidebar() {
               </Link>
             )
           })}
+          <button
+            type="button"
+            onClick={() => setMoreOpen((open) => !open)}
+            aria-expanded={moreOpen}
+            className={`flex flex-col items-center justify-center flex-1 gap-1 transition-colors ${moreActive || moreOpen ? 'text-[var(--action-accent)]' : 'text-[var(--sky-subtle)]'}`}
+          >
+            <Icon name="more" className="w-5 h-5" />
+            <span className="text-[11px] font-medium">More</span>
+          </button>
         </div>
       </nav>
     </>

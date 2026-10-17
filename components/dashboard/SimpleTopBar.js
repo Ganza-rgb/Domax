@@ -10,6 +10,7 @@ const pageTitles = {
   '/dashboard': 'Today',
   '/dashboard/exams': 'Exams',
   '/dashboard/rubrics': 'Rubrics',
+  '/dashboard/results': 'Results',
   '/dashboard/classes': 'Classes',
   '/dashboard/settings': 'Settings',
 }

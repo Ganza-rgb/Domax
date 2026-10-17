@@ -16,6 +16,14 @@ import { seedClasses, seedExams, seedLog, seedRubrics } from '@/states/workspace
 
 const STORAGE_KEY = 'domax:workspace:v1'
 
+export const DEFAULT_PASS_MARK = 50
+export const MATERIAL_KINDS = [
+  { value: 'paper', label: 'Exam paper' },
+  { value: 'memo', label: 'Marking guide or memo' },
+  { value: 'notes', label: 'Teacher notes' },
+  { value: 'reference', label: 'Reference material' },
+]
+
 const newId = (prefix) => `${prefix}-${Math.random().toString(36).slice(2, 9)}`
 
 export const STEPS = [
@@ -174,6 +182,9 @@ export function WorkspaceStateProvider({ children }) {
                 unassigned: [],
                 marks: {},
                 releasedAt: null,
+                materials: [],
+                markingNotes: '',
+                passMark: DEFAULT_PASS_MARK,
               },
             ],
             log: withLog(prev, { examId: id, action: 'Exam created', detail: title }),
@@ -246,6 +257,30 @@ export function WorkspaceStateProvider({ children }) {
           { action: value === null || value === '' ? 'Mark cleared' : 'Mark saved', detail: `${questionId}${value === null || value === '' ? '' : ` · ${value}`}`, studentId }
         )
       },
+      /* Exam materials: the paper, the memo and notes that help marking. Files live on this device. */
+      addMaterial(examId, material) {
+        updateExam(
+          examId,
+          (exam) => ({ ...exam, materials: [...(exam.materials || []), { addedAt: new Date().toISOString(), ...material, id: material.id || newId('mat') }] }),
+          { action: 'Material added', detail: material.name }
+        )
+      },
+      updateMaterial(examId, materialId, patch) {
+        updateExam(examId, (exam) => ({ ...exam, materials: (exam.materials || []).map((m) => (m.id === materialId ? { ...m, ...patch } : m)) }))
+      },
+      removeMaterial(examId, materialId) {
+        updateExam(
+          examId,
+          (exam) => ({ ...exam, materials: (exam.materials || []).filter((m) => m.id !== materialId) }),
+          { action: 'Material removed' }
+        )
+      },
+      setMarkingNotes(examId, markingNotes) {
+        updateExam(examId, (exam) => ({ ...exam, markingNotes }))
+      },
+      setPassMark(examId, passMark) {
+        updateExam(examId, (exam) => ({ ...exam, passMark: Math.min(100, Math.max(1, Number(passMark) || DEFAULT_PASS_MARK)) }))
+      },
       /** Only ever called from the teacher's release button. */
       release(examId) {
         updateExam(examId, (exam) => (exam.releasedAt ? exam : { ...exam, releasedAt: new Date().toISOString() }), {
@@ -313,6 +348,21 @@ export function WorkspaceStateProvider({ children }) {
                 }
               : cls
           ),
+        }))
+      },
+      updateStudent(classId, studentId, patch) {
+        update((prev) => ({
+          ...prev,
+          classes: prev.classes.map((cls) =>
+            cls.id === classId ? { ...cls, students: cls.students.map((s) => (s.id === studentId ? { ...s, ...patch } : s)) } : cls
+          ),
+        }))
+      },
+      /** Student-portal settings for a class: its shared code and what students may do. */
+      setClassAccess(classId, access) {
+        update((prev) => ({
+          ...prev,
+          classes: prev.classes.map((cls) => (cls.id === classId ? { ...cls, access: { ...(cls.access || {}), ...access } } : cls)),
         }))
       },
       removeStudent(classId, studentId) {
