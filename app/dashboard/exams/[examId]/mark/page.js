@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useWorkspace } from '@/states/useWorkspaceState'
 import { ScriptPage } from '@/components/workspace/examStatus'
 import { TickMark } from '@/components/dashboard/ui'
+import AssistantBox from '@/components/workspace/AssistantBox'
 
 /*
  * The marking room: one question across the whole class, names hidden,
@@ -277,6 +278,18 @@ export default function MarkingRoom() {
                 <p className="text-[15px] text-[var(--sky-text)] mt-2 leading-relaxed">{question.modelAnswer}</p>
               </details>
             )}
+
+            <AssistantBox
+              exam={exam}
+              question={question}
+              student={student}
+              pages={pages}
+              sampleText={sampleText}
+              onUse={(score) => {
+                setDraft(String(score))
+                setTicked([])
+              }}
+            />
 
             <div>
               <p className="text-sm font-semibold mb-2">Your mark</p>

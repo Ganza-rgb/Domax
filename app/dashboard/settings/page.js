@@ -6,6 +6,7 @@ import { useUserState } from '@/states/useUserState'
 import { useThemeState } from '@/states/useThemeState'
 import { RestartOnboardingButton } from '@/components/dashboard/OnboardingHelper'
 import BillingOverview from '@/components/dashboard/BillingOverview'
+import AssistantStatus from '@/components/workspace/AssistantStatus'
 import { useWorkspace } from '@/states/useWorkspaceState'
 import { useState } from 'react'
 
@@ -86,6 +87,8 @@ export default function SettingsPage() {
           </div>
         </div>
       </Panel>
+
+ <AssistantStatus />
 
       <section aria-labelledby="billing-heading" className="space-y-4">
         <h2 id="billing-heading" className="text-xl font-semibold tracking-[-0.02em]">Billing</h2>

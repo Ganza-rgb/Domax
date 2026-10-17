@@ -5,6 +5,9 @@ import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import { WsButton as Button, EmptyState, Notice, Panel, ProgressBar, StatGroup, StatusPill, downloadCsv, fieldClass, labelClass } from '@/components/dashboard/ui'
 import { useWorkspace } from '@/states/useWorkspaceState'
 import { analyseAllClasses, focusAdvice, percent } from '@/lib/analytics'
+import { assistant } from '@/lib/aiClient'
+import { portal } from '@/lib/portalClient'
+import Link from 'next/link'
 
 const slug = (text) => text.replace(/[^a-z0-9]+/gi, '-').toLowerCase()
 
@@ -45,6 +48,8 @@ export default function ResultsPage() {
   const [examId, setExamId] = useState('')
   const [studentId, setStudentId] = useState('')
   const [note, setNote] = useState(null)
+  const [drafts, setDrafts] = useState({})
+  const [working, setWorking] = useState(false)
 
   const current = withResults.find((c) => c.cls.id === classId) || withResults[0]
   const analysis = current?.analyses.find((a) => a.exam.id === examId) || current?.analyses[current.analyses.length - 1]
@@ -84,14 +89,53 @@ export default function ResultsPage() {
     ])
   }
 
-  const copyAdvice = async () => {
+  const draftKey = selected ? `${analysis.exam.id}:${selected.student.id}` : ''
+  const message = advice ? drafts[draftKey] ?? adviceText(selected.student, analysis, advice) : ''
+  const setMessage = (text) => setDrafts((prev) => ({ ...prev, [draftKey]: text }))
+
+  const copyMessage = async () => {
     try {
-      await navigator.clipboard.writeText(adviceText(selected.student, analysis, advice))
-      setNote({ tone: 'positive', text: 'Message copied. Paste it into email, WhatsApp or SMS, or send it from Messages.' })
+      await navigator.clipboard.writeText(message)
+      setNote({ tone: 'positive', text: 'Message copied. Paste it into email, WhatsApp or SMS.' })
     } catch {
       setNote({ tone: 'caution', text: 'Your browser blocked copying.' })
     }
   }
+
+  const improveWording = async () => {
+    setWorking(true)
+    const result = await assistant.advice({
+      examTitle: analysis.exam.title,
+      pct: advice.pct,
+      passMark: analysis.pass,
+      focus: advice.focus,
+      strong: advice.strong,
+    })
+    setWorking(false)
+    if (!result.ok) {
+      setNote({ tone: 'caution', text: result.status === 503 ? 'The marking assistant is off, so your own wording stays. See Settings to turn it on.' : result.error })
+      return
+    }
+    const first = selected.student.name.split(' ').pop()
+    setMessage([`Hello ${first},`, result.data.summary, ...(result.data.tips.length ? ['', ...result.data.tips.map((t) => `- ${t}`)] : [])].join('\n'))
+    setNote({ tone: 'info', text: 'Reworded by the assistant. Read it and change anything before you send.' })
+  }
+
+  const sendMessage = async () => {
+    setWorking(true)
+    const result = await portal.sendMessage({ classId: current.cls.id, studentId: selected.student.id, subject: `Your result in ${analysis.exam.title}`, body: message })
+    setWorking(false)
+    if (result.ok) setNote({ tone: 'positive', text: `Sent to ${selected.student.name}. They see it after entering their ID number in the student portal.` })
+    else if (result.status === 409) setNote({ tone: 'caution', text: 'Create the class code first so students can receive messages.', href: `/dashboard/classes/${current.cls.id}` })
+    else setNote({ tone: 'caution', text: result.error, href: result.status === 401 ? '/login' : null })
+  }
+
+  // How often the teacher kept the assistant's suggestions on this exam.
+  const suggestions = Object.entries(analysis.exam.ai || {}).flatMap(([studentId, byQuestion]) =>
+    Object.entries(byQuestion).map(([questionId, s]) => ({ final: analysis.exam.marks?.[studentId]?.[questionId], suggested: s.score })).filter((x) => x.final !== undefined)
+  )
+  const kept = suggestions.filter((x) => Math.abs(x.final - x.suggested) < 0.01).length
+  const avgGap = suggestions.length ? suggestions.reduce((sum, x) => sum + Math.abs(x.final - x.suggested), 0) / suggestions.length : 0
 
   return (
     <div className="space-y-6">
@@ -103,12 +147,12 @@ export default function ResultsPage() {
 
       <Panel title="Classes compared" meta="Average across finished exams">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[520px] text-left text-[15px]">
+          <table className="w-full sm:min-w-[520px] text-left text-[15px]">
             <thead className="text-xs text-[var(--sky-subtle)]">
               <tr>
                 <th className="pb-2 font-medium">Class</th>
-                <th className="pb-2 font-medium">Exams</th>
-                <th className="pb-2 font-medium">Scripts</th>
+                <th className="hidden sm:table-cell pb-2 font-medium">Exams</th>
+                <th className="hidden sm:table-cell pb-2 font-medium">Scripts</th>
                 <th className="pb-2 font-medium w-[32%]">Average</th>
                 <th className="pb-2 font-medium text-right">Pass rate</th>
               </tr>
@@ -121,8 +165,8 @@ export default function ResultsPage() {
                       {c.cls.name}
                     </button>
                   </td>
-                  <td className="py-3 pr-3 tabular-nums">{c.analyses.length}</td>
-                  <td className="py-3 pr-3 tabular-nums">{c.scripts}</td>
+                  <td className="hidden sm:table-cell py-3 pr-3 tabular-nums">{c.analyses.length}</td>
+                  <td className="hidden sm:table-cell py-3 pr-3 tabular-nums">{c.scripts}</td>
                   <td className="py-3 pr-3">
                     <div className="flex items-center gap-2">
                       <ProgressBar value={c.mean} max={100} tone={c.mean >= 50 ? 'positive' : 'caution'} label={`${c.cls.name} average`} />
@@ -287,12 +331,34 @@ export default function ResultsPage() {
                   </ul>
                 </div>
               )}
-              <Button size="md" variant="secondary" className="w-full" onClick={copyAdvice}>Copy a message for this student</Button>
-              {note && <Notice tone={note.tone} onDismiss={() => setNote(null)}>{note.text}</Notice>}
+              <div>
+                <label htmlFor="student-message" className="block text-xs font-semibold text-[var(--sky-subtle)] mb-1">Message to this student</label>
+                <textarea id="student-message" rows={9} className={`${fieldClass} !h-auto py-2.5 text-sm`} value={message} onChange={(e) => setMessage(e.target.value)} />
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Button size="sm" onClick={sendMessage} disabled={working || !message.trim()}>Send in Domax</Button>
+                  <Button size="sm" variant="secondary" onClick={copyMessage}>Copy</Button>
+                  <Button size="sm" variant="secondary" onClick={improveWording} disabled={working}>{working ? 'Working…' : 'Improve wording'}</Button>
+                </div>
+              </div>
+              {note && (
+                <Notice tone={note.tone} onDismiss={() => setNote(null)}>
+                  {note.text} {note.href && <Link href={note.href} className="font-semibold underline">Open</Link>}
+                </Notice>
+              )}
             </div>
           )}
         </Panel>
       </div>
+
+      {suggestions.length > 0 && (
+        <Panel title="Marking assistant check" meta={analysis.exam.title}>
+          <p className="text-[15px]">
+            The assistant suggested <strong>{suggestions.length}</strong> {suggestions.length === 1 ? 'mark' : 'marks'} on this exam. You kept <strong>{kept}</strong> ({Math.round((kept / suggestions.length) * 100)}%) and changed {suggestions.length - kept}.
+            {suggestions.length - kept > 0 && <> On average your mark was {avgGap.toFixed(1)} {avgGap === 1 ? 'mark' : 'marks'} away from its suggestion.</>}
+          </p>
+          <p className="mt-2 text-xs text-[var(--sky-subtle)]">This is how you can tell whether the assistant is good enough to trust more. It never replaces your mark.</p>
+        </Panel>
+      )}
 
       <p className="text-xs text-[var(--sky-subtle)]">
         Only scripts where every question has your mark are counted. Advice names the questions where a student scored well below the class; it never changes a mark.
