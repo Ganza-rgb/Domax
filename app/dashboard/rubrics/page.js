@@ -1,23 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useDashboardState } from '@/states/useDashboardState'
+import { useState } from 'react'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import { WsButton as Button, EmptyState, Notice, Panel, fieldClass, labelClass } from '@/components/dashboard/ui'
 
 const emptyRubric = () => ({ name: '', description: '', criteria: [{ name: '', maxScore: 10, weight: 1 }] })
 
 export default function RubricsPage() {
-  const { setCurrentSection } = useDashboardState()
   const [rubrics, setRubrics] = useState([])
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [newRubric, setNewRubric] = useState(emptyRubric)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    setCurrentSection('rubrics')
-    // TODO: Load rubrics from API
-  }, [setCurrentSection])
+  // TODO: Load rubrics from API
 
   const handleAddCriterion = () => {
     setNewRubric({

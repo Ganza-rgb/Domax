@@ -1,9 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import { Panel, fieldClass, labelClass, TickMark } from '@/components/dashboard/ui'
-import { useDashboardState } from '@/states/useDashboardState'
 import { useUserState } from '@/states/useUserState'
 import { useThemeState } from '@/states/useThemeState'
 import { RestartOnboardingButton } from '@/components/dashboard/OnboardingHelper'
@@ -37,13 +35,8 @@ function Toggle({ id, checked, onChange, label, description }) {
 }
 
 export default function SettingsPage() {
-  const { setCurrentSection } = useDashboardState()
   const { teacher, updatePreferences } = useUserState()
   const { isDark, setTheme } = useThemeState()
-
-  useEffect(() => {
-    setCurrentSection('settings')
-  }, [setCurrentSection])
 
   return (
     <div className="space-y-6 max-w-3xl">
