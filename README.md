@@ -9,7 +9,7 @@ A modern web application built with Next.js for automated student paper grading,
 - **Features**: Detailed feature showcase
 - **Pricing**: Transparent pricing tiers (Starter, Pro, Enterprise)
 - **About**: Company mission and values
-- **Blog**: SEO-optimized content hub
+- **Blog**: SEO-optimized content hub ##Currently not available yet
 - **Contact/Demo**: Lead capture forms
 
 ### Authenticated Application
