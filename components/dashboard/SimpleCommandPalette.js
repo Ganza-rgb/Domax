@@ -2,11 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, createContext, useContext } from 'react'
 import { useRouter } from 'next/navigation'
-import { useDashboardState } from '@/states/useDashboardState'
 import { useThemeState } from '@/states/useThemeState'
-import { useExamState } from '@/states/useExamState'
-import { useSubmissionState } from '@/states/useSubmissionState'
-import { useUserState } from '@/states/useUserState'
+import { useWorkspace } from '@/states/useWorkspaceState'
 
 // Context to allow opening from anywhere
 const CommandPaletteContext = createContext(null)
@@ -16,33 +13,20 @@ export function useCommandPalette() {
 }
 
 const commands = [
-  { label: 'Go to Home', href: '/dashboard', category: 'Navigation' },
-  { label: 'Upload Papers', href: '/dashboard/upload', category: 'Navigation' },
-  { label: 'Go to Exams', href: '/dashboard/exams', category: 'Navigation' },
-  { label: 'Go to Submissions', href: '/dashboard/submissions', category: 'Navigation' },
-  { label: 'Go to Rubrics', href: '/dashboard/rubrics', category: 'Navigation' },
-  { label: 'Go to Courses', href: '/dashboard/courses', category: 'Navigation' },
-  { label: 'Go to Assignments', href: '/dashboard/assignments', category: 'Navigation' },
-  { label: 'Go to Students', href: '/dashboard/students', category: 'Navigation' },
-  { label: 'Go to Past papers', href: '/dashboard/past-papers', category: 'Navigation' },
-  { label: 'Go to Analytics', href: '/dashboard/analytics', category: 'Navigation' },
-  { label: 'Go to Billing', href: '/dashboard/billing', category: 'Navigation' },
-  { label: 'Go to Access codes', href: '/dashboard/entitlements', category: 'Navigation' },
-  { label: 'Go to Settings', href: '/dashboard/settings', category: 'Navigation' },
-  { label: 'Upload Documents', href: '/dashboard/upload', category: 'Actions' },
-  { label: 'Create Rubric', href: '/dashboard/rubrics', category: 'Actions' },
-  { label: 'Create Exam', href: '/dashboard/exams', category: 'Actions' },
-  { label: 'Create Course', href: '/dashboard/courses', category: 'Actions' },
-  { label: 'View billing', href: '/dashboard/billing', category: 'Actions' },
+  { label: 'Today', href: '/dashboard', category: 'Go to' },
+  { label: 'Exams', href: '/dashboard/exams', category: 'Go to' },
+  { label: 'Rubrics', href: '/dashboard/rubrics', category: 'Go to' },
+  { label: 'Classes', href: '/dashboard/classes', category: 'Go to' },
+  { label: 'Settings', href: '/dashboard/settings', category: 'Go to' },
+  { label: 'New exam', href: '/dashboard/exams/new', category: 'Actions' },
+  { label: 'New rubric', href: '/dashboard/rubrics/new', category: 'Actions' },
+  { label: 'New class', href: '/dashboard/classes/new', category: 'Actions' },
 ]
 
 export default function SimpleCommandPalette() {
   const router = useRouter()
-  const { setCurrentSection } = useDashboardState()
   const { toggleTheme, isDark } = useThemeState()
-  const { exams } = useExamState()
-  const { submissions } = useSubmissionState()
-  const { students } = useUserState()
+  const { exams, classes, rubrics } = useWorkspace()
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
@@ -58,26 +42,24 @@ export default function SimpleCommandPalette() {
   // Records from the workspace are searchable alongside commands
   const records = useMemo(
     () => [
-      ...students.map((student) => ({
-        label: student.name,
-        detail: `${student.level} · avg ${student.avgScore}%`,
-        href: `/dashboard/students/${student.id}`,
-        category: 'Students',
-      })),
-      ...submissions.map((submission) => ({
-        label: submission.student.name,
-        detail: submission.student.classRoom,
-        href: `/dashboard/submissions/${submission.id}`,
-        category: 'Submissions',
-      })),
       ...exams.map((exam) => ({
         label: exam.title,
-        detail: exam.level,
+        detail: classes.find((cls) => cls.id === exam.classId)?.name || '',
         href: `/dashboard/exams/${exam.id}`,
         category: 'Exams',
       })),
+      ...classes.flatMap((cls) =>
+        cls.students.map((student) => ({
+          label: student.name,
+          detail: cls.name,
+          href: `/dashboard/classes/${cls.id}`,
+          category: 'Students',
+        }))
+      ),
+      ...classes.map((cls) => ({ label: cls.name, detail: `${cls.students.length} students`, href: `/dashboard/classes/${cls.id}`, category: 'Classes' })),
+      ...rubrics.map((rubric) => ({ label: rubric.name, detail: rubric.level, href: `/dashboard/rubrics/${rubric.id}`, category: 'Rubrics' })),
     ],
-    [students, submissions, exams]
+    [exams, classes, rubrics]
   )
 
   const filteredCommands = useMemo(() => {
@@ -106,12 +88,10 @@ export default function SimpleCommandPalette() {
 
   const handleCommand = useCallback(
     (command) => {
-      const section = command.href.split('/')[2] || 'home'
-      setCurrentSection(section)
       router.push(command.href)
       closePalette()
     },
-    [router, setCurrentSection, closePalette]
+    [router, closePalette]
   )
 
   useEffect(() => {
@@ -198,7 +178,7 @@ export default function SimpleCommandPalette() {
               setActiveIndex(0)
             }}
             onKeyDown={onInputKeyDown}
-            placeholder="Search students, scripts, exams or commands…"
+            placeholder="Find an exam, class, student or rubric…"
             role="combobox"
             aria-expanded="true"
             aria-controls="palette-list"

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { useDashboardState } from '@/states/useDashboardState'
 import { useUserState } from '@/states/useUserState'
 
 const icons = {
@@ -24,43 +23,15 @@ const icons = {
   more: 'M5 12h.01M12 12h.01M19 12h.01',
 }
 
-// Grouped by what the teacher is doing, not alphabetically.
-const navGroups = [
-  {
-    label: 'Marking',
-    items: [
-      { label: 'Home', href: '/dashboard', section: 'home', icon: 'home' },
-      { label: 'Submissions', href: '/dashboard/submissions', section: 'submissions', icon: 'submissions' },
-      { label: 'Exams', href: '/dashboard/exams', section: 'exams', icon: 'exams' },
-      { label: 'Upload', href: '/dashboard/upload', section: 'upload', icon: 'upload' },
-      { label: 'Rubrics', href: '/dashboard/rubrics', section: 'rubrics', icon: 'rubrics' },
-    ],
-  },
-  {
-    label: 'Classes',
-    items: [
-      { label: 'Students', href: '/dashboard/students', section: 'students', icon: 'students' },
-      { label: 'Courses', href: '/dashboard/courses', section: 'courses', icon: 'courses' },
-      { label: 'Assignments', href: '/dashboard/assignments', section: 'assignments', icon: 'assignments' },
-      { label: 'Past papers', href: '/dashboard/past-papers', section: 'past-papers', icon: 'papers' },
-    ],
-  },
-  {
-    label: 'Insights',
-    items: [{ label: 'Analytics', href: '/dashboard/analytics', section: 'analytics', icon: 'analytics' }],
-  },
-  {
-    label: 'Account',
-    items: [
-      { label: 'Billing', href: '/dashboard/billing', section: 'billing', icon: 'billing' },
-      { label: 'Access codes', href: '/dashboard/entitlements', section: 'entitlements', icon: 'codes' },
-      { label: 'Settings', href: '/dashboard/settings', section: 'settings', icon: 'settings' },
-    ],
-  },
+// Five places, named the way a teacher would say them. Each exam carries its
+// own steps (prepare, collect, mark, release), so they don't need sections here.
+const navItems = [
+  { label: 'Today', href: '/dashboard', icon: 'home' },
+  { label: 'Exams', href: '/dashboard/exams', icon: 'exams' },
+  { label: 'Rubrics', href: '/dashboard/rubrics', icon: 'rubrics' },
+  { label: 'Classes', href: '/dashboard/classes', icon: 'students' },
+  { label: 'Settings', href: '/dashboard/settings', icon: 'settings' },
 ]
-
-const allItems = navGroups.flatMap((group) => group.items)
-const mobilePrimary = ['home', 'submissions', 'exams', 'upload']
 
 const Icon = ({ name, className }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -69,73 +40,49 @@ const Icon = ({ name, className }) => (
 )
 
 function isActivePath(pathname, href) {
-  // Home is only active on exactly /dashboard
   if (href === '/dashboard') return pathname === '/dashboard'
   return pathname === href || pathname.startsWith(href + '/')
 }
 
 export default function SimpleSidebar() {
   const pathname = usePathname()
-  const { setCurrentSection } = useDashboardState()
   const { teacher } = useUserState()
   const [isExpanded, setIsExpanded] = useState(true)
-  const [moreOpen, setMoreOpen] = useState(false)
 
-  // Load sidebar state from localStorage on mount
   useEffect(() => {
-    const saved = localStorage.getItem('sidebarExpanded')
-    if (saved !== null) {
-      setIsExpanded(saved === 'true')
-    }
+    try {
+      const saved = localStorage.getItem('sidebarExpanded')
+      if (saved !== null) setIsExpanded(saved === 'true')
+    } catch {}
   }, [])
 
-  // Save sidebar state to localStorage
   useEffect(() => {
-    localStorage.setItem('sidebarExpanded', isExpanded.toString())
+    try {
+      localStorage.setItem('sidebarExpanded', isExpanded.toString())
+    } catch {}
   }, [isExpanded])
-
-  // Close the mobile sheet with Escape
-  useEffect(() => {
-    if (!moreOpen) return undefined
-    const onKey = (event) => {
-      if (event.key === 'Escape') setMoreOpen(false)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [moreOpen])
-
-  const toggleSidebar = () => {
-    setIsExpanded(!isExpanded)
-  }
-
-  const moreActive = allItems.some((item) => !mobilePrimary.includes(item.section) && isActivePath(pathname, item.href))
 
   return (
     <>
       {/* Desktop sidebar */}
       <aside
         data-tour="sidebar-menu"
-        className={`hidden lg:flex flex-col bg-[var(--sky-panel)] border-r border-[var(--sky-panel-border)] transition-all duration-300 ease-in-out ${
-          isExpanded ? 'w-60' : 'w-16'
+        className={`hidden lg:flex flex-col bg-[var(--sky-panel)] border-r border-[var(--sky-panel-border)] transition-[width] duration-300 ease-in-out ${
+          isExpanded ? 'w-56' : 'w-16'
         }`}
       >
-        {/* Brand + collapse toggle */}
-        <div className={`flex items-center h-14 border-b border-[var(--sky-panel-border)] transition-all duration-300 ${
-          isExpanded ? 'px-4 justify-between' : 'justify-center'
-        }`}>
+        <div className={`flex items-center h-14 border-b border-[var(--sky-panel-border)] ${isExpanded ? 'px-4 justify-between' : 'justify-center'}`}>
           <Link
             href="/"
             aria-label="Domax home"
-            className={`flex items-end -space-x-1 overflow-hidden rounded-md transition-all duration-300 ${
-              isExpanded ? 'opacity-100 max-w-full' : 'opacity-0 max-w-0'
-            }`}
+            className={`flex items-end -space-x-1 overflow-hidden rounded-md transition-all duration-300 ${isExpanded ? 'opacity-100 max-w-full' : 'opacity-0 max-w-0'}`}
           >
             <Image src="/favicon.svg" alt="" width={28} height={28} className="h-6 w-6 flex-shrink-0" />
             <span className="text-[15px] font-bold tracking-tight text-[var(--sky-text)]">OMAX</span>
           </Link>
           <button
             type="button"
-            onClick={toggleSidebar}
+            onClick={() => setIsExpanded(!isExpanded)}
             aria-label={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
             aria-expanded={isExpanded}
             title={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
@@ -148,171 +95,69 @@ export default function SimpleSidebar() {
           </button>
         </div>
 
-        {/* Navigation */}
-        <nav aria-label="Workspace" className="flex-1 py-3 overflow-y-auto">
-          {navGroups.map((group, groupIndex) => (
-            <div key={group.label} className={groupIndex > 0 ? 'mt-4' : ''}>
-              <p
-                className={`px-5 mb-1 text-[12px] font-medium text-[var(--sky-subtle)] whitespace-nowrap overflow-hidden transition-all duration-300 ${
-                  isExpanded ? 'opacity-100 max-h-6' : 'opacity-0 max-h-0'
-                }`}
-              >
-                {group.label}
-              </p>
-              <ul className="space-y-0.5 px-2">
-                {group.items.map((item) => {
-                  const isActive = isActivePath(pathname, item.href)
-                  return (
-                    <li key={item.section}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setCurrentSection(item.section)}
-                        aria-current={isActive ? 'page' : undefined}
-                        title={!isExpanded ? item.label : undefined}
-                        className={`w-full flex items-center h-9 rounded-md transition-all duration-200 relative ${
-                          isExpanded ? 'px-3 gap-3' : 'justify-center'
-                        } ${
-                          isActive
-                            ? 'bg-[var(--action-accent-soft)] text-[var(--action-accent)] font-semibold'
-                            : 'text-[var(--sky-subtle)] font-medium hover:text-[var(--sky-text)] hover:bg-[var(--sky-surface)]'
-                        }`}
-                      >
-                        <Icon name={item.icon} className="w-[18px] h-[18px] flex-shrink-0" />
-                        <span
-                          className={`text-sm whitespace-nowrap overflow-hidden text-ellipsis transition-all duration-300 ${
-                            isExpanded ? 'opacity-100 max-w-full' : 'opacity-0 max-w-0'
-                          }`}
-                        >
-                          {item.label}
-                        </span>
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          ))}
+        <nav aria-label="Workspace" className="flex-1 py-4 overflow-y-auto">
+          <ul className="space-y-1 px-2">
+            {navItems.map((item) => {
+              const isActive = isActivePath(pathname, item.href)
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive ? 'page' : undefined}
+                    title={!isExpanded ? item.label : undefined}
+                    className={`w-full flex items-center h-10 rounded-lg transition-colors ${isExpanded ? 'px-3 gap-3' : 'justify-center'} ${
+                      isActive
+                        ? 'bg-[var(--action-accent-soft)] text-[var(--action-accent)] font-semibold'
+                        : 'text-[var(--sky-subtle)] font-medium hover:text-[var(--sky-text)] hover:bg-[var(--sky-surface)]'
+                    }`}
+                  >
+                    <Icon name={item.icon} className="w-[19px] h-[19px] flex-shrink-0" />
+                    <span className={`text-[15px] whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? 'opacity-100 max-w-full' : 'opacity-0 max-w-0'}`}>
+                      {item.label}
+                    </span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
         </nav>
 
-        {/* Signed-in teacher */}
         <div className="border-t border-[var(--sky-panel-border)] p-2">
           <Link
             href="/dashboard/settings"
             title={!isExpanded && teacher?.name ? teacher.name : undefined}
-            className={`w-full flex items-center transition-all duration-200 ${
-              isExpanded ? 'px-2 gap-3 h-12' : 'justify-center h-10'
-            } text-[var(--sky-subtle)] hover:text-[var(--sky-text)] hover:bg-[var(--sky-surface)] rounded-md`}
+            className={`w-full flex items-center ${isExpanded ? 'px-2 gap-3 h-12' : 'justify-center h-10'} text-[var(--sky-subtle)] hover:text-[var(--sky-text)] hover:bg-[var(--sky-surface)] rounded-lg`}
           >
             <div className="w-8 h-8 rounded-full bg-[#0A3059] flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
-              {teacher?.avatar || teacher?.name?.slice(0, 2)?.toUpperCase() || 'DT'}
+              {teacher?.avatar || 'DT'}
             </div>
-            <div
-              className={`flex-1 min-w-0 text-left transition-all duration-300 ${
-                isExpanded ? 'opacity-100 max-w-full' : 'opacity-0 max-w-0 overflow-hidden'
-              }`}
-            >
-              <p className="text-sm font-semibold text-[var(--sky-text)] truncate">
-                {teacher?.name || 'User'}
-              </p>
-              <p className="text-xs text-[var(--sky-subtle)] truncate">
-                {teacher?.email || 'user@example.com'}
-              </p>
+            <div className={`flex-1 min-w-0 text-left transition-all duration-300 ${isExpanded ? 'opacity-100 max-w-full' : 'opacity-0 max-w-0 overflow-hidden'}`}>
+              <p className="text-sm font-semibold text-[var(--sky-text)] truncate">{teacher?.name}</p>
+              <p className="text-xs text-[var(--sky-subtle)] truncate">{teacher?.school}</p>
             </div>
           </Link>
         </div>
       </aside>
 
-      {/* Mobile bottom navigation: four primary destinations + "More" */}
+      {/* Phone: all five places as tabs at the bottom */}
       <nav aria-label="Workspace" className="lg:hidden fixed bottom-0 left-0 right-0 bg-[var(--sky-panel)] border-t border-[var(--sky-panel-border)] z-40 pb-[env(safe-area-inset-bottom)]">
         <div className="flex items-stretch justify-around h-16 px-1">
-          {mobilePrimary
-            .map((section) => allItems.find((item) => item.section === section))
-            .filter(Boolean)
-            .map((item) => {
-              const isActive = isActivePath(pathname, item.href)
-              return (
-                <Link
-                  key={item.section}
-                  href={item.href}
-                  onClick={() => setCurrentSection(item.section)}
-                  aria-current={isActive ? 'page' : undefined}
-                  className={`flex flex-col items-center justify-center flex-1 gap-1 transition-colors ${
-                    isActive ? 'text-[var(--action-accent)]' : 'text-[var(--sky-subtle)]'
-                  }`}
-                >
-                  <Icon name={item.icon} className="w-5 h-5" />
-                  <span className="text-[11px] font-medium">{item.label}</span>
-                </Link>
-              )
-            })}
-          <button
-            type="button"
-            onClick={() => setMoreOpen(true)}
-            aria-haspopup="dialog"
-            aria-expanded={moreOpen}
-            className={`flex flex-col items-center justify-center flex-1 gap-1 transition-colors ${
-              moreActive ? 'text-[var(--action-accent)]' : 'text-[var(--sky-subtle)]'
-            }`}
-          >
-            <Icon name="more" className="w-5 h-5" />
-            <span className="text-[11px] font-medium">More</span>
-          </button>
+          {navItems.map((item) => {
+            const isActive = isActivePath(pathname, item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? 'page' : undefined}
+                className={`flex flex-col items-center justify-center flex-1 gap-1 transition-colors ${isActive ? 'text-[var(--action-accent)]' : 'text-[var(--sky-subtle)]'}`}
+              >
+                <Icon name={item.icon} className="w-5 h-5" />
+                <span className="text-[11px] font-medium">{item.label}</span>
+              </Link>
+            )
+          })}
         </div>
       </nav>
-
-      {/* Mobile "More" sheet — every section, grouped like the desktop sidebar */}
-      {moreOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 flex items-end" role="dialog" aria-modal="true" aria-label="All sections">
-          <button
-            type="button"
-            className="absolute inset-0 bg-[rgba(10,22,38,0.45)]"
-            aria-label="Close"
-            onClick={() => setMoreOpen(false)}
-          />
-          <div className="relative w-full max-h-[80vh] overflow-y-auto rounded-t-2xl bg-[var(--sky-panel)] border-t border-[var(--sky-panel-border)] px-3 pt-3 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-            <div className="flex items-center justify-between px-2 pb-2">
-              <p className="text-sm font-semibold text-[var(--sky-text)]">All sections</p>
-              <button
-                type="button"
-                onClick={() => setMoreOpen(false)}
-                className="h-8 px-2 rounded-md text-sm text-[var(--sky-subtle)] hover:text-[var(--sky-text)]"
-              >
-                Close
-              </button>
-            </div>
-            {navGroups.map((group) => (
-              <div key={group.label} className="mt-2">
-                <p className="px-2 mb-1 text-[12px] font-medium text-[var(--sky-subtle)]">{group.label}</p>
-                <ul className="grid grid-cols-2 gap-1">
-                  {group.items.map((item) => {
-                    const isActive = isActivePath(pathname, item.href)
-                    return (
-                      <li key={item.section}>
-                        <Link
-                          href={item.href}
-                          onClick={() => {
-                            setCurrentSection(item.section)
-                            setMoreOpen(false)
-                          }}
-                          aria-current={isActive ? 'page' : undefined}
-                          className={`flex items-center gap-2.5 h-11 px-3 rounded-lg text-sm ${
-                            isActive
-                              ? 'bg-[var(--action-accent-soft)] text-[var(--action-accent)] font-semibold'
-                              : 'text-[var(--sky-text)] hover:bg-[var(--sky-surface)]'
-                          }`}
-                        >
-                          <Icon name={item.icon} className="w-[18px] h-[18px]" />
-                          {item.label}
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </>
   )
 }

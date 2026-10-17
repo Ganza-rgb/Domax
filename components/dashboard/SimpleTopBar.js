@@ -3,24 +3,14 @@
 import { useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useUserState } from '@/states/useUserState'
 import { useThemeState } from '@/states/useThemeState'
-import { useExamState } from '@/states/useExamState'
-import { useSubmissionState } from '@/states/useSubmissionState'
+import { useWorkspace } from '@/states/useWorkspaceState'
 
 const pageTitles = {
-  '/dashboard': 'Home',
-  '/dashboard/upload': 'Upload',
+  '/dashboard': 'Today',
   '/dashboard/exams': 'Exams',
-  '/dashboard/submissions': 'Submissions',
   '/dashboard/rubrics': 'Rubrics',
-  '/dashboard/courses': 'Courses',
-  '/dashboard/assignments': 'Assignments',
-  '/dashboard/students': 'Students',
-  '/dashboard/past-papers': 'Past papers',
-  '/dashboard/analytics': 'Analytics',
-  '/dashboard/billing': 'Billing',
-  '/dashboard/entitlements': 'Access codes',
+  '/dashboard/classes': 'Classes',
   '/dashboard/settings': 'Settings',
 }
 
@@ -28,10 +18,8 @@ const subscribeNoop = () => () => {}
 
 export default function SimpleTopBar() {
   const pathname = usePathname()
-  const { teacher, findStudentById } = useUserState()
   const { toggleTheme, isDark } = useThemeState()
-  const { findExamById } = useExamState()
-  const { findSubmissionById } = useSubmissionState()
+  const { findExam, findClass, findRubric } = useWorkspace()
   const isMac = useSyncExternalStore(
     subscribeNoop,
     () => /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent),
@@ -44,9 +32,10 @@ export default function SimpleTopBar() {
   const recordId = pathname.split('/')[3]
   let recordTitle = null
   if (recordId) {
-    if (basePath === '/dashboard/exams') recordTitle = findExamById(recordId)?.title || 'Exam'
-    else if (basePath === '/dashboard/submissions') recordTitle = findSubmissionById(recordId)?.student?.name || 'Submission'
-    else if (basePath === '/dashboard/students') recordTitle = findStudentById(recordId)?.name || 'Student'
+    if (recordId === 'new') recordTitle = 'New'
+    else if (basePath === '/dashboard/exams') recordTitle = findExam(recordId)?.title || 'Exam'
+    else if (basePath === '/dashboard/classes') recordTitle = findClass(recordId)?.name || 'Class'
+    else if (basePath === '/dashboard/rubrics') recordTitle = findRubric(recordId)?.name || 'Rubric'
     else recordTitle = decodeURIComponent(recordId)
   }
 

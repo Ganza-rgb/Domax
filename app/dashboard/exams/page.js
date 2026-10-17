@@ -1,95 +1,62 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import Link from 'next/link'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import ExamList from '@/components/dashboard/ExamList'
-import ExamDetails from '@/components/dashboard/ExamDetails'
-import { WsButton as Button, Panel, StatGroup } from '@/components/dashboard/ui'
-import { useDashboardState } from '@/states/useDashboardState'
-import { useExamState } from '@/states/useExamState'
-import { useSubmissionState } from '@/states/useSubmissionState'
+import { EmptyState, WsButton as Button } from '@/components/dashboard/ui'
+import { useWorkspace } from '@/states/useWorkspaceState'
+import { examStatus, StepChip } from '@/components/workspace/examStatus'
 
 export default function ExamsPage() {
-  const { setCurrentSection, updatePanel } = useDashboardState()
-  const { exams, activeExamId, findExamById } = useExamState()
-  const { setActiveSubmissionId } = useSubmissionState()
-
-  useEffect(() => {
-    setCurrentSection('exams')
-    if (activeExamId) {
-      const exam = findExamById(activeExamId)
-      if (exam) {
-        updatePanel({ type: 'exam', payload: exam })
-      }
-    } else if (exams.length > 0) {
-      updatePanel({ type: 'exam', payload: exams[0] })
-    }
-  }, [setCurrentSection, activeExamId, findExamById, updatePanel, exams])
-
-  const activeExam = findExamById(activeExamId) || exams[0]
-
-  const handleOpenSubmission = (submission) => {
-    setActiveSubmissionId(submission.id)
-    updatePanel({ type: 'submission', payload: submission })
-  }
-
-  const statusBoard = useMemo(
-    () => [
-      {
-        label: 'In progress',
-        value: exams.filter((exam) => exam.status === 'in-progress').length,
-        hint: 'Being marked now',
-      },
-      {
-        label: 'Drafts',
-        value: exams.filter((exam) => exam.status === 'draft').length,
-        hint: 'Not scheduled yet',
-      },
-      {
-        label: 'Need your review',
-        value: exams.reduce((acc, exam) => acc + exam.stats.needsReview, 0),
-        hint: 'Scripts with answers to check',
-        tone: exams.some((exam) => exam.stats.needsReview > 0) ? 'caution' : 'neutral',
-      },
-    ],
-    [exams]
-  )
+  const { exams, findClass, progressOf } = useWorkspace()
+  const rows = [...exams]
+    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+    .map((exam) => {
+      const progress = progressOf(exam)
+      return { exam, cls: findClass(exam.classId), progress, status: examStatus(exam, progress) }
+    })
 
   return (
     <div className="space-y-6">
       <WorkspaceHeader
-        meta="Exams manager"
         title="Exams"
-        subtitle={`${exams.length} upcoming or in progress`}
+        subtitle="Every exam you’ve set, and the step it’s at."
         actions={
-          <>
-            <Button variant="secondary" size="sm" disabled title="Importing exams is not available yet">
-              Import exam
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              data-tour="create-exam-button"
-              disabled
-              title="Exam creation is not available yet"
-            >
-              Create exam
-            </Button>
-          </>
+          <Button href="/dashboard/exams/new" size="lg" data-tour="create-exam-button">
+            New exam
+          </Button>
         }
       />
 
-      <StatGroup items={statusBoard} />
-
-      <div className="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)] gap-6 items-start">
-        <Panel title="Your exams" bodyClassName="!px-2 !pb-2">
-          <ExamList />
-        </Panel>
-
-        <Panel>
-          <ExamDetails exam={activeExam} onOpenSubmission={handleOpenSubmission} />
-        </Panel>
-      </div>
+      {rows.length === 0 ? (
+        <EmptyState
+          title="No exams yet"
+          body="Create an exam, print the answer sheets, and Domax walks you through collecting, marking and releasing."
+          action={<Button href="/dashboard/exams/new" size="lg">New exam</Button>}
+        />
+      ) : (
+        <ul className="rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] divide-y divide-[var(--sky-panel-border)] overflow-hidden">
+          {rows.map(({ exam, cls, status }) => (
+            <li key={exam.id}>
+              <Link
+                href={`/dashboard/exams/${exam.id}`}
+                className="group grid grid-cols-1 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto] gap-x-6 gap-y-2 items-center px-5 sm:px-6 py-4 hover:bg-[var(--sky-surface)] transition-colors"
+              >
+                <span className="min-w-0">
+                  <span className="block font-semibold text-[var(--sky-text)] truncate group-hover:text-[var(--action-accent)]">{exam.title}</span>
+                  <span className="block text-sm text-[var(--sky-subtle)]">{cls?.name || 'No class'}</span>
+                </span>
+                <span>
+                  <StepChip tone={status.tone}>{status.chip}</StepChip>
+                </span>
+                <span className="text-sm text-[var(--sky-subtle)]">{status.line}</span>
+                <svg viewBox="0 0 16 16" className="hidden sm:block w-4 h-4 text-[var(--sky-subtle)] group-hover:text-[var(--action-accent)]" aria-hidden="true">
+                  <path d="M6 3.5L10.5 8 6 12.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
