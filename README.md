@@ -1,4 +1,4 @@
-# Domax — Automated Student Paper Correction & Review Platform
+# Domax — Automated Student Paper Correction & Review Platform (Rwanda focused)
 
 A modern web application built with Next.js for automated student paper grading, rubric-based scoring, in-document annotations, and comprehensive analytics.
 
