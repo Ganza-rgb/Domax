@@ -10,7 +10,7 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`
  * What an exam needs next, in teacher words: a chip, one line of progress,
  * and the single action to take.
  */
-export function examStatus(exam, progress) {
+export function examStatus(exam, progress, cls = null) {
   const href = `/dashboard/exams/${exam.id}`
   switch (progress.step) {
     case 'prepare':
@@ -44,6 +44,15 @@ export function examStatus(exam, progress) {
       }
     }
     case 'release':
+      if (cls?.under16 && !cls.consent) {
+        return {
+          tone: 'warn',
+          chip: 'Consent needed',
+          line: 'Marked. Record consent for this class before releasing',
+          action: 'Record consent',
+          href: `/dashboard/classes/${cls.id}`,
+        }
+      }
       return {
         tone: 'ok',
         chip: 'Ready to release',

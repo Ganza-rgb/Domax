@@ -23,7 +23,7 @@ export default function TodayPage() {
   const rows = exams
     .map((exam) => {
       const progress = progressOf(exam)
-      return { exam, cls: findClass(exam.classId), progress, status: examStatus(exam, progress) }
+      return { exam, cls: findClass(exam.classId), progress, status: examStatus(exam, progress, findClass(exam.classId)) }
     })
     .filter((row) => row.progress.step !== 'done')
     .sort((a, b) => urgency[a.progress.step] - urgency[b.progress.step])

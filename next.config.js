@@ -17,6 +17,13 @@ const nextConfig = {
       { source: '/gdpr', destination: '/data-protection', permanent: true },
       { source: '/case-studies', destination: '/about', permanent: true },
       { source: '/:page(blog|careers|partners|status|docs|help|support)', destination: '/contact', permanent: true },
+      // Dashboard sections folded into the exam flow (Today, Exams, Rubrics, Classes, Settings).
+      { source: '/dashboard/submissions/:path*', destination: '/dashboard/exams', permanent: false },
+      { source: '/dashboard/:page(upload|assignments|analytics)', destination: '/dashboard/exams', permanent: false },
+      { source: '/dashboard/students/:path*', destination: '/dashboard/classes', permanent: false },
+      { source: '/dashboard/courses', destination: '/dashboard/classes', permanent: false },
+      { source: '/dashboard/:page(billing|entitlements)', destination: '/dashboard/settings', permanent: false },
+      { source: '/dashboard/past-papers', destination: '/dashboard', permanent: false },
     ]
   },
   experimental: {

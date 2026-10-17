@@ -30,7 +30,7 @@ export default function ExamPage() {
   const cls = findClass(exam.classId)
   const rubric = findRubric(exam.rubricId)
   const step = viewing || (progress.step === 'done' ? 'release' : progress.step)
-  const status = examStatus(exam, progress)
+  const status = examStatus(exam, progress, cls)
 
   return (
     <div className="space-y-6">

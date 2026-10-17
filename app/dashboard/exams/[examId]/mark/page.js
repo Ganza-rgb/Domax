@@ -127,10 +127,14 @@ export default function MarkingRoom() {
     return () => window.removeEventListener('keydown', onKey)
   }, [max, saveAndNext, goTo, sIndex, commit, router, leaveHref])
 
+  // A point worth more than one mark says so at the end, e.g. "Osmosis: water only (2)".
+  const pointValue = (point) => Number(/\((\d+(?:\.\d+)?)\)\s*$/.exec(point)?.[1] || 1)
+
   const toggleTick = (index) => {
     setTicked((prev) => {
       const next = prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
-      setDraft(next.length ? String(Math.min(max, next.length)) : '')
+      const sum = next.reduce((total, i) => total + pointValue(question.points[i]), 0)
+      setDraft(next.length ? String(Math.min(max, sum)) : '')
       return next
     })
   }

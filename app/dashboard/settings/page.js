@@ -5,6 +5,9 @@ import { Panel, fieldClass, labelClass, TickMark } from '@/components/dashboard/
 import { useUserState } from '@/states/useUserState'
 import { useThemeState } from '@/states/useThemeState'
 import { RestartOnboardingButton } from '@/components/dashboard/OnboardingHelper'
+import BillingOverview from '@/components/dashboard/BillingOverview'
+import { useWorkspace } from '@/states/useWorkspaceState'
+import { useState } from 'react'
 
 function Toggle({ id, checked, onChange, label, description }) {
   return (
@@ -37,9 +40,11 @@ function Toggle({ id, checked, onChange, label, description }) {
 export default function SettingsPage() {
   const { teacher, updatePreferences } = useUserState()
   const { isDark, setTheme } = useThemeState()
+  const { resetExampleWorkspace } = useWorkspace()
+  const [resetDone, setResetDone] = useState(false)
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-6 max-w-4xl">
       <WorkspaceHeader
         meta="Settings"
         title="Settings"
@@ -82,6 +87,11 @@ export default function SettingsPage() {
         </div>
       </Panel>
 
+      <section aria-labelledby="billing-heading" className="space-y-4">
+        <h2 id="billing-heading" className="text-xl font-semibold tracking-[-0.02em]">Billing</h2>
+        <BillingOverview />
+      </section>
+
       <Panel meta="Display" title="Appearance">
         <Toggle
           id="pref-dark"
@@ -90,6 +100,23 @@ export default function SettingsPage() {
           label="Dark theme"
           description="Applies to the workspace only."
         />
+      </Panel>
+
+      <Panel title="Example workspace">
+        <p className="text-sm text-[var(--sky-subtle)] mb-3">
+          This prototype keeps your classes, rubrics and exams in this browser only. Resetting brings back the example exams and removes anything you added.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            resetExampleWorkspace()
+            setResetDone(true)
+          }}
+          className="h-9 px-4 rounded-full border border-[var(--sky-panel-border)] text-sm font-semibold hover:bg-[var(--sky-surface)]"
+        >
+          Reset to the example workspace
+        </button>
+        {resetDone && <p className="text-sm text-[var(--vscode-green)] mt-2" role="status">Example workspace restored.</p>}
       </Panel>
 
       <Panel meta="Help & support" title="Welcome tour">

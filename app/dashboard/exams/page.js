@@ -12,7 +12,7 @@ export default function ExamsPage() {
     .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
     .map((exam) => {
       const progress = progressOf(exam)
-      return { exam, cls: findClass(exam.classId), progress, status: examStatus(exam, progress) }
+      return { exam, cls: findClass(exam.classId), progress, status: examStatus(exam, progress, findClass(exam.classId)) }
     })
 
   return (
