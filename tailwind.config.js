@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+// Loaded by Tailwind v4 through `@config` in app/globals.css.
+// Semantic roles mirror the CSS variables defined there.
 module.exports = {
   content: [
     './pages/**/*.{js,jsx}',
@@ -22,12 +24,44 @@ module.exports = {
           neutral: '#F6F8FA',
         },
         text: {
-          muted: '#6B7280',
+          muted: '#5B6B82',
+        },
+        // Text
+        ink: {
+          DEFAULT: '#0A3059',
+          2: '#4A5D75',
+          3: '#5B6B82',
+        },
+        // Surfaces & lines
+        canvas: '#F6F8FA',
+        tint: '#F0F7FF',
+        line: {
+          DEFAULT: '#E3E8EF',
+          strong: '#CFD8E3',
+        },
+        // Actions & status
+        accent: {
+          DEFAULT: '#005ffe',
+          strong: '#0047cc',
+          soft: '#E8F0FF',
+        },
+        positive: {
+          DEFAULT: '#007A56',
+          soft: '#E3F8F1',
+        },
+        caution: {
+          DEFAULT: '#B45309',
+          soft: '#FFF4E5',
+        },
+        critical: {
+          DEFAULT: '#E11D48',
+          soft: '#FDECEF',
         },
       },
       fontFamily: {
-        headline: ['Poppins', 'system-ui', 'sans-serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
+        headline: ['var(--font-display)', 'Georgia', 'serif'],
+        hand: ['var(--font-hand)', 'cursive'],
+        body: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         h1: ['clamp(2rem, 5vw, 3.5rem)', { lineHeight: '1.2', fontWeight: '700', letterSpacing: '-0.02em' }],
@@ -45,8 +79,9 @@ module.exports = {
         'card-lg': '16px',
       },
       boxShadow: {
-        card: '0 6px 18px rgba(10, 37, 102, 0.06)',
-        'card-hover': '0 12px 24px rgba(10, 37, 102, 0.12)',
+        card: '0 1px 2px rgba(10, 48, 89, 0.05), 0 4px 12px -6px rgba(10, 48, 89, 0.12)',
+        'card-hover': '0 2px 4px rgba(10, 48, 89, 0.06), 0 12px 28px -12px rgba(10, 48, 89, 0.22)',
+        pop: '0 12px 32px -8px rgba(10, 48, 89, 0.22), 0 2px 6px rgba(10, 48, 89, 0.08)',
         glow: '0 0 20px rgba(45, 212, 191, 0.3)',
       },
       backgroundImage: {
@@ -58,4 +93,3 @@ module.exports = {
   },
   plugins: [],
 }
-

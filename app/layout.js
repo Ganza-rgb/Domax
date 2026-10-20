@@ -1,5 +1,5 @@
 import './globals.css'
-import { Inter, Poppins } from 'next/font/google'
+import { Inter, Bricolage_Grotesque, Caveat } from 'next/font/google'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -8,17 +8,24 @@ const inter = Inter({
   display: 'swap',
 })
 
-const poppins = Poppins({
+// Display face for headings: a grotesque with some warmth in its curves.
+const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
-  weight: ['400', '600', '700', '800'],
-  variable: '--font-poppins',
+  variable: '--font-display',
+  display: 'swap',
+})
+
+// Only used for students' handwriting inside the script illustrations.
+const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-hand',
   display: 'swap',
 })
 
 export const metadata = {
-  title: 'Domax — AI-Powered Automated Grading Platform for Educators',
+  title: 'Domax — marking help for teachers in Rwanda',
   description:
-    'Grade papers faster with AI-powered feedback, rubric-based scoring, and in-document annotations. Save 80% of your grading time while delivering consistent, actionable feedback to every student. Trusted by 10,000+ educators worldwide.',
+    'Photograph your students\' handwritten scripts. Domax checks every page, suggests a mark for each answer against your marking scheme, and you sign off every mark before it reaches a student.',
   keywords: [
     'automated grading',
     'AI grading software',
@@ -35,18 +42,18 @@ export const metadata = {
   ],
   authors: [{ name: 'Domax' }],
   openGraph: {
-    title: 'Domax — AI-Powered Automated Grading Platform',
+    title: 'Domax — marking help for teachers in Rwanda',
     description:
-      'Grade papers faster with AI-powered feedback. Save 80% of your grading time while delivering consistent, actionable feedback. Trusted by 10,000+ educators worldwide.',
+      'Domax marks a first pass of your students\' scripts against your scheme. You check it, change what you disagree with, and release.',
     type: 'website',
     url: 'https://domax.com',
     siteName: 'Domax',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Domax — AI-Powered Automated Grading Platform',
+    title: 'Domax — marking help for teachers in Rwanda',
     description:
-      'Grade papers faster with AI-powered feedback. Save 80% of your grading time while delivering consistent, actionable feedback.',
+      'Domax marks a first pass of your students\' scripts against your scheme. You check it, change what you disagree with, and release.',
   },
   robots: {
     index: true,
@@ -56,7 +63,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang="en" className={`${inter.variable} ${bricolage.variable} ${caveat.variable}`}>
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="alternate icon" href="/favicon.ico" />

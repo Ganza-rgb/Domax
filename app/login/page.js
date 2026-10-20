@@ -1,165 +1,69 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import Button from '@/components/atoms/Button'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ReviewQueueVisual, Tick } from '@/components/site/ProductVisuals'
+import { useMotion, gsap, EASE } from '@/lib/motion'
+import { CONTACT_EMAIL } from '@/lib/site'
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
-}
+const inputClass =
+  'w-full h-12 px-4 bg-white border border-line-strong rounded-xl text-[15px] text-ink placeholder:text-ink-3 transition-[border-color,box-shadow] focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10'
 
 export default function LoginPage() {
+  const router = useRouter()
+  const page = useRef(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [currentFeature, setCurrentFeature] = useState(0)
+  const [error, setError] = useState('')
 
-  const features = [
-    {
-      title: 'AI-Powered Grading',
-      description: 'Grade papers in seconds with AI-powered feedback that delivers consistent, actionable comments.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Smart Rubrics',
-      description: 'Create custom rubrics and apply them consistently across all submissions for fair, transparent grading.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        </svg>
-      )
-    },
-    {
-      title: 'In-Document Annotations',
-      description: 'Add comments, highlights, and suggestions directly on student papers for personalized feedback.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Analytics Dashboard',
-      description: 'Track student performance, identify trends, and make data-driven decisions with comprehensive analytics.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      )
-    },
-    {
-      title: 'LMS Integrations',
-      description: 'Seamlessly sync with Canvas, Blackboard, Moodle, and Google Classroom for a unified workflow.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" />
-        </svg>
-      )
-    }
-  ]
+  useMotion(page, () => {
+    gsap.from('[data-enter]', { autoAlpha: 0, y: 18, duration: 0.7, ease: EASE, stagger: 0.07 })
+  })
 
-  const leftSideRef = useRef(null)
-  const rightSideRef = useRef(null)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentFeature((prev) => (prev + 1) % features.length)
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    // Use a small delay to ensure DOM is ready
-    const timer = setTimeout(() => {
-      // Left side (form) animation
-      if (leftSideRef.current) {
-        const children = Array.from(leftSideRef.current.children)
-        gsap.fromTo(children,
-          { opacity: 0, x: -30 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: 'power3.out',
-          }
-        )
-      }
-
-      // Right side (features) animation
-      if (rightSideRef.current) {
-        const content = rightSideRef.current.querySelector('div > div')
-        if (content) {
-          gsap.fromTo(content,
-            { opacity: 0, x: 30 },
-            {
-              opacity: 1,
-              x: 0,
-              duration: 0.8,
-              ease: 'power3.out',
-            }
-          )
-        }
-      }
-    }, 50)
-
-    return () => {
-      clearTimeout(timer)
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
-    }
-  }, [])
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setError('')
     setIsLoading(true)
-    setTimeout(() => setIsLoading(false), 1000)
+    try {
+      const result = await signIn('credentials', { email, password, redirect: false })
+      if (result?.ok && !result.error) {
+        router.push('/dashboard')
+        return
+      }
+      setError('That email and password don’t match an account. Check them and try again.')
+    } catch {
+      setError('We couldn’t reach the sign-in service. Check your connection and try again.')
+    }
+    setIsLoading(false)
   }
 
   return (
-    <div className="min-h-screen bg-white flex">
-      {/* Left Side - Login Form */}
-      <div ref={leftSideRef} className="flex-1 flex flex-col bg-white">
-        <div className="flex-1 flex items-center justify-center px-8 py-12 opacity-100">
-          <div className="w-full max-w-md">
-            {/* Logo */}
-            <Link href="/" className="flex items-end -space-x-1 mb-12">
-              <Image
-                src="/favicon.svg"
-                alt="Domax Logo"
-                width={40}
-                height={40}
-                className="h-8 w-8"
-                priority
-              />
-              <span className="text-2xl font-bold text-[#0A3059]">OMAX</span>
-            </Link>
+    <div ref={page} className="min-h-screen bg-white grid grid-cols-1 lg:grid-cols-[1fr_1.05fr]">
+      {/* Form */}
+      <div className="flex flex-col px-6 sm:px-10 py-8">
+        <Link data-enter href="/" className="inline-flex items-end -space-x-1 self-start" aria-label="Domax home">
+          <Image src="/favicon.svg" alt="" width={40} height={40} className="h-7 w-7" priority />
+          <span className="text-lg font-bold tracking-tight text-[#0A3059]">OMAX</span>
+        </Link>
 
-            {/* Welcome Message */}
-            <div className="mb-8">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#0A3059] mb-6 lg:mb-8 leading-[1.1] tracking-tight">
-                Welcome back!
-              </h1>
-              <p className="text-gray-600 text-lg">
-                Log in and continue grading your students' papers.
-              </p>
-            </div>
+        <div className="flex-1 flex items-center justify-center py-12">
+          <div className="w-full max-w-[400px]">
+            <h1 data-enter className="text-[clamp(2.25rem,4vw,3rem)] leading-[1] tracking-[-0.04em] text-ink">
+              Log in to Domax
+            </h1>
+            <p data-enter className="text-ink-2 text-[17px] mt-4">
+              Pick up where you left off with your class’s scripts.
+            </p>
 
-            {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
+            <form data-enter onSubmit={handleSubmit} className="mt-10 space-y-5">
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-semibold text-[#0A3059] mb-2"
-                >
+                <label htmlFor="email" className="block text-sm font-medium text-ink mb-2">
                   Email
                 </label>
                 <input
@@ -169,18 +73,16 @@ export default function LoginPage() {
                   autoComplete="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#005ffe] focus:border-transparent transition-all"
-                  placeholder="you@example.com"
+                  onChange={(event) => setEmail(event.target.value)}
+                  className={inputClass}
+                  placeholder="you@school.rw"
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? 'login-error' : undefined}
                 />
               </div>
 
-              {/* Password Field */}
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-semibold text-[#0A3059] mb-2"
-                >
+                <label htmlFor="password" className="block text-sm font-medium text-ink mb-2">
                   Password
                 </label>
                 <div className="relative">
@@ -191,115 +93,75 @@ export default function LoginPage() {
                     autoComplete="current-password"
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#005ffe] focus:border-transparent transition-all"
-                    placeholder="Enter your password"
+                    onChange={(event) => setPassword(event.target.value)}
+                    className={`${inputClass} pr-12`}
+                    aria-invalid={Boolean(error)}
+                    aria-describedby={error ? 'login-error' : undefined}
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 w-12 flex items-center justify-center rounded-r-xl text-ink-3 hover:text-ink"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-pressed={showPassword}
                   >
-                    {showPassword ? (
-                      <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                      </svg>
-                    ) : (
-                      <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    )}
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      {showPassword ? (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.1A9.7 9.7 0 0112 5c4.5 0 8.3 2.9 9.5 7a10 10 0 01-3 4.6M6.6 6.6A10 10 0 002.5 12c1.3 4.1 5 7 9.5 7a9.6 9.6 0 004.4-1" />
+                      ) : (
+                        <>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M2.5 12C3.7 7.9 7.5 5 12 5s8.3 2.9 9.5 7c-1.2 4.1-5 7-9.5 7s-8.3-2.9-9.5-7z" />
+                          <circle cx="12" cy="12" r="3" strokeWidth={1.8} />
+                        </>
+                      )}
+                    </svg>
                   </button>
                 </div>
               </div>
 
-              {/* Forgot Password Link */}
-              <div className="flex items-center justify-end">
-                <Link
-                  href="/forgot-password"
-                  className="text-sm font-medium text-[#005ffe] hover:text-[#0047cc] transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              {error && (
+                <p id="login-error" role="alert" className="rounded-xl bg-critical-soft text-critical text-sm px-4 py-3">
+                  {error}
+                </p>
+              )}
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                className="w-full"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Logging in...' : 'Log In'}
+              <Button type="submit" size="xl" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Logging in…' : 'Log in'}
               </Button>
+
+              <p className="text-sm text-ink-3">
+                Forgot your password?{' '}
+                <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Password reset')}`} className="link">
+                  Email us
+                </a>{' '}
+                and we’ll reset it.
+              </p>
             </form>
 
-            {/* Sign Up Link */}
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-600">
-                Don't have an account?{' '}
-                <Link
-                  href="/signup"
-                  className="font-semibold text-[#005ffe] hover:text-[#0047cc] transition-colors"
-                >
-                  Sign up
-                </Link>
-              </p>
-            </div>
+            <p data-enter className="mt-10 pt-6 border-t border-line text-[15px] text-ink-2">
+              Not a pilot site yet?{' '}
+              <Link href="/pilot" className="link">
+                Request a pilot
+              </Link>
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Right Side - Auto-sliding Features */}
-      <div ref={rightSideRef} className="hidden lg:flex flex-1 items-center justify-center bg-gradient-to-br from-[#f0f7ff] to-[#e8f2ff] p-12 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-30">
-          <div className="absolute -top-32 -right-10 w-96 h-96 bg-gradient-to-br from-[#00cd90] to-transparent blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[28rem] h-[28rem] bg-gradient-to-tr from-[#005ffe] to-transparent blur-3xl" />
+      {/* Product panel */}
+      <aside className="hidden lg:flex flex-col justify-center gap-10 bg-[#071A33] on-dark px-14 xl:px-20 py-16">
+        <div data-enter className="max-w-md">
+          <p className="flex items-center gap-2 text-[13px] font-semibold text-[#8db8ff]">
+            <Tick className="w-4 h-4" /> Teacher-signed marking
+          </p>
+          <p className="mt-4 font-headline text-[clamp(2rem,3vw,2.75rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-white">
+            The hard answers come first. The judgement stays yours.
+          </p>
         </div>
-        
-        <div className="relative z-10 max-w-md w-full">
-          <div className="relative h-96">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-opacity duration-500 ${
-                  index === currentFeature ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#005ffe] to-[#0047cc] flex items-center justify-center text-white mb-6 shadow-lg">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#0A3059] mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Pagination Dots */}
-          <div className="flex items-center justify-center gap-2 mt-8">
-            {features.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentFeature(index)}
-                className={`transition-all duration-300 ${
-                  index === currentFeature
-                    ? 'w-8 h-2 bg-[#005ffe] rounded-full'
-                    : 'w-2 h-2 bg-gray-300 rounded-full hover:bg-gray-400'
-                }`}
-                aria-label={`Go to feature ${index + 1}`}
-              />
-            ))}
-          </div>
+        <div data-enter className="max-w-xl [&>div]:!bg-white/[0.06]">
+          <ReviewQueueVisual />
         </div>
-      </div>
+      </aside>
     </div>
   )
 }

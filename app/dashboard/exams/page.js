@@ -1,113 +1,62 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
-import Button from '@/components/atoms/Button'
+import Link from 'next/link'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import ExamList from '@/components/dashboard/ExamList'
-import ExamDetails from '@/components/dashboard/ExamDetails'
-import { useDashboardState } from '@/states/useDashboardState'
-import { useExamState } from '@/states/useExamState'
-import { useSubmissionState } from '@/states/useSubmissionState'
+import { EmptyState, WsButton as Button } from '@/components/dashboard/ui'
+import { useWorkspace } from '@/states/useWorkspaceState'
+import { examStatus, StepChip } from '@/components/workspace/examStatus'
 
 export default function ExamsPage() {
-  const { setCurrentSection, updatePanel } = useDashboardState()
-  const { exams, activeExamId, findExamById } = useExamState()
-  const { setActiveSubmissionId } = useSubmissionState()
-
-  useEffect(() => {
-    setCurrentSection('exams')
-    if (activeExamId) {
-      const exam = findExamById(activeExamId)
-      if (exam) {
-        updatePanel({ type: 'exam', payload: exam })
-      }
-    } else if (exams.length > 0) {
-      updatePanel({ type: 'exam', payload: exams[0] })
-    }
-  }, [setCurrentSection, activeExamId, findExamById, updatePanel, exams])
-
-  const activeExam = findExamById(activeExamId) || exams[0]
-
-  const handleOpenSubmission = (submission) => {
-    setActiveSubmissionId(submission.id)
-    updatePanel({ type: 'submission', payload: submission })
-  }
-
-  const statusBoard = useMemo(
-    () => [
-      {
-        label: 'Live exams',
-        value: exams.filter((exam) => exam.status === 'in-progress').length,
-        sub: 'Monitoring right now',
-      },
-      {
-        label: 'Drafts',
-        value: exams.filter((exam) => exam.status === 'draft').length,
-        sub: 'Need scheduling',
-      },
-      {
-        label: 'Awaiting review',
-        value: exams.reduce((acc, exam) => acc + exam.stats.needsReview, 0),
-        sub: 'Scripts pending manual oversight',
-      },
-    ],
-    [exams]
-  )
+  const { exams, findClass, progressOf } = useWorkspace()
+  const rows = [...exams]
+    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+    .map((exam) => {
+      const progress = progressOf(exam)
+      return { exam, cls: findClass(exam.classId), progress, status: examStatus(exam, progress, findClass(exam.classId)) }
+    })
 
   return (
     <div className="space-y-6">
       <WorkspaceHeader
-        meta="Exams manager"
-        title="Plan, monitor, and close out exams"
-        subtitle={`${exams.length} upcoming + ongoing`}
+        title="Exams"
+        subtitle="Every exam you’ve set, and the step it’s at."
         actions={
-          <Button variant="primary" size="sm" data-tour="create-exam-button">
-            Create exam
+          <Button href="/dashboard/exams/new" size="lg" data-tour="create-exam-button">
+            New exam
           </Button>
         }
       />
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {statusBoard.map((stat) => (
-          <article key={stat.label} className="sky-card">
-            <p className="sky-label">{stat.label}</p>
-            <p className="text-3xl font-semibold text-[var(--sky-text)] mt-3">{stat.value}</p>
-            <p className="text-xs text-[var(--sky-subtle)] mt-2">{stat.sub}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="grid grid-cols-1 xl:grid-cols-[380px_1fr] gap-5">
-        <article className="sky-card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="sky-label">Exam spaces</p>
-              <h3 className="text-xl font-semibold text-[var(--sky-text)]">Playbook</h3>
-            </div>
-            <Button variant="outline" size="sm">
-              Import
-            </Button>
-          </div>
-          <div className="mt-5">
-            <ExamList onCreateExam={() => {}} />
-          </div>
-        </article>
-
-        <article className="sky-card">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <p className="sky-label">{activeExam ? activeExam.level : 'Exam'}</p>
-              <h3 className="text-xl font-semibold text-[var(--sky-text)]">
-                {activeExam ? activeExam.title : 'Select an exam'}
-              </h3>
-            </div>
-            <Button variant="ghost" size="sm">
-              Export progress
-            </Button>
-          </div>
-          <ExamDetails exam={activeExam} onOpenSubmission={handleOpenSubmission} />
-        </article>
-      </section>
+      {rows.length === 0 ? (
+        <EmptyState
+          title="No exams yet"
+          body="Create an exam, print the answer sheets, and Domax walks you through collecting, marking and releasing."
+          action={<Button href="/dashboard/exams/new" size="lg">New exam</Button>}
+        />
+      ) : (
+        <ul className="rounded-2xl border border-[var(--sky-panel-border)] bg-[var(--sky-panel)] divide-y divide-[var(--sky-panel-border)] overflow-hidden">
+          {rows.map(({ exam, cls, status }) => (
+            <li key={exam.id}>
+              <Link
+                href={`/dashboard/exams/${exam.id}`}
+                className="group grid grid-cols-1 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto] gap-x-6 gap-y-2 items-center px-5 sm:px-6 py-4 hover:bg-[var(--sky-surface)] transition-colors"
+              >
+                <span className="min-w-0">
+                  <span className="block font-semibold text-[var(--sky-text)] truncate group-hover:text-[var(--action-accent)]">{exam.title}</span>
+                  <span className="block text-sm text-[var(--sky-subtle)]">{cls?.name || 'No class'}</span>
+                </span>
+                <span>
+                  <StepChip tone={status.tone}>{status.chip}</StepChip>
+                </span>
+                <span className="text-sm text-[var(--sky-subtle)]">{status.line}</span>
+                <svg viewBox="0 0 16 16" className="hidden sm:block w-4 h-4 text-[var(--sky-subtle)] group-hover:text-[var(--action-accent)]" aria-hidden="true">
+                  <path d="M6 3.5L10.5 8 6 12.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

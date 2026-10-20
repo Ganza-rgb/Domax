@@ -48,155 +48,110 @@ export default function Navbar() {
   }
 
   const navItems = [
-    { label: 'Features', href: '/features' },
+    { label: 'How it works', href: '/how-it-works' },
+    {
+      label: 'Who it’s for',
+      hasDropdown: true,
+      items: [
+        {
+          title: 'Universities & polytechnics',
+          description: 'Long scripts, large cohorts. Where pilots start.',
+          href: '/solutions/universities',
+        },
+        {
+          title: 'Secondary schools',
+          description: 'O-Level and A-Level assessments.',
+          href: '/solutions/schools',
+        },
+        {
+          title: 'Sponsors & districts',
+          description: 'Fund marking for public schools.',
+          href: '/solutions/sponsors',
+        },
+      ],
+    },
     { label: 'Pricing', href: '/pricing' },
-    {
-      label: 'Product',
-      hasDropdown: true,
-      items: [
-        {
-          title: 'AI Grading',
-          description: 'Automate scoring with Domax intelligence.',
-          href: '/product/ai-grading',
-        },
-        {
-          title: 'Rubric Builder',
-          description: 'Design reusable rubrics in minutes.',
-          href: '/product/rubrics',
-        },
-        {
-          title: 'Annotations',
-          description: 'Comment, highlight, and suggest inline.',
-          href: '/product/annotations',
-        },
-        {
-          title: 'Batch Processing',
-          description: 'Grade hundreds of papers simultaneously.',
-          href: '/product/batch',
-        },
-        {
-          title: 'Analytics',
-          description: 'Track class performance and trends.',
-          href: '/product/analytics',
-        },
-        {
-          title: 'LMS Integration',
-          description: 'Sync with Canvas, Moodle, and more.',
-          href: '/product/integrations',
-        },
-        {
-          title: 'Plagiarism Detection',
-          description: 'Ensure academic integrity automatically.',
-          href: '/product/plagiarism',
-        },
-      ],
-    },
-    {
-      label: 'Use Cases',
-      hasDropdown: true,
-      items: [
-        {
-          title: 'Solo Teachers',
-          description: 'Grade faster with AI rubrics, annotations, and insights.',
-          href: '/solutions/teachers',
-        },
-        {
-          title: 'Student Access Codes',
-          description: 'Give learners free portals for past papers and assignments.',
-          href: '/dashboard/past-papers',
-        },
-        {
-          title: 'Integrations & API',
-          description: 'Connect Domax to your LMS or class stack.',
-          href: '/solutions/api',
-        },
-      ],
-    },
-    {
-      label: 'Resources',
-      hasDropdown: true,
-      items: [
-        {
-          title: 'Documentation',
-          description: 'Everything you need to build on Domax.',
-          href: '/docs',
-        },
-        {
-          title: 'Blog',
-          description: 'Product updates, guides, and insights.',
-          href: '/blog',
-        },
-        {
-          title: 'Case Studies',
-          description: 'See how leading teachers use Domax.',
-          href: '/case-studies',
-        },
-        {
-          title: 'Help Center',
-          description: 'Get answers fast from our support team.',
-          href: '/help',
-        },
-      ],
-    },
+    { label: 'Student data', href: '/data-protection' },
+    { label: 'About', href: '/about' },
   ]
 
-  const isDarkMode = !scrolled
-  const containerClasses = isDarkMode
-    ? 'bg-[#0A3059]/95 text-white border-white/10 shadow-[0_30px_70px_-45px_rgba(0,0,0,0.65)]'
-    : 'bg-white/95 text-[#0A3059] border-white shadow-[0_25px_65px_-40px_rgba(10,48,89,0.35)]'
+  // A plain bar: white, with a hairline that only appears once content
+  // scrolls underneath it.
+  const containerClasses = scrolled ? 'border-[#E3E8EF]' : 'border-transparent'
   const desktopLinkBase =
-    'px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-[15px] font-medium transition-colors flex items-center gap-1'
-  const desktopLinkColor = isDarkMode ? 'text-white/85 hover:text-white' : 'text-[#0A3059]/80 hover:text-[#0A3059]'
-  const outlineBtnClasses = isDarkMode
-    ? 'text-white/90 border border-white/30 hover:border-white/50 hover:bg-white/5'
-    : 'text-[#0A3059] border border-[#dfe7f5] hover:border-[#0A3059]/40 hover:bg-[#f5f7fb]'
+    'h-9 px-3 text-[15px] transition-colors flex items-center gap-1'
+  const desktopLinkColor = 'text-[#4A5D75] hover:text-[#0A3059]'
+
+  const toggleDropdown = (label) => {
+    if (dropdownTimeout.current) {
+      clearTimeout(dropdownTimeout.current)
+    }
+    setActiveDropdown((current) => (current === label ? null : label))
+  }
+
+  // Close an open menu with Escape, or when keyboard focus leaves it.
+  const handleDropdownKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      setActiveDropdown(null)
+    }
+  }
+  const handleDropdownBlur = (event) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setActiveDropdown(null)
+    }
+  }
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'
         }`}
+      aria-label="Main"
     >
-      <div className="max-w-[1200px] mx-auto px-3 sm:px-4 lg:px-6">
-        <div
-          className={`${containerClasses} backdrop-blur-lg rounded-2xl mt-2 sm:mt-3 lg:mt-4 border transition-all duration-300`}
-        >
-          <div className="flex items-center justify-between h-12 sm:h-14 lg:h-16 px-2 sm:px-3 lg:px-4">
+      <div className={`bg-white border-b transition-colors ${containerClasses}`}>
+        <div className="container-custom text-[#0A3059]">
+          <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-end -space-x-1">
+            <Link href="/" className="flex items-end -space-x-1 rounded-md" aria-label="Domax home">
               <Image
                 src="/favicon.svg"
-                alt="Domax Logo"
+                alt=""
                 width={40}
                 height={40}
-                className="h-8 w-8"
+                className="h-7 w-7"
                 priority
               />
-              <span
-                className={`text-lg sm:text-xl font-bold tracking-tight ${isDarkMode ? 'text-white' : 'text-[#0A3059]'
-                  }`}
-              >
+              <span className="text-lg font-bold tracking-tight text-[#0A3059]">
                 OMAX
               </span>
             </Link>
 
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-0.5">
               {navItems.map((item, index) => (
                 <div
                   key={index}
                   className="relative"
                   onMouseEnter={() => item.hasDropdown && handleMouseEnter(item.label)}
                   onMouseLeave={handleMouseLeave}
+                  onKeyDown={item.hasDropdown ? handleDropdownKeyDown : undefined}
+                  onBlur={item.hasDropdown ? handleDropdownBlur : undefined}
                 >
                   {item.hasDropdown ? (
-                    <button className={`${desktopLinkBase} ${desktopLinkColor}`}>
+                    <button
+                      type="button"
+                      className={`${desktopLinkBase} ${desktopLinkColor} ${activeDropdown === item.label ? 'text-[#0A3059]' : ''}`}
+                      aria-expanded={activeDropdown === item.label}
+                      aria-haspopup="true"
+                      onClick={() => toggleDropdown(item.label)}
+                    >
                       {item.label}
                       <svg
                         className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-200 ${activeDropdown === item.label ? 'rotate-180' : ''}`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
@@ -212,24 +167,25 @@ export default function Navbar() {
 
                   {/* Dropdown Menu */}
                   {item.hasDropdown && activeDropdown === item.label && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[min(700px,calc(100vw-3rem))]">
-                      <div className="relative">
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 bg-white border border-[#e4e8f5] rotate-45 shadow-[0_20px_45px_-20px_rgba(10,48,89,0.35)]"></div>
-                        <div className="relative bg-white rounded-3xl border border-[#e4e8f5] shadow-[0_45px_120px_-60px_rgba(10,48,89,0.45)] p-6">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {item.items.map((subItem, subIndex) => (
-                              <Link
-                                key={subIndex}
-                                href={subItem.href}
-                                className="group rounded-xl p-4 hover:bg-[#f5f7fb] transition-colors"
-                              >
-                                <p className="text-sm font-semibold text-[#0A3059]">{subItem.title}</p>
-                                {subItem.description && (
-                                  <p className="text-sm text-gray-500 mt-1 leading-relaxed">{subItem.description}</p>
-                                )}
-                              </Link>
-                            ))}
-                          </div>
+                    <div
+                      className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 ${
+                        item.items.length > 4 ? 'w-[min(640px,calc(100vw-3rem))]' : 'w-[340px]'
+                      }`}
+                    >
+                      <div className="bg-white rounded-lg border border-[#E3E8EF] shadow-pop p-2">
+                        <div className={`grid gap-0.5 ${item.items.length > 4 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                          {item.items.map((subItem, subIndex) => (
+                            <Link
+                              key={subIndex}
+                              href={subItem.href}
+                              className="group rounded-md px-3.5 py-3 hover:bg-[#F6F8FA] transition-colors"
+                            >
+                              <p className="text-sm font-semibold text-[#0A3059]">{subItem.title}</p>
+                              {subItem.description && (
+                                <p className="text-[13px] text-[#5B6B82] mt-0.5 leading-snug">{subItem.description}</p>
+                              )}
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -239,19 +195,21 @@ export default function Navbar() {
             </div>
 
             {/* Desktop CTA Buttons */}
-            <div className="hidden lg:flex items-center gap-2 xl:gap-3">
-              <Button href="/login" variant="primary-blue" size="sm">
-                Login
-              </Button>
-              <Button href="/signup" variant="primary-blue" size="sm">
-                Get Started
+            <div className="hidden lg:flex items-center gap-1.5">
+              <Link
+                href="/login"
+                className="h-9 px-3 inline-flex items-center text-[15px] text-[#0A3059] hover:text-[#005ffe] transition-colors"
+              >
+                Log in
+              </Link>
+              <Button href="/pilot" variant="primary" size="sm">
+                Request a pilot
               </Button>
             </div>
 
             {/* Mobile Menu Button */}
             <button
-              className={`lg:hidden p-2 rounded-lg transition-colors ${isDarkMode ? 'text-white hover:bg-white/10' : 'text-[#0A3059] hover:bg-[#f0f7ff]'
-                }`}
+              className="lg:hidden p-2 -mr-1 rounded-lg transition-colors text-[#0A3059] hover:bg-[#F6F8FA]"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
               aria-expanded={mobileMenuOpen}
@@ -292,22 +250,22 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
           />
           {/* Menu Panel */}
-          <div className="lg:hidden fixed top-0 left-0 right-0 bg-white z-50 overflow-y-auto max-h-screen shadow-xl border-b border-gray-100">
+          <div className="lg:hidden fixed top-0 left-0 right-0 bg-white z-50 overflow-y-auto max-h-screen shadow-pop border-b border-[#E3E8EF]">
             {/* Menu Header with close button */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+            <div className="flex items-center justify-between px-4 h-14 border-b border-[#E3E8EF]">
+              <Link href="/" className="flex items-end -space-x-1" aria-label="Domax home" onClick={() => setMobileMenuOpen(false)}>
                 <Image
                   src="/favicon.svg"
-                  alt="Domax Logo"
+                  alt=""
                   width={32}
                   height={32}
-                  className="h-6 w-6"
+                  className="h-7 w-7"
                   priority
                 />
-                <span className="text-lg font-bold text-[#0A3059]">DOMAX</span>
+                <span className="text-lg font-bold tracking-tight text-[#0A3059]">OMAX</span>
               </Link>
               <button
-                className="p-2 text-[#0A3059]"
+                className="p-2 -mr-1 rounded-lg text-[#0A3059] hover:bg-[#F6F8FA]"
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label="Close menu"
               >
@@ -328,23 +286,23 @@ export default function Navbar() {
             </div>
 
             {/* Menu Content */}
-            <div className="px-4 py-4 space-y-1">
+            <div className="px-3 py-3 space-y-0.5">
               {navItems.map((item, index) => (
                 <div key={index}>
                   {item.hasDropdown ? (
                     <details className="group">
-                      <summary className="flex items-center justify-between px-4 py-3 text-base font-medium text-[#0A3059] cursor-pointer list-none hover:bg-[#f5f7fb] rounded-lg transition-colors">
+                      <summary className="flex items-center justify-between px-3 py-3 text-base font-medium text-[#0A3059] cursor-pointer list-none hover:bg-[#F6F8FA] rounded-lg transition-colors">
                         {item.label}
-                        <svg className="w-5 h-5 text-[#0A3059]/60 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-[#0A3059]/60 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </summary>
-                      <div className="mt-1 ml-4 space-y-1">
+                      <div className="mb-2 ml-3 pl-3 border-l border-[#E3E8EF] space-y-0.5">
                         {item.items.map((subItem, subIndex) => (
                           <Link
                             key={subIndex}
                             href={subItem.href}
-                            className="block px-4 py-2.5 text-sm text-[#0A3059]/80 hover:text-[#0A3059] hover:bg-[#f5f7fb] rounded-lg transition-colors"
+                            className="block px-3 py-2.5 text-[15px] text-[#4A5D75] hover:text-[#0A3059] hover:bg-[#F6F8FA] rounded-lg transition-colors"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {subItem.title}
@@ -355,7 +313,7 @@ export default function Navbar() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="block px-4 py-3 text-base font-medium text-[#0A3059] hover:bg-[#f5f7fb] rounded-lg transition-colors"
+                      className="block px-3 py-3 text-base font-medium text-[#0A3059] hover:bg-[#F6F8FA] rounded-lg transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {item.label}
@@ -365,12 +323,12 @@ export default function Navbar() {
               ))}
 
               {/* Mobile CTA Buttons */}
-              <div className="pt-6 mt-6 border-t border-gray-100 space-y-3">
-                <Button href="/login" variant="primary-blue" size="md" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                  Login
+              <div className="pt-4 mt-4 border-t border-[#E3E8EF] grid grid-cols-2 gap-2">
+                <Button href="/login" variant="secondary" size="lg" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                  Log in
                 </Button>
-                <Button href="/signup" variant="primary-blue" size="md" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                  Get Started
+                <Button href="/pilot" variant="primary" size="lg" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                  Request a pilot
                 </Button>
               </div>
             </div>

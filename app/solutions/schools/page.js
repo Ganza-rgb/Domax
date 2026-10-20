@@ -1,76 +1,52 @@
-import Navbar from '@/components/molecules/Navbar'
-import Footer from '@/components/organisms/Footer'
-import GradientHeading from '@/components/atoms/GradientHeading'
-import Button from '@/components/atoms/Button'
+import AudiencePage from '@/components/organisms/AudiencePage'
+import { EXAM_PRICES, formatRwf } from '@/lib/site'
 
 export const metadata = {
-  title: 'Teacher Pods — Domax',
-  description: 'Organize teacher pods that share rubrics, credits, and analytics without waiting for central rollouts.',
+  title: 'For secondary schools — Domax',
+  description:
+    'Domax helps O-Level and A-Level teachers mark handwritten assessments, with every mark signed by the teacher and results free for students.',
 }
 
 export default function SchoolsPage() {
   return (
-    <main className="min-h-screen bg-white">
-      <Navbar />
-      <div className="pt-32 pb-20">
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <GradientHeading as="h1" className="text-4xl sm:text-5xl lg:text-6xl mb-6 lg:mb-8" highlightText="Pods">
-              Teacher Pods
-            </GradientHeading>
-            <p className="text-xl text-gray-600 mb-12 leading-relaxed">
-              Scale grading efficiency across your trusted circle of teachers. Share wallets, rubrics, and analytics inside small pods while we keep pricing simple and teacher-first.
-            </p>
-
-            <div className="prose prose-lg max-w-none">
-              <section className="mb-12">
-                <h2 className="text-2xl font-semibold text-[#0A3059] mb-4">Pod Programs</h2>
-                <p className="text-gray-600 mb-4">
-                  Domax offers special pricing and features for teacher pods—no district paperwork required. Bundle credits, share rubrics, and view pod-level analytics. Contact us for pod pricing.
-                </p>
-                <ul className="list-disc list-inside text-gray-600 space-y-2">
-                  <li>Volume-friendly wallets for 3–25 teachers</li>
-                  <li>Pod dashboard for lead teachers or coordinators</li>
-                  <li>Shared rubric library with version control</li>
-                  <li>Dedicated success coaching and onboarding</li>
-                </ul>
-              </section>
-
-              <section className="mb-12">
-                <h2 className="text-2xl font-semibold text-[#0A3059] mb-4">Pod Features</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Pod Dashboard</h3>
-                    <p className="text-gray-600 text-sm">Monitor usage, manage co-teachers, and view pod-level analytics from one central location.</p>
-                  </div>
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Shared Resources</h3>
-                    <p className="text-gray-600 text-sm">Create a library of rubrics and templates that your pod can access and reuse.</p>
-                  </div>
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Shared Wallets</h3>
-                    <p className="text-gray-600 text-sm">Load one wallet and distribute credits across every teacher in the pod.</p>
-                  </div>
-                  <div className="p-6 bg-[#f0f7ff] rounded-2xl">
-                    <h3 className="text-lg font-semibold text-[#0A3059] mb-2">Priority Support</h3>
-                    <p className="text-gray-600 text-sm">Dedicated support team and faster response times for pod leads.</p>
-                  </div>
-                </div>
-              </section>
-
-              <div className="mt-12 text-center">
-                <Button href="/contact" variant="primary" size="lg">
-                  Plan a pod rollout
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </main>
+    <AudiencePage
+      kicker="For secondary schools"
+      facts={[
+        { value: formatRwf(EXAM_PRICES.find((l) => l.key === 'o-level').price), label: 'per O-Level exam, up to 8 pages' },
+        { value: formatRwf(EXAM_PRICES.find((l) => l.key === 'a-level').price), label: 'per A-Level exam, up to 12 pages' },
+        { value: 'Free', label: 'for students to see their results' },
+        { value: 'Sponsored', label: 'at public schools, so the school pays nothing' },
+      ]}
+      title="End-of-term marking, with the judgement still yours."
+      lede="A teacher with several streams of forty or more students marks hundreds of scripts at the end of every term, usually at night. Domax does the first read so they can spend that time on the answers that need them."
+      sections={[
+        {
+          title: 'How it fits the term',
+          body: [
+            'Teachers set and sit assessments as they do now. Students write on paper. The only addition is a header sheet on each script, which tells Domax whose it is and how many pages it should have.',
+            'After the exam, a teacher or the school’s ICT lead photographs or scans the scripts. Capture works offline and uploads when the connection allows.',
+          ],
+        },
+        {
+          title: 'Teachers stay in charge',
+          body: [
+            'Domax suggests marks against the school’s own marking scheme. Teachers review every answer, change what they disagree with, and sign before anything is released. Marks come out in a sheet set out for CAMIS.',
+          ],
+        },
+        {
+          title: 'Students’ data and parents',
+          body: [
+            'Most secondary students are under 16, so we work through the school: parents are told what Domax does, and consent is arranged with you before any real scripts are used. Names are masked before any page is read by AI, and scripts are stored in Rwanda.',
+          ],
+        },
+        {
+          title: 'Students see their results free',
+          body: [
+            'Each class gets an access code. Students use it to see their marked scripts and anything their teacher chooses to share. They never pay, and access never depends on the school’s account.',
+          ],
+        },
+      ]}
+      closing="We’re looking for one secondary school, ideally outside Kigali, to pilot with this term. If that could be you, tell us about your school."
+    />
   )
 }
-
-
-

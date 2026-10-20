@@ -1,8 +1,16 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
 
-/* CSS Variables for Design Tokens */
+/*
+ * DOMAX design tokens
+ *
+ * Brand colors are unchanged. What is defined here is how they are applied:
+ * navy carries text, blue is the single action color, teal and orange are
+ * signal colors (fills and indicators — they fail contrast as text on white).
+ * Utility equivalents live in tailwind.config.js (text-ink, bg-canvas, …).
+ */
 :root {
-  /* Brand Colors - From favicon.svg */
+  /* Brand */
   --brand-navy: #0A3059;
   --brand-primary-blue: #005ffe;
   --brand-teal: #00cd90;
@@ -10,56 +18,60 @@
   --brand-success-end: #2DD4BF;
   --brand-orange: #FF9F43;
 
-  /* Surface Colors */
+  /* Text */
+  --ink: #0A3059;
+  --ink-2: #4A5D75;
+  --ink-3: #5B6B82;
+
+  /* Surfaces & lines */
+  --canvas: #F6F8FA;
+  --surface: #FFFFFF;
+  --tint: #F0F7FF;
+  --line: #E3E8EF;
+  --line-strong: #CFD8E3;
+
+  /* Actions & status */
+  --accent: #005ffe;
+  --accent-strong: #0047cc;
+  --accent-soft: #E8F0FF;
+  --positive: #007A56;
+  --positive-soft: #E3F8F1;
+  --caution: #B45309;
+  --caution-soft: #FFF4E5;
+  --critical: #E11D48;
+  --critical-soft: #FDECEF;
+
+  /* Legacy surface names (kept for existing references) */
   --surface-dark: #0F172A;
   --surface-light: #FFFFFF;
   --surface-neutral: #F6F8FA;
-  --sky-surface: #eef3ff;
-  --sky-panel: rgba(255, 255, 255, 0.94);
-  --sky-panel-border: rgba(223, 231, 245, 0.8);
-  --sky-text: #0a3059;
-  --sky-subtle: rgba(10, 48, 89, 0.6);
-  --sky-shadow: 0 35px 80px -45px rgba(10, 48, 89, 0.4);
+  --text-muted: #5B6B82;
+
+  /* Teacher workspace (light by default; .theme-dark below) */
+  --sky-surface: #F6F8FA;
+  --sky-panel: #FFFFFF;
+  --sky-panel-border: #E3E8EF;
+  --sky-text: #0A3059;
+  --sky-subtle: #5B6B82;
+  --sky-shadow: 0 1px 2px rgba(10, 48, 89, 0.06), 0 8px 24px -12px rgba(10, 48, 89, 0.16);
   --action-accent: #005ffe;
-  --action-accent-soft: rgba(0, 95, 254, 0.12);
-  --vscode-bg: #eef3ff;
+  --action-accent-soft: rgba(0, 95, 254, 0.1);
+  --vscode-bg: #F6F8FA;
   --vscode-accent: #005ffe;
   --vscode-blue: #0047cc;
-  --vscode-orange: #d97706;
-  --vscode-red: #e11d48;
+  --vscode-orange: #B45309;
+  --vscode-red: #E11D48;
   --vscode-purple: #7c3aed;
-  --vscode-green: #00cd90;
+  --vscode-green: #007A56;
 
-  /* VS Code Dark Palette */
-  --vscode-bg: #1e1e1e;
-  --vscode-panel: #252526;
-  --vscode-panel-muted: #2d2d2d;
-  --vscode-border: #3c3c3c;
-  --vscode-foreground: #d4d4d4;
-  --vscode-heading: #f3f3f3;
-  --vscode-muted: #9da5b4;
-  --vscode-accent: #569cd6;
-  --vscode-green: #4ec9b0;
-  --vscode-orange: #ce9178;
-  --vscode-purple: #c586c0;
-  --vscode-yellow: #dcdcaa;
-  --vscode-red: #f44747;
-  --vscode-blue: #9cdcfe;
-
-  /* Action accents */
-  --action-accent: #4c7dff;
-  --action-accent-soft: rgba(76, 125, 255, 0.12);
-
-  /* Text Colors */
-  --text-muted: #6B7280;
-
-  /* Shadows */
-  --shadow-card: 0 6px 18px rgba(0, 95, 254, 0.08);
-  --shadow-card-hover: 0 12px 24px rgba(0, 95, 254, 0.15);
+  /* Elevation — used sparingly: menus, dialogs, floating panels */
+  --shadow-card: 0 1px 2px rgba(10, 48, 89, 0.05), 0 4px 12px -6px rgba(10, 48, 89, 0.12);
+  --shadow-card-hover: 0 2px 4px rgba(10, 48, 89, 0.06), 0 12px 28px -12px rgba(10, 48, 89, 0.22);
+  --shadow-pop: 0 12px 32px -8px rgba(10, 48, 89, 0.22), 0 2px 6px rgba(10, 48, 89, 0.08);
   --shadow-glow: 0 0 20px rgba(0, 205, 144, 0.4);
   --shadow-blue-glow: 0 0 20px rgba(0, 95, 254, 0.3);
 
-  /* Spacing Scale */
+  /* Spacing scale */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
@@ -71,14 +83,14 @@
 
 @layer base {
   body {
-    background-color: var(--sky-surface);
-    color: var(--sky-text);
+    background-color: var(--surface);
+    color: var(--ink);
     font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
     font-size: 16px;
-    line-height: 1.7;
-    letter-spacing: -0.01em;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   h1,
@@ -87,84 +99,102 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-poppins, 'Poppins', system-ui, sans-serif);
+    font-family: var(--font-display, system-ui, sans-serif);
+    color: var(--heading, var(--ink));
+    text-wrap: balance;
   }
 
   h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    line-height: 1.2;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--brand-navy);
+    font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -0.035em;
   }
 
   h2 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.3;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--brand-navy);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.03em;
   }
 
   h3 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    line-height: 1.4;
+    font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+    line-height: 1.25;
     font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--brand-navy);
+    letter-spacing: -0.015em;
+  }
+
+  /* Small headings read better in the body face */
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: rgba(0, 95, 254, 0.18);
+  }
+
+  /* One visible focus treatment for every interactive element */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 }
 
+/* Workspace headings follow the workspace theme instead of fixed navy */
+[data-workspace] {
+  --heading: var(--sky-text);
+}
+
+/* In the workspace, page titles keep the display face so the app and site
+   read as one product; everything smaller is set in the UI face. */
+[data-workspace] :is(h3, h4, h5, h6) {
+  font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
+  letter-spacing: -0.01em;
+}
+
 .theme-light {
-  --sky-surface: #eef4ff;
-  --sky-panel: rgba(255, 255, 255, 0.98);
-  --sky-panel-border: rgba(223, 231, 245, 0.8);
-  --sky-text: #0a3059;
-  --sky-subtle: rgba(10, 48, 89, 0.6);
-  --sky-shadow: 0 35px 90px -55px rgba(10, 48, 89, 0.35);
+  --sky-surface: #F6F8FA;
+  --sky-panel: #FFFFFF;
+  --sky-panel-border: #E3E8EF;
+  --sky-text: #0A3059;
+  --sky-subtle: #5B6B82;
+  --sky-shadow: 0 1px 2px rgba(10, 48, 89, 0.06), 0 8px 24px -12px rgba(10, 48, 89, 0.16);
   --action-accent: #005ffe;
-  --action-accent-soft: rgba(0, 95, 254, 0.12);
-  --vscode-bg: #eef3ff;
+  --action-accent-soft: rgba(0, 95, 254, 0.1);
+  --vscode-bg: #F6F8FA;
   --vscode-accent: #005ffe;
   --vscode-blue: #0047cc;
-  --vscode-orange: #d97706;
-  --vscode-red: #e11d48;
+  --vscode-orange: #B45309;
+  --vscode-red: #E11D48;
   --vscode-purple: #7c3aed;
-  --vscode-green: #00cd90;
+  --vscode-green: #007A56;
 }
 
 .theme-dark {
-  --sky-surface: #0f172a;
-  --sky-panel: rgba(17, 24, 39, 0.95);
-  --sky-panel-border: rgba(255, 255, 255, 0.08);
-  --sky-text: #f5f7ff;
-  --sky-subtle: rgba(245, 247, 255, 0.65);
-  --sky-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.85);
-  --action-accent: #4fc1ff;
-  --action-accent-soft: rgba(79, 193, 255, 0.2);
-  --vscode-bg: #1e1e1e;
-  --vscode-accent: #4fc1ff;
-  --vscode-blue: #3794ff;
-  --vscode-orange: #d19a66;
-  --vscode-red: #f48771;
-  --vscode-purple: #c586c0;
-  --vscode-green: #89d185;
+  --sky-surface: #0B1626;
+  --sky-panel: #101E33;
+  --sky-panel-border: rgba(255, 255, 255, 0.09);
+  --sky-text: #EEF3FA;
+  --sky-subtle: #9AABC2;
+  --sky-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -12px rgba(0, 0, 0, 0.7);
+  --action-accent: #5B9BFF;
+  --action-accent-soft: rgba(91, 155, 255, 0.16);
+  --vscode-bg: #0B1626;
+  --vscode-accent: #5B9BFF;
+  --vscode-blue: #3B82F6;
+  --vscode-orange: #F5B26B;
+  --vscode-red: #F48799;
+  --vscode-purple: #C4A7FF;
+  --vscode-green: #3DDCAA;
   background-color: var(--sky-surface);
   color: var(--sky-text);
-}
-
-.theme-vscode-dark {
-  background-color: var(--vscode-bg);
-  color: var(--vscode-foreground);
-  --sky-surface: var(--vscode-bg);
-  --sky-panel: var(--vscode-panel);
-  --sky-panel-border: var(--vscode-border);
-  --sky-text: var(--vscode-heading);
-  --sky-subtle: var(--vscode-muted);
-  --sky-shadow: 0 45px 110px -60px rgba(0, 0, 0, 0.85);
-  --text-muted: var(--vscode-muted);
-  --action-accent: var(--vscode-accent);
-  --action-accent-soft: rgba(86, 156, 214, 0.16);
 }
 
 @layer components {
@@ -185,12 +215,11 @@
 
   /* Card hover effect */
   .card-hover {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: border-color 0.15s ease;
   }
 
   .card-hover:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-card-hover);
+    border-color: var(--line-strong);
   }
 
   /* Focus styles for accessibility */
@@ -218,31 +247,115 @@
     color: var(--brand-teal);
   }
 
+  /* Workspace panel: hairline border, no heavy shadow */
   .sky-card {
-    border-radius: 24px;
+    border-radius: 12px;
     border: 1px solid var(--sky-panel-border);
     background: var(--sky-panel);
     padding: 1.25rem;
-    box-shadow: 0 20px 45px -30px rgba(10, 48, 89, 0.25);
   }
 
+  /* Small uppercase label used for metadata in the workspace */
   .sky-label {
     font-size: 0.75rem;
-    letter-spacing: 0;
-    text-transform: uppercase;
+    line-height: 1rem;
     color: var(--sky-subtle);
+    font-weight: 500;
+  }
+
+  /* Public pages: section label above a heading */
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    color: var(--ink-3);
+  }
+
+  /* Public pages: introductory paragraph under a page or section heading */
+  .lede {
+    font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+
+  /*
+   * Long-form text (legal, docs, product detail).
+   * The pages already use `prose`, but @tailwindcss/typography is not
+   * installed, so this class rendered nothing. :where() keeps specificity at
+   * zero so utility classes on individual elements still win.
+   */
+  .prose {
+    color: var(--ink-2);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .prose :where(h2) {
+    font-size: 1.375rem;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose :where(h3) {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .prose :where(section:first-child h2, h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :where(p) {
+    margin-bottom: 1rem;
+  }
+
+  .prose :where(ul) {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose :where(ol) {
+    list-style: decimal;
+    padding-left: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose :where(li) {
+    margin-top: 0.375rem;
+    padding-left: 0.25rem;
+  }
+
+  .prose :where(li)::marker {
+    color: var(--ink-3);
+  }
+
+  .prose :where(a:not([class])) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose :where(strong) {
+    color: var(--ink);
     font-weight: 600;
   }
 }
 
 @layer utilities {
-  /* Container max width - bunny.net inspired */
+  /* Shared content width — navbar, sections and footer align to this */
   .container-custom {
-    max-width: 1280px;
+    max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    padding-left: clamp(1.5rem, 4vw, 3rem);
-    padding-right: clamp(1.5rem, 4vw, 3rem);
+    padding-left: clamp(1.25rem, 4vw, 2.5rem);
+    padding-right: clamp(1.25rem, 4vw, 2.5rem);
   }
 
   /* Hero section spacing */
@@ -253,8 +366,8 @@
 
   /* Section spacing */
   .section-spacing {
-    padding-top: clamp(3rem, 8vw, 6rem);
-    padding-bottom: clamp(3rem, 8vw, 6rem);
+    padding-top: clamp(4rem, 9vw, 7rem);
+    padding-bottom: clamp(4rem, 9vw, 7rem);
   }
 
   /* Respect reduced motion */
@@ -289,3 +402,126 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * Public site primitives
+ * ------------------------------------------------------------------------ */
+@layer components {
+  /* Oversized display line for hero and statement sections */
+  .display {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: clamp(2.75rem, 7.2vw, 6rem);
+    line-height: 0.96;
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  /* Small pill label above a heading */
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+
+  /* Paper texture for the script illustrations */
+  .paper {
+    background-color: #fdfcf8;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 33px,
+      #e4eaf2 33px,
+      #e4eaf2 34px
+    );
+  }
+
+  /* Text link with an underline that strengthens on hover */
+  .link {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 30%, transparent);
+    text-underline-offset: 4px;
+    transition: text-decoration-color 0.15s ease;
+  }
+
+  .link:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .on-dark .link {
+    color: #8db8ff;
+    text-decoration-color: rgba(141, 184, 255, 0.35);
+  }
+
+  .on-dark .link:hover {
+    text-decoration-color: #8db8ff;
+  }
+}
+
+/* Story visual swap on the homepage */
+@keyframes stage-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Workspace: the one emphasised surface on a page (e.g. "Next up") */
+.ws-feature {
+  background: #071a33;
+  color: #fff;
+}
+
+.theme-dark .ws-feature {
+  background: #14294a;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Answer sheets: print only the sheets, one per A4 page */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html,
+  body,
+  [data-workspace],
+  [data-workspace] main,
+  #workspace-main {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .print-sheets,
+  .print-sheets * {
+    visibility: visible;
+  }
+
+  .print-sheets {
+    position: absolute !important;
+    left: 0;
+    top: 0;
+    width: 210mm;
+    overflow: visible !important;
+  }
+
+  .answer-sheet {
+    break-after: page;
+    page-break-after: always;
+  }
+}

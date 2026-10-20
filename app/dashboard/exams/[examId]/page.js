@@ -1,53 +1,49 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
-import ExamDetails from '@/components/dashboard/ExamDetails'
-import { useDashboardState } from '@/states/useDashboardState'
-import { useExamState } from '@/states/useExamState'
-import { useSubmissionState } from '@/states/useSubmissionState'
+import { EmptyState, WsButton as Button } from '@/components/dashboard/ui'
+import { useWorkspace } from '@/states/useWorkspaceState'
+import { StepBar, examStatus } from '@/components/workspace/examStatus'
+import { PrepareStep, CollectStep, MarkStep, ReleaseStep, ExamActivity } from '@/components/workspace/ExamSteps'
 
-export default function ExamDetailsPage() {
-  const params = useParams()
-  const examId = Array.isArray(params?.examId) ? params.examId[0] : params?.examId
-  const { setCurrentSection, updatePanel } = useDashboardState()
-  const { findExamById, setActiveExamId } = useExamState()
-  const { setActiveSubmissionId } = useSubmissionState()
+export default function ExamPage() {
+  const { examId } = useParams()
+  const { findExam, findClass, findRubric, progressOf, loaded } = useWorkspace()
+  const exam = findExam(examId)
+  const progress = exam ? progressOf(exam) : null
+  const [viewing, setViewing] = useState(null)
 
-  const exam = examId ? findExamById(examId) : null
-
+  // Open on the step named in the link (?step=collect), else on the step the exam is at.
   useEffect(() => {
-    setCurrentSection('exams')
-    if (examId) {
-      setActiveExamId(examId)
-    }
-    if (exam) {
-      updatePanel({ type: 'exam', payload: exam })
-    }
-  }, [examId, exam, setCurrentSection, setActiveExamId, updatePanel])
+    const requested = new URLSearchParams(window.location.search).get('step')
+    if (['prepare', 'collect', 'mark', 'release'].includes(requested)) setViewing(requested)
+  }, [])
 
-  const handleOpenSubmission = (submission) => {
-    setActiveSubmissionId(submission.id)
-    updatePanel({ type: 'submission', payload: submission })
+  if (!exam) {
+    return loaded ? (
+      <EmptyState title="This exam isn’t here" body="It may have been created on another device. Exams are kept on the device they were made on in this prototype." action={<Button href="/dashboard/exams">All exams</Button>} />
+    ) : null
   }
+
+  const cls = findClass(exam.classId)
+  const rubric = findRubric(exam.rubricId)
+  const step = viewing || (progress.step === 'done' ? 'release' : progress.step)
+  const status = examStatus(exam, progress, cls)
 
   return (
     <div className="space-y-6">
-      <WorkspaceHeader
-        meta="Exam detail"
-        title={exam ? exam.title : 'Exam not found'}
-        subtitle={exam ? `${exam.stats.graded}/${exam.stats.total} graded` : 'Check exam id'}
-      />
-      <ExamDetails exam={exam} onOpenSubmission={handleOpenSubmission} />
+      <WorkspaceHeader title={exam.title} subtitle={`${cls?.name || 'No class'} · ${status.line}`} />
+
+      <StepBar current={progress.step} viewing={step} onSelect={setViewing} />
+
+      {step === 'prepare' && <PrepareStep exam={exam} cls={cls} rubric={rubric} progress={progress} />}
+      {step === 'collect' && <CollectStep exam={exam} cls={cls} progress={progress} />}
+      {step === 'mark' && <MarkStep exam={exam} progress={progress} />}
+      {step === 'release' && <ReleaseStep exam={exam} cls={cls} progress={progress} />}
+
+      <ExamActivity exam={exam} cls={cls} />
     </div>
   )
 }
-
-
-
-
-
-
-
-
