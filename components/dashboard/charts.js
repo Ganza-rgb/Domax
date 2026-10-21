@@ -187,17 +187,19 @@ export function ScoreTrendLine({ points, pass, height = 200 }) {
           <CartesianGrid vertical={false} stroke={axis.grid} />
           <XAxis dataKey="title" tick={tickStyle(axis)} axisLine={{ stroke: axis.grid }} tickLine={false} />
           <YAxis domain={[0, 100]} tick={tickStyle(axis)} axisLine={false} tickLine={false} width={34} tickFormatter={(v) => `${v}%`} />
-          <ReferenceLine
-            y={pass}
-            stroke={axis.subtle}
-            strokeDasharray="4 4"
-            label={{ value: `Pass ${pass}%`, position: 'insideTopRight', fill: axis.subtle, fontSize: 11 }}
-          />
+          {Number.isFinite(pass) && (
+            <ReferenceLine
+              y={pass}
+              stroke={axis.subtle}
+              strokeDasharray="4 4"
+              label={{ value: `Pass ${pass}%`, position: 'insideTopRight', fill: axis.subtle, fontSize: 11 }}
+            />
+          )}
           <Tooltip
             cursor={{ stroke: axis.grid }}
             content={({ active, payload, label }) => (
               <ChartTooltip active={active} payload={payload} label={label} axis={axis}>
-                {(entry) => <div>{entry.value}%{entry.payload.passed === false ? ` · below ${pass}%` : ''}</div>}
+                {(entry) => <div>{entry.value}%{Number.isFinite(pass) && entry.payload.passed === false ? ` · below ${pass}%` : ''}</div>}
               </ChartTooltip>
             )}
           />
