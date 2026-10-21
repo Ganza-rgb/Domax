@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import WorkspaceHeader from '@/components/dashboard/WorkspaceHeader'
 import { WsButton as Button, EmptyState, Notice, Panel, ProgressBar, StatGroup, StatusPill, downloadCsv, fieldClass, labelClass } from '@/components/dashboard/ui'
+import { QuestionDifficultyChart, ScoreSpreadChart, ScoreTrendLine } from '@/components/dashboard/charts'
 import { useWorkspace } from '@/states/useWorkspaceState'
 import { analyseAllClasses, focusAdvice, percent } from '@/lib/analytics'
 import { assistant } from '@/lib/aiClient'
@@ -210,33 +211,22 @@ export default function ResultsPage() {
         ]}
       />
 
+      {current.analyses.length > 1 && (
+        <Panel title="Trend" meta={`${current.cls.name}'s average across its exams`}>
+          <ScoreTrendLine
+            points={current.analyses.map((a) => ({ examId: a.exam.id, title: a.exam.title, pct: a.stats.mean }))}
+            pass={analysis.pass}
+          />
+        </Panel>
+      )}
+
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
         <Panel title="Spread of scores">
-          <ul className="space-y-3">
-            {analysis.bands.map((band) => (
-              <li key={band.key}>
-                <div className="flex justify-between text-sm mb-1">
-                  <span>{band.label}</span>
-                  <span className="tabular-nums text-[var(--sky-subtle)]">{band.count} {band.count === 1 ? 'student' : 'students'}</span>
-                </div>
-                <ProgressBar value={band.count} max={analysis.stats.n || 1} tone={band.min >= analysis.pass ? 'positive' : band.max <= analysis.pass ? 'caution' : 'info'} label={`${band.label}: ${band.count}`} />
-              </li>
-            ))}
-          </ul>
+          <ScoreSpreadChart bands={analysis.bands} pass={analysis.pass} />
         </Panel>
 
         <Panel title="Question by question" meta="Average score on each question">
-          <ul className="space-y-3">
-            {analysis.perQuestion.map(({ question, avgPct, zero }) => (
-              <li key={question.id}>
-                <div className="flex justify-between gap-3 text-sm mb-1">
-                  <span className="truncate">Q{question.number} · {question.title}</span>
-                  <span className="tabular-nums whitespace-nowrap text-[var(--sky-subtle)]">{percent(avgPct)}{zero ? ` · ${zero} got 0` : ''}</span>
-                </div>
-                <ProgressBar value={avgPct ?? 0} max={100} tone={avgPct !== null && avgPct < 50 ? 'caution' : 'info'} label={`Question ${question.number} average`} />
-              </li>
-            ))}
-          </ul>
+          <QuestionDifficultyChart perQuestion={analysis.perQuestion} />
           {hardest && hardest.avgPct < 60 && (
             <p className="mt-4 text-sm text-[var(--sky-subtle)]">
               Hardest for this class: <strong className="text-[var(--sky-text)]">Q{hardest.question.number}</strong> ({percent(hardest.avgPct)}). It may be worth re-teaching.
@@ -324,11 +314,7 @@ export default function ResultsPage() {
               {selectedClassRow?.history.length > 1 && (
                 <div>
                   <p className="text-xs font-semibold text-[var(--sky-subtle)] mb-1">Across exams</p>
-                  <ul className="text-sm space-y-1">
-                    {selectedClassRow.history.map((h) => (
-                      <li key={h.examId} className="flex justify-between gap-3"><span className="truncate">{h.title}</span><span className="tabular-nums">{Math.round(h.pct)}%</span></li>
-                    ))}
-                  </ul>
+                  <ScoreTrendLine points={selectedClassRow.history} pass={analysis.pass} height={160} />
                 </div>
               )}
               <div>
