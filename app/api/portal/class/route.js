@@ -25,12 +25,12 @@ export async function POST(request) {
   db.exec('BEGIN')
   try {
     if (existing) {
-      db.prepare('UPDATE classes SET name = ?, level = ?, under16 = ?, consent_ok = ?, settings = ?, updated_at = ? WHERE code = ?').run(
-        text(body.name), text(body.level), under16 ? 1 : 0, consentOk ? 1 : 0, JSON.stringify(settings), stamp, code
+      db.prepare('UPDATE classes SET name = ?, level = ?, under16 = ?, consent_ok = ?, settings = ?, teacher_name = ?, updated_at = ? WHERE code = ?').run(
+        text(body.name), text(body.level), under16 ? 1 : 0, consentOk ? 1 : 0, JSON.stringify(settings), text(teacher.name, 120), stamp, code
       )
     } else {
-      db.prepare('INSERT INTO classes (code, teacher_id, class_id, name, level, under16, consent_ok, settings, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(
-        code, teacher.id, text(body.classId), text(body.name), text(body.level), under16 ? 1 : 0, consentOk ? 1 : 0, JSON.stringify(settings), stamp, stamp
+      db.prepare('INSERT INTO classes (code, teacher_id, teacher_name, class_id, name, level, under16, consent_ok, settings, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(
+        code, teacher.id, text(teacher.name, 120), text(body.classId), text(body.name), text(body.level), under16 ? 1 : 0, consentOk ? 1 : 0, JSON.stringify(settings), stamp, stamp
       )
     }
     db.prepare('DELETE FROM students WHERE code = ?').run(code)

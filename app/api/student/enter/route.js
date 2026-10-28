@@ -24,5 +24,5 @@ export async function POST(request) {
     .prepare("SELECT id, subject, body, created_at AS createdAt FROM messages WHERE code = ? AND student_id IS NULL AND direction = 'to_student' ORDER BY created_at DESC LIMIT 20")
     .all(cls.code)
   const { canSeeResults, canSeeAdvice, canAsk } = cls.settings
-  return json({ code: cls.code, name: cls.name, level: cls.level, settings: { canSeeResults, canSeeAdvice, canAsk }, papers, notices })
+  return json({ code: cls.code, name: cls.name, level: cls.level, teacherName: cls.teacher_name || null, settings: { canSeeResults, canSeeAdvice, canAsk }, papers, notices })
 }
